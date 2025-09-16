@@ -1,3 +1,24 @@
+This project is a starter template for building modern web applications using React together with Claude Code.
+It provides a quick and clean setup, so you can focus on writing features instead of boilerplate configuration.
+
+Features
+
+⚡ Quick start: minimal configuration to get your app running fast.
+
+🛠 Claude Code integration: ready-to-use setup for experimenting with Claude’s coding capabilities.
+
+🎨 React best practices: structured project with reusable components and clear organization.
+
+🚀 Extensible: easily adaptable for small prototypes or larger projects.
+
+Use cases
+
+Kickstarting new React projects without wasting time on setup.
+
+Prototyping apps that leverage Claude Code for AI-assisted development.
+
+Learning how to integrate Claude into a modern React environment.
+
 # 🚀 Next.js SOLID Boilerplate
 
 Modern Next.js template with SOLID architecture, TypeScript, Tailwind CSS and Vertical Slice organization.
