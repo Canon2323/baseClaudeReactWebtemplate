@@ -371,6 +371,7 @@ if (hasPermission('billing.read')) {
 - 🎨 **React components** - Guards, hooks, and providers
 
 See [RBAC Documentation](docs/RBAC.md) for complete guide.
+
 ## 📋 Best Practices Checklist
 
 ### Before Implementation
