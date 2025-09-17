@@ -23,7 +23,11 @@ Aprender a integrar o Claude em um ambiente moderno com React.
 
 Template moderno Next.js com arquitetura SOLID, TypeScript, Tailwind CSS e organização Vertical Slice.
 
+<<<<<<< HEAD
 🌐 **Português** | [English](README.md)
+=======
+🌐 **Português** | [English](./README.md)
+>>>>>>> 2df8104fb7354b97e10463f72958422cc8983e64
 
 ## ⚡ Quick Start
 
@@ -41,10 +45,15 @@ npm run dev
 
 - **Next.js 14+** com App Router
 - **TypeScript** + **Tailwind CSS** + **shadcn/ui**
-- **Arquitetura SOLID** com Vertical Slice
+<<<<<<< HEAD
+- **Arquitetura SOLID** com princípios rigorosos
 - **Supabase** para auth & database (local)
 - **Sistema RBAC** com permissões granulares
 - **Integração de Pagamentos** (Stripe, Paddle, LemonSqueezy)
+=======
+- **Arquitetura SOLID** com Vertical Slice
+- **Supabase** para auth & database (local)
+>>>>>>> 2df8104fb7354b97e10463f72958422cc8983e64
 - **Git hooks** (Husky + lint-staged) para qualidade de código
 
 ### 🏗️ Princípios SOLID
@@ -55,6 +64,7 @@ npm run dev
 - **I**nterface Segregation - Interfaces específicas > interfaces gerais
 - **D**ependency Inversion - Depender de abstrações, não de concretos
 
+<<<<<<< HEAD
 ### 🔌 11 MCP Servers (Integração Claude Code)
 
 1. **shadcn/ui MCP** - Instalar/gerenciar componentes UI
@@ -97,12 +107,75 @@ Verificações automáticas de qualidade em operações Git:
 - **GitHub Spec Kit** - Metodologia de desenvolvimento specification-first
 - **Interações AI estruturadas** com Claude Code
 - **Documentação viva** que evolui com o código
+=======
+### 🔌 11 MCP Servers (Claude Code Integration)
+1. **shadcn/ui MCP** - Install/manage UI components
+2. **Playwright MCP** - Browser automation & testing
+3. **Figma MCP** - Design-to-code integration
+4. **Apify MCP** - Web scraping & data extraction
+5. **Browser Automation MCP** - Additional browser control
+6. **Gemini MCP** - Google AI model integration
+7. **Context7 MCP** - Real-time documentation search
+8. **Stripe MCP** - Payment processing integration
+9. **Supabase MCP** - Local Supabase database operations
+10. **Filesystem MCP** - File system operations
+11. **Serena MCP** - AI coding agent toolkit
+
+**Note**: Git/GitHub operations use standard **CLI tools** (GitHub CLI + Git) for better performance.
+
+### 🪝 Code Quality Hooks
+Automatic code quality checks on Git operations:
+- **Pre-commit**: Auto-format, lint, and type-check before commits
+- **Pre-push**: Final validation before pushing to remote
+- **Commit-msg**: Validates commit message format (optional)
+
+### 🛡️ Security
+- **VibeKit** - AI agent sandbox isolation
+>>>>>>> 2df8104fb7354b97e10463f72958422cc8983e64
 
 ## 📦 Scripts
 
 ```bash
-npm run setup              # Configuração completa
-npm run setup:spec-kit     # Configurar Desenvolvimento Orientado por Specs
+<<<<<<< HEAD
+npm run setup         # Configuração completa
+npm run setup:spec-kit # Configurar Desenvolvimento Orientado por Specs
+npm run dev          # Desenvolvimento
+npm run build        # Build de produção
+npm run lint:fix     # Corrigir linting
+npm run format       # Formatar código
+```
+
+## 📁 Estrutura
+
+```
+src/
+├── app/           # Páginas Next.js App Router
+├── components/    # Componentes UI (shadcn/ui)
+├── lib/           # Utilitários e helpers
+├── hooks/         # Hooks React customizados
+├── types/         # Definições TypeScript
+├── config/        # Arquivos de configuração
+├── shared/        # Código compartilhado (SOLID)
+│   ├── types/     # Interfaces e tipos
+│   ├── services/  # Camada de serviços
+│   ├── hooks/     # Hooks especializados
+│   └── components/ # Componentes reutilizáveis
+└── middleware.ts  # Proteção de rotas & middleware de auth
+
+specs/             # 📋 Desenvolvimento Orientado por Specs
+├── requirements.md # Especificações do produto
+├── plan.md        # Plano de implementação técnica
+└── tasks/         # Divisão de tarefas acionáveis
+
+docs/             # 📚 Documentação
+├── MCP-SERVERS.md # Guia de configuração MCP
+├── SPEC-DRIVEN-DEVELOPMENT.md # Uso do Spec Kit
+├── RBAC.md       # Guia do sistema de controle de acesso
+└── HOOKS.md      # Documentação dos git hooks
+```
+
+=======
+npm run setup              # Setup completo
 npm run dev                # Desenvolvimento
 npm run build              # Build de produção
 npm run lint:fix           # Corrigir linting
@@ -133,17 +206,6 @@ src/
 ├── config/            # Configurações
 ├── tests/             # Testes E2E
 └── middleware.ts      # Middleware de rotas
-
-specs/             # 📋 Desenvolvimento Orientado por Specs
-├── requirements.md # Especificações do produto
-├── plan.md        # Plano de implementação técnica
-└── tasks/         # Divisão de tarefas acionáveis
-
-docs/             # 📚 Documentação
-├── MCP-SERVERS.md # Guia de configuração MCP
-├── SPEC-DRIVEN-DEVELOPMENT.md # Uso do Spec Kit
-├── RBAC.md       # Guia do sistema de controle de acesso
-└── HOOKS.md      # Documentação dos git hooks
 ```
 
 ### 🎯 Features vs Shared - Quando usar cada um?
@@ -259,24 +321,38 @@ export const useAuthStore = create((set) => ({
 | Lógica reutilizável de UI | **Hook** | `useModal()`, `useDebounce()` |
 | Configurações globais | **Store** | Tema, idioma, preferências |
 
+>>>>>>> 2df8104fb7354b97e10463f72958422cc8983e64
 ## 🛡️ Middleware
 
 O arquivo `src/middleware.ts` gerencia:
 - Proteção de rotas e autenticação
 - Modificações de request/response
+<<<<<<< HEAD
 - Redirects e rewrites
 - Controle de acesso para rotas protegidas
 
 Localizado em: `src/middleware.ts` (mesmo nível que `src/app/`)
+=======
+- Redirecionamentos e rewrites
+- Controle de acesso para rotas protegidas
+
+Localização: `src/middleware.ts` (mesmo nível de `src/app/`)
+>>>>>>> 2df8104fb7354b97e10463f72958422cc8983e64
 
 ## 🗄️ Configuração Supabase
 
 **Supabase local** é instalado e configurado automaticamente.
 
+<<<<<<< HEAD
 Para alterar chaves: editar `scripts/setup-all.js` linhas 127-129.
 
 ### Acessar Supabase Local
 
+=======
+Para alterar chaves: edite `scripts/setup-all.js` linhas 127-129.
+
+### Acessar Supabase Local
+>>>>>>> 2df8104fb7354b97e10463f72958422cc8983e64
 - **Database**: http://127.0.0.1:54321
 - **Dashboard**: http://127.0.0.1:54323
 
@@ -317,6 +393,7 @@ features/products/
 └── index.ts
 ```
 
+<<<<<<< HEAD
 ## 🛡️ **Quick Start RBAC**
 
 ```tsx
@@ -378,6 +455,8 @@ implement specs/plan.md
 
 Veja [Guia de Desenvolvimento Orientado por Specs](docs/SPEC-DRIVEN-DEVELOPMENT.md) para uso detalhado.
 
+=======
+>>>>>>> 2df8104fb7354b97e10463f72958422cc8983e64
 ## 📋 Checklist de Boas Práticas
 
 ### Antes de Implementar
@@ -396,6 +475,7 @@ Veja [Guia de Desenvolvimento Orientado por Specs](docs/SPEC-DRIVEN-DEVELOPMENT.
 - [ ] Adicionar/atualizar testes
 - [ ] Solicitar aprovação do usuário
 
+<<<<<<< HEAD
 ## 📚 Documentação
 
 - [Servidores MCP](docs/MCP-SERVERS.md)
@@ -420,9 +500,22 @@ Aprimoramos a abordagem deles com:
 - ✅ **Abstrações de providers** para extensibilidade
 
 ## 📄 Licença
+=======
+## 📚 Docs
+
+- [MCP Servers](docs/MCP-SERVERS.md)
+- [Git Hooks](docs/HOOKS.md)
+- [Middleware](docs/MIDDLEWARE.md)
+
+## 📄 License
+>>>>>>> 2df8104fb7354b97e10463f72958422cc8983e64
 
 MIT
 
 ---
 
+<<<<<<< HEAD
 **Desenvolvido com princípios SOLID e boas práticas de engenharia de software.**
+=======
+**Desenvolvido com princípios SOLID e boas práticas de engenharia de software.**
+>>>>>>> 2df8104fb7354b97e10463f72958422cc8983e64

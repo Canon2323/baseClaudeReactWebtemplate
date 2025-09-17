@@ -5,11 +5,7 @@ Features
 
 ⚡ Quick start: minimal configuration to get your app running fast.
 
-<<<<<<< HEAD
 🛠 Claude Code integration: ready-to-use setup for experimenting with Claude's coding capabilities.
-=======
-🛠 Claude Code integration: ready-to-use setup for experimenting with Claude’s coding capabilities.
->>>>>>> 2df8104fb7354b97e10463f72958422cc8983e64
 
 🎨 React best practices: structured project with reusable components and clear organization.
 
@@ -101,10 +97,7 @@ Automatic code quality checks on Git operations:
 
 ```bash
 npm run setup              # Complete setup
-<<<<<<< HEAD
 npm run setup:spec-kit     # Setup Spec-Driven Development
-=======
->>>>>>> 2df8104fb7354b97e10463f72958422cc8983e64
 npm run dev                # Development server
 npm run build              # Production build
 npm run lint:fix           # Fix linting issues
@@ -135,7 +128,6 @@ src/
 ├── config/            # Configuration
 ├── tests/             # E2E tests
 └── middleware.ts      # Route middleware
-<<<<<<< HEAD
 
 specs/             # 📋 Spec-Driven Development
 ├── requirements.md # Product specifications
@@ -147,8 +139,6 @@ docs/             # 📚 Documentation
 ├── SPEC-DRIVEN-DEVELOPMENT.md # Spec Kit usage
 ├── RBAC.md       # Role-based access control guide
 └── HOOKS.md      # Git hooks documentation
-=======
->>>>>>> 2df8104fb7354b97e10463f72958422cc8983e64
 ```
 
 ### 🎯 Features vs Shared - When to use each?
@@ -321,7 +311,6 @@ features/products/
 └── index.ts
 ```
 
-<<<<<<< HEAD
 ## 🚀 **Spec-Driven Development Quick Start**
 
 ```bash
@@ -382,9 +371,6 @@ if (hasPermission('billing.read')) {
 - 🎨 **React components** - Guards, hooks, and providers
 
 See [RBAC Documentation](docs/RBAC.md) for complete guide.
-
-=======
->>>>>>> 2df8104fb7354b97e10463f72958422cc8983e64
 ## 📋 Best Practices Checklist
 
 ### Before Implementation
@@ -406,11 +392,8 @@ See [RBAC Documentation](docs/RBAC.md) for complete guide.
 ## 📚 Docs
 
 - [MCP Servers](docs/MCP-SERVERS.md)
-<<<<<<< HEAD
 - [Spec-Driven Development](docs/SPEC-DRIVEN-DEVELOPMENT.md)
 - [RBAC System](docs/RBAC.md)
-=======
->>>>>>> 2df8104fb7354b97e10463f72958422cc8983e64
 - [Git Hooks](docs/HOOKS.md)
 - [Middleware](docs/MIDDLEWARE.md)
 
@@ -435,8 +418,4 @@ MIT
 
 ---
 
-<<<<<<< HEAD
 **Built with SOLID principles and software engineering best practices.**
-=======
-**Built with SOLID principles and software engineering best practices.**
->>>>>>> 2df8104fb7354b97e10463f72958422cc8983e64
