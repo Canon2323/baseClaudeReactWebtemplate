@@ -5,12 +5,6 @@ Features
 
 ⚡ Quick start: minimal configuration to get your app running fast.
 
-<<<<<<< HEAD
-🛠 Claude Code integration: ready-to-use setup for experimenting with Claude's coding capabilities.
-=======
-🛠 Claude Code integration: ready-to-use setup for experimenting with Claude’s coding capabilities.
->>>>>>> 2df8104fb7354b97e10463f72958422cc8983e64
-
 🎨 React best practices: structured project with reusable components and clear organization.
 
 🚀 Extensible: easily adaptable for small prototypes or larger projects.
@@ -383,8 +377,6 @@ if (hasPermission('billing.read')) {
 
 See [RBAC Documentation](docs/RBAC.md) for complete guide.
 
-=======
->>>>>>> 2df8104fb7354b97e10463f72958422cc8983e64
 ## 📋 Best Practices Checklist
 
 ### Before Implementation
