@@ -23,7 +23,11 @@ Aprender a integrar o Claude em um ambiente moderno com React.
 
 Template moderno Next.js com arquitetura SOLID, TypeScript, Tailwind CSS e organização Vertical Slice.
 
+<<<<<<< HEAD
 🌐 **Português** | [English](README.md)
+=======
+🌐 **Português** | [English](./README.md)
+>>>>>>> 2df8104fb7354b97e10463f72958422cc8983e64
 
 ## ⚡ Quick Start
 
@@ -41,10 +45,15 @@ npm run dev
 
 - **Next.js 14+** com App Router
 - **TypeScript** + **Tailwind CSS** + **shadcn/ui**
+<<<<<<< HEAD
 - **Arquitetura SOLID** com princípios rigorosos
 - **Supabase** para auth & database (local)
 - **Sistema RBAC** com permissões granulares
 - **Integração de Pagamentos** (Stripe, Paddle, LemonSqueezy)
+=======
+- **Arquitetura SOLID** com Vertical Slice
+- **Supabase** para auth & database (local)
+>>>>>>> 2df8104fb7354b97e10463f72958422cc8983e64
 - **Git hooks** (Husky + lint-staged) para qualidade de código
 
 ### 🏗️ Princípios SOLID
@@ -55,6 +64,7 @@ npm run dev
 - **I**nterface Segregation - Interfaces específicas > interfaces gerais
 - **D**ependency Inversion - Depender de abstrações, não de concretos
 
+<<<<<<< HEAD
 ### 🔌 11 MCP Servers (Integração Claude Code)
 
 1. **shadcn/ui MCP** - Instalar/gerenciar componentes UI
@@ -97,10 +107,36 @@ Verificações automáticas de qualidade em operações Git:
 - **GitHub Spec Kit** - Metodologia de desenvolvimento specification-first
 - **Interações AI estruturadas** com Claude Code
 - **Documentação viva** que evolui com o código
+=======
+### 🔌 11 MCP Servers (Claude Code Integration)
+1. **shadcn/ui MCP** - Install/manage UI components
+2. **Playwright MCP** - Browser automation & testing
+3. **Figma MCP** - Design-to-code integration
+4. **Apify MCP** - Web scraping & data extraction
+5. **Browser Automation MCP** - Additional browser control
+6. **Gemini MCP** - Google AI model integration
+7. **Context7 MCP** - Real-time documentation search
+8. **Stripe MCP** - Payment processing integration
+9. **Supabase MCP** - Local Supabase database operations
+10. **Filesystem MCP** - File system operations
+11. **Serena MCP** - AI coding agent toolkit
+
+**Note**: Git/GitHub operations use standard **CLI tools** (GitHub CLI + Git) for better performance.
+
+### 🪝 Code Quality Hooks
+Automatic code quality checks on Git operations:
+- **Pre-commit**: Auto-format, lint, and type-check before commits
+- **Pre-push**: Final validation before pushing to remote
+- **Commit-msg**: Validates commit message format (optional)
+
+### 🛡️ Security
+- **VibeKit** - AI agent sandbox isolation
+>>>>>>> 2df8104fb7354b97e10463f72958422cc8983e64
 
 ## 📦 Scripts
 
 ```bash
+<<<<<<< HEAD
 npm run setup         # Configuração completa
 npm run setup:spec-kit # Configurar Desenvolvimento Orientado por Specs
 npm run dev          # Desenvolvimento
@@ -138,24 +174,185 @@ docs/             # 📚 Documentação
 └── HOOKS.md      # Documentação dos git hooks
 ```
 
+=======
+npm run setup              # Setup completo
+npm run dev                # Desenvolvimento
+npm run build              # Build de produção
+npm run lint:fix           # Corrigir linting
+npm run format             # Formatar código
+npm run generate:feature   # Gerar nova feature
+```
+
+## 📁 Estrutura de Pastas
+
+```
+src/
+├── app/                # Next.js App Router
+├── components/         # Componentes globais
+│   └── ui/            # shadcn/ui components
+├── features/          # Domínios específicos (Vertical Slice)
+│   ├── [feature]/
+│   │   ├── components/  # UI específica
+│   │   ├── hooks/       # Hooks do domínio
+│   │   ├── services/    # Lógica de negócio
+│   │   ├── stores/      # Estado do domínio
+│   │   └── types/       # Types específicos
+├── shared/            # Cross-cutting concerns
+│   ├── components/    # Componentes compartilhados
+│   ├── hooks/         # Hooks globais
+│   ├── stores/        # Estado global
+│   ├── services/      # Serviços de infraestrutura
+│   └── utils/         # Utilitários
+├── config/            # Configurações
+├── tests/             # Testes E2E
+└── middleware.ts      # Middleware de rotas
+```
+
+### 🎯 Features vs Shared - Quando usar cada um?
+
+**Features/** - Código específico do domínio de negócio:
+- ✅ Componentes que só existem em um contexto (ex: `UserProfileCard`)
+- ✅ Lógica de negócio específica (ex: `calculateOrderTotal`)
+- ✅ Estado local do domínio (ex: `useProductFilters`)
+- ✅ Types do domínio (ex: `interface Product`)
+
+**Shared/** - Código reutilizável entre múltiplos domínios:
+- ✅ Componentes genéricos (ex: `Button`, `Modal`, `Toast`)
+- ✅ Hooks utilitários (ex: `useDebounce`, `useLocalStorage`)
+- ✅ Estado global da aplicação (ex: `authStore`, `themeStore`)
+- ✅ Serviços de infraestrutura (ex: `apiClient`, `logger`)
+- ✅ Utilitários puros (ex: `formatCurrency`, `validateEmail`)
+
+**Regra de ouro**: Se é usado por 2+ features → `shared/`. Se é específico de uma feature → `features/[nome]/`
+
+## 📚 Guia de Arquitetura: Types, Hooks e Stores
+
+### 📝 **Types** - Definição de Estruturas
+
+**O que são:** Interfaces e tipos TypeScript que definem a estrutura dos dados.
+
+**Quando usar:**
+- Definir formato de dados da API
+- Criar contratos entre camadas
+- Garantir type safety
+- Documentar estruturas de dados
+
+**Exemplo:**
+```typescript
+// features/users/types/user.types.ts
+export interface User {
+  id: string
+  email: string
+  name: string
+}
+```
+
+**Onde colocar:**
+- `features/[domain]/types/` - Types específicos do domínio
+- `shared/types/` - Types compartilhados globalmente
+
+### 🪝 **Hooks** - Lógica Reutilizável
+
+**O que são:** Funções que encapsulam lógica de estado e side effects do React.
+
+**Quando usar:**
+- Compartilhar lógica entre componentes
+- Gerenciar estado local do componente
+- Executar side effects (API calls, subscriptions)
+- Abstrair lógica complexa de UI
+
+**Exemplo:**
+```typescript
+// features/users/hooks/useUser.ts
+export function useUser(userId: string) {
+  const [user, setUser] = useState<User>()
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    userService.getById(userId)
+      .then(setUser)
+      .finally(() => setLoading(false))
+  }, [userId])
+
+  return { user, loading }
+}
+```
+
+**Onde colocar:**
+- `features/[domain]/hooks/` - Hooks específicos do domínio
+- `shared/hooks/` - Hooks utilitários globais
+
+### 🗄️ **Stores** - Estado Global
+
+**O que são:** Containers de estado compartilhado entre componentes usando Zustand.
+
+**Quando usar:**
+- Estado que precisa ser acessado por múltiplos componentes
+- Dados que persistem entre navegações de página
+- Cache de dados do usuário
+- Estado da aplicação (tema, idioma, autenticação)
+
+**Exemplo:**
+```typescript
+// shared/stores/auth.store.ts
+export const useAuthStore = create((set) => ({
+  user: null,
+  isAuthenticated: false,
+
+  login: (user) => set({ user, isAuthenticated: true }),
+  logout: () => set({ user: null, isAuthenticated: false })
+}))
+```
+
+**Onde colocar:**
+- `shared/stores/` - Estado global (auth, tema, UI)
+- `features/[domain]/stores/` - Estado específico do domínio
+
+## 🎯 Guia de Decisão Rápido
+
+| Preciso de... | Use | Exemplo |
+|---------------|-----|---------|
+| Definir formato de dados | **Types** | `interface Product { id: string; name: string }` |
+| Buscar dados em um componente | **Hook** | `useProduct(id)` retorna produto e loading |
+| Compartilhar estado entre páginas | **Store** | Carrinho de compras, usuário logado |
+| Validar estrutura de dados | **Types** + Zod | Schema de validação com types |
+| Estado temporário do formulário | **Hook** | `useForm()` com react-hook-form |
+| Cache de dados da API | **Store** ou React Query | Lista de produtos já carregados |
+| Lógica reutilizável de UI | **Hook** | `useModal()`, `useDebounce()` |
+| Configurações globais | **Store** | Tema, idioma, preferências |
+
+>>>>>>> 2df8104fb7354b97e10463f72958422cc8983e64
 ## 🛡️ Middleware
 
 O arquivo `src/middleware.ts` gerencia:
 - Proteção de rotas e autenticação
 - Modificações de request/response
+<<<<<<< HEAD
 - Redirects e rewrites
 - Controle de acesso para rotas protegidas
 
 Localizado em: `src/middleware.ts` (mesmo nível que `src/app/`)
+=======
+- Redirecionamentos e rewrites
+- Controle de acesso para rotas protegidas
+
+Localização: `src/middleware.ts` (mesmo nível de `src/app/`)
+>>>>>>> 2df8104fb7354b97e10463f72958422cc8983e64
 
 ## 🗄️ Configuração Supabase
 
 **Supabase local** é instalado e configurado automaticamente.
 
+<<<<<<< HEAD
 Para alterar chaves: editar `scripts/setup-all.js` linhas 127-129.
 
 ### Acessar Supabase Local
 
+=======
+Para alterar chaves: edite `scripts/setup-all.js` linhas 127-129.
+
+### Acessar Supabase Local
+>>>>>>> 2df8104fb7354b97e10463f72958422cc8983e64
 - **Database**: http://127.0.0.1:54321
 - **Dashboard**: http://127.0.0.1:54323
 
@@ -196,6 +393,7 @@ features/products/
 └── index.ts
 ```
 
+<<<<<<< HEAD
 ## 🛡️ **Quick Start RBAC**
 
 ```tsx
@@ -257,6 +455,8 @@ implement specs/plan.md
 
 Veja [Guia de Desenvolvimento Orientado por Specs](docs/SPEC-DRIVEN-DEVELOPMENT.md) para uso detalhado.
 
+=======
+>>>>>>> 2df8104fb7354b97e10463f72958422cc8983e64
 ## 📋 Checklist de Boas Práticas
 
 ### Antes de Implementar
@@ -275,6 +475,7 @@ Veja [Guia de Desenvolvimento Orientado por Specs](docs/SPEC-DRIVEN-DEVELOPMENT.
 - [ ] Adicionar/atualizar testes
 - [ ] Solicitar aprovação do usuário
 
+<<<<<<< HEAD
 ## 📚 Documentação
 
 - [Servidores MCP](docs/MCP-SERVERS.md)
@@ -299,9 +500,22 @@ Aprimoramos a abordagem deles com:
 - ✅ **Abstrações de providers** para extensibilidade
 
 ## 📄 Licença
+=======
+## 📚 Docs
+
+- [MCP Servers](docs/MCP-SERVERS.md)
+- [Git Hooks](docs/HOOKS.md)
+- [Middleware](docs/MIDDLEWARE.md)
+
+## 📄 License
+>>>>>>> 2df8104fb7354b97e10463f72958422cc8983e64
 
 MIT
 
 ---
 
+<<<<<<< HEAD
 **Desenvolvido com princípios SOLID e boas práticas de engenharia de software.**
+=======
+**Desenvolvido com princípios SOLID e boas práticas de engenharia de software.**
+>>>>>>> 2df8104fb7354b97e10463f72958422cc8983e64
