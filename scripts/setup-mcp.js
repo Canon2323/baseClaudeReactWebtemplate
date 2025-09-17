@@ -251,6 +251,7 @@ STRIPE_PUBLISHABLE_KEY=pk_test_your_stripe_test_publishable_key_here
 # Requires Python and uv to be installed
 # Install: pip install uv
 
+
 # =================================
 # SECURITY NOTES
 # =================================
@@ -288,10 +289,10 @@ async function main() {
   
   log('Installing all 11 MCP servers LOCALLY in this project...', 'blue');
   log('MCPs will be installed in node_modules and configured for local use.\n', 'yellow');
-  
+
   info('MCP Servers to be installed locally:');
   log('  Core Development: shadcn/ui, Playwright, Figma', 'green');
-  log('  Repository: GitHub, Git', 'green'); 
+  log('  Repository: GitHub, Git', 'green');
   log('  Web & Data: Apify, Browser Automation', 'green');
   log('  AI & Docs: Gemini, Context7, Serena', 'green');
   log('  Services: Stripe, Supabase', 'green');

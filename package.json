@@ -7,6 +7,7 @@
     "setup": "node scripts/setup-all.js",
     "setup:basic": "node scripts/setup.js",
     "setup:mcp": "node scripts/setup-mcp.js",
+    "setup:spec-kit": "node scripts/setup-spec-kit.js",
     "setup:husky": "node scripts/setup-husky.js",
     "setup:auth": "npm install zod @hookform/resolvers react-hook-form next-auth",
     "setup:database": "npm install prisma @prisma/client zod",

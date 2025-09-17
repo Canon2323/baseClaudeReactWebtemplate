@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "WebSearch",
-      "mcp__shrimp-task-manager__process_thought"
+      "mcp__shrimp-task-manager__process_thought",
+      "WebFetch(domain:github.com)"
     ],
     "deny": [],
     "ask": []

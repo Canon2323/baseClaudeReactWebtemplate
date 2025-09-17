@@ -156,20 +156,33 @@ Os **servidores MCP** (Playwright, Figma, Supabase, etc.) são **facilitadores e
 ### Fase 2: Implementação Core da Aplicação
 
 #### 2.1 Providers & Context (DIP)
-- [ ] **2.1.1** - AuthProvider abstrato
+- [x] **2.1.1** - AuthProvider abstrato ✅
   - Interface IAuthProvider
-  - Implementações: Clerk, Auth0, NextAuth
+  - Implementações: Supabase Auth (extensível)
   - Strategy Pattern para troca de providers
 
-- [ ] **2.1.2** - DatabaseProvider abstrato
-  - Interface IDatabaseProvider  
-  - Implementações: Supabase, PlanetScale, Prisma
+- [x] **2.1.2** - DatabaseProvider abstrato ✅
+  - Interface IDatabaseProvider
+  - Implementações: Supabase (extensível)
   - Factory Pattern para conexões
 
-- [ ] **2.1.3** - ThemeProvider (OCP)
+- [x] **2.1.3** - ThemeProvider (OCP) ✅
   - Sistema de temas extensível
   - shadcn/ui theme customization
   - Dark/Light mode + themes customizados
+
+- [x] **2.1.4** - RBAC System (Next.js SaaS Starter Integration) ✅
+  - Sistema completo de Role-Based Access Control
+  - Integração nativa com Supabase RLS
+  - Components React para proteção de rotas
+  - Hooks especializados para permissões
+  - Multi-tenant com suporte a organizações
+
+- [x] **2.1.5** - Payment Integration (Next.js SaaS Starter) ✅
+  - Sistema de pagamentos multi-provider
+  - Suporte a Stripe, Paddle, LemonSqueezy
+  - Factory Pattern para diferentes providers
+  - Webhook handling automático
 
 #### 2.2 Services Layer (SRP)
 - [ ] **2.2.1** - AuthService
@@ -379,20 +392,25 @@ Os **servidores MCP** (Playwright, Figma, Supabase, etc.) são **facilitadores e
 ## 📊 Status do Projeto
 
 - **Fase 1**: ✅ **COMPLETO** - Arquitetura Base SOLID
-- **Fase 2**: 🟡 Não iniciado
-- **Fase 3**: ✅ **COMPLETO** - MCPs + VibeKit Security  
-- **Fase 4**: 🟡 Não iniciado
-- **Fase 5**: 🟡 Não iniciado
-- **Fase 6**: 🟡 Não iniciado
+- **Fase 2**: 🚀 **EM ANDAMENTO** - Implementação Core da Aplicação
+  - ✅ Providers & Context (Auth, Database, Theme, RBAC, Payments)
+  - 🔄 Services Layer (próximo)
+- **Fase 3**: ✅ **COMPLETO** - MCPs + VibeKit Security
+- **Fase 4**: 🟡 Em espera - Generators & Templates
+- **Fase 5**: 🟡 Em espera - Testing & Quality
+- **Fase 6**: 🟡 Em espera - Documentation & Distribution
 
 ## 🎉 **TEMPLATE PRONTO PARA USO!**
 
 ### ✅ **Concluído:**
 - **Fase 1 Completa**: Arquivos base, configurações, SOLID structure
+- **Fase 2.1 Completa**: Providers & Context (Auth, Database, Theme, RBAC, Payments)
 - **Fase 3 Completa**: 11 MCP servers + VibeKit security configurados
+- **Next.js SaaS Starter Integration**: RBAC + Payments implementados
+- **Spec-Driven Development**: GitHub Spec Kit integrado
 - **Revisão e Simplificação**: Template minimalista e limpo
 - **Husky + lint-staged**: Hooks de qualidade de código
-- **Supabase Integration**: Configuração básica pronta
+- **Supabase Integration**: RLS + JWT Claims automáticos
 
 ## 🎯 Objetivos do Boilerplate
 
