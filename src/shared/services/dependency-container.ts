@@ -57,7 +57,8 @@ const globalContainer = new DependencyContainer()
 export const SERVICE_KEYS = {
   SUPABASE: 'supabase',
   VALIDATION: 'validation',
-  // Add more as needed
+  API: 'api',
+  STORAGE: 'storage',
 } as const
 
 // Helper functions for easier usage

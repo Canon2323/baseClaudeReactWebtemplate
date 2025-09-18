@@ -1,0 +1,7 @@
+packages:
+  - '.'
+
+# pnpm configuration
+prefer-workspace-packages: true
+auto-install-peers: true
+dedupe-peer-dependents: true

@@ -27,15 +27,33 @@ Modern Next.js template with SOLID architecture, TypeScript, Tailwind CSS and Ve
 
 ## ⚡ Quick Start
 
+### 🚀 Usando pnpm (Recomendado - Mais Seguro)
 ```bash
-# Clone and setup automatically
+# Clone and setup
 git clone <this-repo> my-app
 cd my-app
-npm run setup
 
-# Start development (everything configured automatically)
-npm run dev
+# Install pnpm globally (se não tiver)
+npm install -g pnpm
+
+# Install dependencies and setup
+pnpm install
+pnpm setup:hooks
+
+# Start development
+pnpm dev
 ```
+
+### 🔄 Outras opções
+```bash
+# Yarn
+yarn install && yarn setup:hooks && yarn dev
+
+# npm (fallback)
+npm install && npm run setup:hooks && npm run dev
+```
+
+> 📖 **Gerenciadores suportados**: [pnpm](docs/package-managers.md) | yarn | npm
 
 ## ✨ Features
 

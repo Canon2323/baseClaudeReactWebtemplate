@@ -1,0 +1,11 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Detect package manager and run commitlint
+if [ -f "pnpm-lock.yaml" ]; then
+  pnpm exec commitlint --edit $1
+elif [ -f "yarn.lock" ]; then
+  yarn commitlint --edit $1
+else
+  npx commitlint --edit $1
+fi

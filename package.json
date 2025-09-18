@@ -16,6 +16,7 @@
     "setup:animations": "npm install framer-motion",
     "setup:query": "npm install @tanstack/react-query",
     "setup:stores": "npm install zustand",
+    "setup:hooks": "node scripts/setup-hooks.js",
     "generate:feature": "node scripts/generate-feature.js",
     "dev": "next dev",
     "build": "next build",
@@ -123,12 +124,17 @@
     "@testing-library/react": "^15.0.0",
     "@testing-library/jest-dom": "^6.4.0",
     "@playwright/test": "^1.40.0",
-    "eslint-plugin-import": "^2.29.0"
+    "eslint-plugin-import": "^2.29.0",
+    "@commitlint/cli": "^18.4.0",
+    "@commitlint/config-conventional": "^18.4.0"
   },
   "engines": {
     "node": ">=18.0.0",
-    "npm": ">=9.0.0"
+    "npm": ">=9.0.0",
+    "pnpm": ">=8.0.0",
+    "yarn": ">=3.0.0"
   },
+  "packageManager": "pnpm@8.15.0",
   "keywords": [
     "nextjs",
     "react",
