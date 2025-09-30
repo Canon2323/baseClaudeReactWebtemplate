@@ -1,77 +1,77 @@
-﻿# Template de Projeto - InstruÃ§Ãµes para Claude Code
+# Template de Projeto - Instruções para Claude Code
 
 ## CONTEXTO
 Template para projetos Next.js com Claude Code
 - Stack: Next.js 14, TypeScript, Supabase, shadcn/ui
 - Desenvolvimento assistido por IA com Claude Code
-- Idioma: PortuguÃªs BR
+- Idioma: Português BR
 
-## PRINCÃPIOS FUNDAMENTAIS
+## PRINCÍPIOS FUNDAMENTAIS
 
-### SOLID - ObrigatÃ³rio em toda implementaÃ§Ã£o
-- **S**ingle Responsibility: Uma classe/funÃ§Ã£o = uma responsabilidade
-- **O**pen/Closed: Aberto para extensÃ£o, fechado para modificaÃ§Ã£o  
-- **L**iskov Substitution: Subtipos devem ser substituÃ­veis
-- **I**nterface Segregation: Interfaces especÃ­ficas > interfaces gerais
-- **D**ependency Inversion: Depender de abstraÃ§Ãµes, nÃ£o de concretos
+### SOLID - Obrigatório em toda implementação
+- **S**ingle Responsibility: Uma classe/função = uma responsabilidade
+- **O**pen/Closed: Aberto para extensão, fechado para modificação
+- **L**iskov Substitution: Subtipos devem ser substituíveis
+- **I**nterface Segregation: Interfaces específicas > interfaces gerais
+- **D**ependency Inversion: Depender de abstrações, não de concretos
 
-### DRY e ReutilizaÃ§Ã£o
-- SEMPRE buscar cÃ³digo existente antes de criar novo
+### DRY e Reutilização
+- SEMPRE buscar código existente antes de criar novo
 - Verificar services, hooks e utils existentes
-- Estender funcionalidade existente ao invÃ©s de duplicar
+- Estender funcionalidade existente ao invés de duplicar
 
-## PERGUNTAS OBRIGATÃ“RIAS ANTES DE IMPLEMENTAR
+## PERGUNTAS OBRIGATÓRIAS ANTES DE IMPLEMENTAR
 
 ### 1. Descoberta de Contexto
-- Qual problema de negÃ³cio estamos resolvendo?
-- Quais regras de negÃ³cio especÃ­ficas se aplicam?
-- Existe soluÃ§Ã£o similar jÃ¡ implementada? Onde?
+- Qual problema de negócio estamos resolvendo?
+- Quais regras de negócio específicas se aplicam?
+- Existe solução similar já implementada? Onde?
 
-### 2. AnÃ¡lise de CÃ³digo Existente
-- Quais services/classes jÃ¡ lidam com este domÃ­nio?
+### 2. Análise de Código Existente
+- Quais services/classes já lidam com este domínio?
 - Existem hooks/utils que posso reutilizar?
-- Quais padrÃµes estÃ£o sendo usados nesta Ã¡rea do cÃ³digo?
+- Quais padrões estão sendo usados nesta área do código?
 
 ### 3. Escopo e Limites
-- O que estÃ¡ DENTRO do escopo desta tarefa?
-- O que estÃ¡ FORA e deve ser ignorado agora? (YAGNI)
-- Quais sÃ£o os critÃ©rios de aceitaÃ§Ã£o?
+- O que está DENTRO do escopo desta tarefa?
+- O que está FORA e deve ser ignorado agora? (YAGNI)
+- Quais são os critérios de aceitação?
 
-### 4. Arquitetura e IntegraÃ§Ã£o
-- Quais arquivos/classes/mÃ©todos serÃ£o modificados?
+### 4. Arquitetura e Integração
+- Quais arquivos/classes/métodos serão modificados?
 - Como isso se integra com o sistema existente?
 - Quais testes precisam ser atualizados/criados?
 
-### 5. ValidaÃ§Ã£o de Approach
-- Minha soluÃ§Ã£o segue os princÃ­pios SOLID?
-- Estou reutilizando cÃ³digo existente adequadamente?
+### 5. Validação de Approach
+- Minha solução segue os princípios SOLID?
+- Estou reutilizando código existente adequadamente?
 - Existe uma forma mais simples de resolver?
 
-## REGRAS CRÃTICAS - NUNCA VIOLAR
+## REGRAS CRÍTICAS - NUNCA VIOLAR
 
 ### Ferramentas Claude Code
 **LEITURA/BUSCA**: Usar ferramentas apropriadas
-- Utilizar Read, Grep, Glob para anÃ¡lise de cÃ³digo
-- Documentar referÃªncias encontradas
-- Evitar busca manual desnecessÃ¡ria
+- Utilizar Read, Grep, Glob para análise de código
+- Documentar referências encontradas
+- Evitar busca manual desnecessária
 
-**ESCRITA**: Editor padrÃ£o apenas
-- Usar Write/Edit para modificaÃ§Ãµes
-- MultiEdit para mÃºltiplas alteraÃ§Ãµes
+**ESCRITA**: Editor padrão apenas
+- Usar Write/Edit para modificações
+- MultiEdit para múltiplas alterações
 - NotebookEdit para Jupyter notebooks
 
-**VALIDAÃ‡ÃƒO**: Testes automatizados
-- Sempre anexar evidÃªncias quando possÃ­vel
+**VALIDAÇÃO**: Testes automatizados
+- Sempre anexar evidências quando possível
 - Usar Bash para executar comandos de teste
 
 ### Banco de Dados
-**ARQUIVO ÃšNICO**: database/setup.sql
-- Adicionar mudanÃ§as antes do COMMIT
-- Executar comandos de reset conforme necessÃ¡rio
-- PROIBIDO: criar mÃºltiplos arquivos de migraÃ§Ã£o
+**ARQUIVO ÚNICO**: database/setup.sql
+- Adicionar mudanças antes do COMMIT
+- Executar comandos de reset conforme necessário
+- PROIBIDO: criar múltiplos arquivos de migração
 
 ### Supabase SDK Only
-**PERMITIDO**: 
+**PERMITIDO**:
 - @supabase/supabase-js
 - @supabase/ssr
 
@@ -79,56 +79,56 @@ Template para projetos Next.js com Claude Code
 - pg, Prisma, Knex, Drizzle
 - JWT manual (jose, jsonwebtoken)
 - REST direto ao PostgREST
-- ConexÃµes diretas ao banco
+- Conexões diretas ao banco
 
 **REGRAS**:
 - RLS sempre ON
 - Service role apenas em Edge Functions
 
-## ESTRUTURA E ORGANIZAÃ‡ÃƒO
+## ESTRUTURA E ORGANIZAÇÃO
 
-### ARQUITETURA: Vertical Slice + Stores por DomÃ­nio
+### ARQUITETURA: Vertical Slice + Stores por Domínio
 
 ### Estrutura Recomendada
 ```
 src/
-â”œâ”€â”€ app/                    # Next.js App Router
-â”œâ”€â”€ components/            # Componentes globais
-â”‚   â””â”€â”€ ui/               # shadcn/ui components
-â”œâ”€â”€ features/              # DomÃ­nios especÃ­ficos (Vertical Slice)
-â”‚   â”œâ”€â”€ [feature-name]/    # Ex: users, products, orders
-â”‚   â”‚   â”œâ”€â”€ components/    # UI especÃ­fica do domÃ­nio
-â”‚   â”‚   â”œâ”€â”€ stores/        # Estado especÃ­fico do domÃ­nio
-â”‚   â”‚   â”œâ”€â”€ hooks/         # Hooks especÃ­ficos
-â”‚   â”‚   â”œâ”€â”€ services/      # LÃ³gica de negÃ³cio
-â”‚   â”‚   â””â”€â”€ types/         # Types especÃ­ficos
-â”œâ”€â”€ shared/               # Cross-cutting concerns
-â”‚   â”œâ”€â”€ stores/           # Auth, UI, Session
-â”‚   â”œâ”€â”€ components/ui/    # Design system
-â”‚   â”œâ”€â”€ hooks/            # Hooks globais
-â”‚   â”œâ”€â”€ services/         # Infraestrutura
-â”‚   â””â”€â”€ utils/            # UtilitÃ¡rios
-â””â”€â”€ tests/               # E2E com Gherkin/Playwright
+├── app/                    # Next.js App Router
+├── components/            # Componentes globais
+│   └── ui/               # shadcn/ui components
+├── features/              # Domínios específicos (Vertical Slice)
+│   ├── [feature-name]/    # Ex: users, products, orders
+│   │   ├── components/    # UI específica do domínio
+│   │   ├── stores/        # Estado específico do domínio
+│   │   ├── hooks/         # Hooks específicos
+│   │   ├── services/      # Lógica de negócio
+│   │   └── types/         # Types específicos
+├── shared/               # Cross-cutting concerns
+│   ├── stores/           # Auth, UI, Session
+│   ├── components/ui/    # Design system
+│   ├── hooks/            # Hooks globais
+│   ├── services/         # Infraestrutura
+│   └── utils/            # Utilitários
+└── tests/               # E2E com Gherkin/Playwright
 ```
 
-### Stores por DomÃ­nio (Arquitetura Alvo)
+### Stores por Domínio (Arquitetura Alvo)
 ```typescript
-// EVITAR: Store monolÃ­tico
+// EVITAR: Store monolítico
 profile-store.ts  // Faz TUDO (auth, profile, UI, permissions)
 
 // PREFERIR: Stores segregados por responsabilidade
 shared/stores/
-â”œâ”€â”€ auth.store.ts         # SÃ³ autenticaÃ§Ã£o
-â”œâ”€â”€ ui.store.ts           # SÃ³ estado UI
-â””â”€â”€ session.store.ts      # SÃ³ sessÃ£o
+├── auth.store.ts         # Só autenticação
+├── ui.store.ts           # Só estado UI
+└── session.store.ts      # Só sessão
 
 features/[domain]/stores/
-â”œâ”€â”€ [domain].store.ts     # Estado principal do domÃ­nio
-â”œâ”€â”€ [domain]-form.store.ts # FormulÃ¡rios especÃ­ficos
-â””â”€â”€ [domain]-list.store.ts # Listagem/filtros
+├── [domain].store.ts     # Estado principal do domínio
+├── [domain]-form.store.ts # Formulários específicos
+└── [domain]-list.store.ts # Listagem/filtros
 ```
 
-### PrincÃ­pios de OrganizaÃ§Ã£o SOLID
+### Princípios de Organização SOLID
 
 **Services** (Single Responsibility)
 ```typescript
@@ -141,7 +141,7 @@ class UserProfileService {
   async updateProfile(id: string, data: Profile): Promise<void>
 }
 
-// RUIM: MÃºltiplas responsabilidades
+// RUIM: Múltiplas responsabilidades
 class UserService {
   async authenticate()
   async updateProfile()
@@ -151,115 +151,115 @@ class UserService {
 
 **Interfaces** (Interface Segregation)
 ```typescript
-// BOM: Interfaces especÃ­ficas
+// BOM: Interfaces específicas
 interface Readable { read(): Data }
 interface Writable { write(data: Data): void }
 
 // RUIM: Interface gorda
 interface Repository {
-  read(); write(); delete(); update(); 
+  read(); write(); delete(); update();
   backup(); restore(); validate();
 }
 ```
 
-**DependÃªncias** (Dependency Inversion)
+**Dependências** (Dependency Inversion)
 ```typescript
-// BOM: Depende de abstraÃ§Ã£o
+// BOM: Depende de abstração
 constructor(private auth: IAuthService)
 
-// RUIM: Depende de implementaÃ§Ã£o concreta
+// RUIM: Depende de implementação concreta
 constructor(private auth: SupabaseAuthService)
 ```
 
 ## FLUXO DE TRABALHO
 
-### 1. DESCOBERTA (com usuÃ¡rio)
-- Fazer todas as perguntas obrigatÃ³rias
-- Confirmar escopo e regras de negÃ³cio
-- Identificar cÃ³digo existente para reutilizar
+### 1. DESCOBERTA (com usuário)
+- Fazer todas as perguntas obrigatórias
+- Confirmar escopo e regras de negócio
+- Identificar código existente para reutilizar
 
-### 2. INVESTIGAÃ‡ÃƒO 
-- Buscar implementaÃ§Ãµes similares
-- Analisar padrÃµes usados na Ã¡rea
-- Mapear dependÃªncias e integraÃ§Ãµes
-- LER E COMPREENDER o cÃ³digo existente completamente
+### 2. INVESTIGAÇÃO
+- Buscar implementações similares
+- Analisar padrões usados na área
+- Mapear dependências e integrações
+- LER E COMPREENDER o código existente completamente
 
 ### 3. PLANEJAMENTO
-- Desenhar soluÃ§Ã£o seguindo SOLID
-- Identificar classes/mÃ©todos a criar/modificar
-- Planejar reutilizaÃ§Ã£o de cÃ³digo existente
+- Desenhar solução seguindo SOLID
+- Identificar classes/métodos a criar/modificar
+- Planejar reutilização de código existente
 
-### 4. VALIDAÃ‡ÃƒO PRÃ‰-IMPLEMENTAÃ‡ÃƒO
-- Revisar com usuÃ¡rio antes de codificar
+### 4. VALIDAÇÃO PRÉ-IMPLEMENTAÇÃO
+- Revisar com usuário antes de codificar
 - Confirmar approach e arquitetura
 - Ajustar baseado em feedback
 
-### 5. IMPLEMENTAÃ‡ÃƒO
-- Seguir princÃ­pios SOLID rigorosamente
-- Reutilizar cÃ³digo existente ao mÃ¡ximo
-- Manter responsabilidade Ãºnica por classe/mÃ©todo
+### 5. IMPLEMENTAÇÃO
+- Seguir princípios SOLID rigorosamente
+- Reutilizar código existente ao máximo
+- Manter responsabilidade única por classe/método
 
-### 6. TESTES E EVIDÃŠNCIAS
-- Testes unitÃ¡rios para cada service
+### 6. TESTES E EVIDÊNCIAS
+- Testes unitários para cada service
 - E2E com Playwright + Gherkin (pasta tests/)
-- Screenshots/evidÃªncias quando aplicÃ¡vel
-- BDD scenarios para validaÃ§Ã£o de regras de negÃ³cio
+- Screenshots/evidências quando aplicável
+- BDD scenarios para validação de regras de negócio
 
-### 7. APROVAÃ‡ÃƒO
+### 7. APROVAÇÃO
 - Code review focado em SOLID
-- Verificar reutilizaÃ§Ã£o adequada
-- Aguardar aprovaÃ§Ã£o do usuÃ¡rio
+- Verificar reutilização adequada
+- Aguardar aprovação do usuário
 
 ## CHECKLIST DE CONFORMIDADE
 
 **Arquitetura**
-- [ ] PrincÃ­pios SOLID aplicados
-- [ ] Responsabilidade Ãºnica por classe
-- [ ] CÃ³digo existente reutilizado
-- [ ] Sem duplicaÃ§Ã£o (DRY)
+- [ ] Princípios SOLID aplicados
+- [ ] Responsabilidade única por classe
+- [ ] Código existente reutilizado
+- [ ] Sem duplicação (DRY)
 
-**InvestigaÃ§Ã£o**
+**Investigação**
 - [ ] Ferramentas apropriadas utilizadas
-- [ ] PadrÃµes existentes identificados
-- [ ] DependÃªncias mapeadas
+- [ ] Padrões existentes identificados
+- [ ] Dependências mapeadas
 
 **Qualidade**
 - [ ] TypeScript strict mode
 - [ ] Interfaces segregadas
-- [ ] InversÃ£o de dependÃªncias
-- [ ] Testes unitÃ¡rios
+- [ ] Inversão de dependências
+- [ ] Testes unitários
 - [ ] Testes E2E atualizados
 
 **Conformidade**
-- [ ] Regras de negÃ³cio respeitadas
-- [ ] RLS ativo (quando aplicÃ¡vel)
+- [ ] Regras de negócio respeitadas
+- [ ] RLS ativo (quando aplicável)
 - [ ] Dados reais (sem mocks)
 - [ ] shadcn/ui para UI
 
 ## TEMPLATE DE RESPOSTA
 
 ### DESCOBERTA
-**Perguntas ao usuÃ¡rio**:
-1. [Contexto de negÃ³cio]
-2. [CÃ³digo existente relacionado]
+**Perguntas ao usuário**:
+1. [Contexto de negócio]
+2. [Código existente relacionado]
 3. [Escopo e limites]
 
-### INVESTIGAÃ‡ÃƒO
-**CÃ³digo existente encontrado**:
-- Services: [referÃªncias]
-- Hooks: [referÃªncias]
-- Utils: [referÃªncias]
+### INVESTIGAÇÃO
+**Código existente encontrado**:
+- Services: [referências]
+- Hooks: [referências]
+- Utils: [referências]
 
-**PadrÃµes identificados**:
-- [PadrÃ£o]: usado em [arquivo]
+**Padrões identificados**:
+- [Padrão]: usado em [arquivo]
 
-**Fluxo de execuÃ§Ã£o mapeado** (para bugs/problemas):
+**Fluxo de execução mapeado** (para bugs/problemas):
 1. [Passo 1]: [componente/arquivo:linha]
-2. [Passo 2]: [service/hook:mÃ©todo]
-3. [Passo 3]: [transformaÃ§Ã£o de dados]
+2. [Passo 2]: [service/hook:método]
+3. [Passo 3]: [transformação de dados]
 4. [Resultado]: [esperado vs atual]
 
-### PROPOSTA DE IMPLEMENTAÃ‡ÃƒO
+### PROPOSTA DE IMPLEMENTAÇÃO
 
 **Arquitetura SOLID**:
 ```typescript
@@ -271,106 +271,106 @@ class NewService implements INewService {
 }
 ```
 
-**ReutilizaÃ§Ã£o**:
-- Estendendo: [classe/mÃ©todo existente]
+**Reutilização**:
+- Estendendo: [classe/método existente]
 - Compondo: [services existentes]
 
-**Novos arquivos necessÃ¡rios**:
+**Novos arquivos necessários**:
 - [ ] path/to/new-service.ts (justificativa)
 
-**ModificaÃ§Ãµes em existentes**:
-- [ ] path/to/existing.ts: [mudanÃ§a especÃ­fica]
+**Modificações em existentes**:
+- [ ] path/to/existing.ts: [mudança específica]
 
-### VALIDAÃ‡ÃƒO
+### VALIDAÇÃO
 - [ ] SOLID checklist completo
-- [ ] CÃ³digo existente maximamente reutilizado
-- [ ] Complexidade mÃ­nima (KISS)
+- [ ] Código existente maximamente reutilizado
+- [ ] Complexidade mínima (KISS)
 
-## DEBUGGING E ANÃLISE DE PROBLEMAS
+## DEBUGGING E ANÁLISE DE PROBLEMAS
 
-### ABORDAGEM OBRIGATÃ“RIA: Leitura de CÃ³digo
+### ABORDAGEM OBRIGATÓRIA: Leitura de Código
 **NUNCA debuggar via prints/console.log**
 
-#### 1. COMPREENSÃƒO DO FLUXO
-- Ler completamente o cÃ³digo relacionado ao problema
-- Mapear o fluxo de execuÃ§Ã£o passo a passo
-- Identificar todos os pontos de entrada e saÃ­da
-- Entender as transformaÃ§Ãµes de dados
+#### 1. COMPREENSÃO DO FLUXO
+- Ler completamente o código relacionado ao problema
+- Mapear o fluxo de execução passo a passo
+- Identificar todos os pontos de entrada e saída
+- Entender as transformações de dados
 
-#### 2. COMPARTILHAMENTO COM USUÃRIO
+#### 2. COMPARTILHAMENTO COM USUÁRIO
 Sempre apresentar:
 ```
 **FLUXO IDENTIFICADO:**
-1. UsuÃ¡rio aciona [aÃ§Ã£o] em [componente]
-2. Component chama [hook/service]  
-3. Service executa [operaÃ§Ã£o] 
+1. Usuário aciona [ação] em [componente]
+2. Component chama [hook/service]
+3. Service executa [operação]
 4. Dados fluem por [caminho]
 5. Resultado esperado: [X]
 6. Resultado atual: [Y]
-7. **POSSÃVEL CAUSA:** [anÃ¡lise baseada na leitura]
+7. **POSSÍVEL CAUSA:** [análise baseada na leitura]
 ```
 
 #### 3. DEBUGGING ESTRUTURADO
 **FAZER:**
-- Analisar cÃ³digo estÃ¡tico primeiro
-- Mapear dependÃªncias e data flow
-- Validar lÃ³gica linha por linha
+- Analisar código estático primeiro
+- Mapear dependências e data flow
+- Validar lógica linha por linha
 - Verificar tipos e interfaces
 - Checar tratamento de erros
 
-**NÃƒO FAZER:**
+**NÃO FAZER:**
 - Adicionar console.log/prints
 - Tentar "adivinhar" o problema
-- Fazer mudanÃ§as sem entender o fluxo
+- Fazer mudanças sem entender o fluxo
 - Debuggar "no escuro"
 
-## PROIBIÃ‡Ã•ES ABSOLUTAS
+## PROIBIÇÕES ABSOLUTAS
 
-1. Criar cÃ³digo sem buscar existente primeiro
-2. Violar princÃ­pios SOLID
-3. Duplicar lÃ³gica existente
-4. Criar "god classes" com mÃºltiplas responsabilidades
-5. Implementar sem aprovaÃ§Ã£o do approach
-6. Usar drivers diretos de banco (quando aplicÃ¡vel)
-7. Pular investigaÃ§Ã£o de cÃ³digo existente
-8. Marcar tarefa concluÃ­da sem teste do usuÃ¡rio
+1. Criar código sem buscar existente primeiro
+2. Violar princípios SOLID
+3. Duplicar lógica existente
+4. Criar "god classes" com múltiplas responsabilidades
+5. Implementar sem aprovação do approach
+6. Usar drivers diretos de banco (quando aplicável)
+7. Pular investigação de código existente
+8. Marcar tarefa concluída sem teste do usuário
 9. **Debuggar via prints/console.log**
 10. **Implementar sem compreender o fluxo completo**
 
 ## METODOLOGIA DE DESENVOLVIMENTO
 
 ### ABORDAGEM ITERATIVA
-- ComeÃ§ar com funcionalidade mÃ­nima viÃ¡vel
+- Começar com funcionalidade mínima viável
 - Evitar over-engineering inicial
-- Refatorar conforme necessÃ¡rio
+- Refatorar conforme necessário
 
 ### FOCO E DISCIPLINA
-**FAZER**: 
+**FAZER**:
 - Perguntar ANTES de assumir
-- Investigar ANTES de implementar  
+- Investigar ANTES de implementar
 - Reutilizar ANTES de criar
 - Priorizar features conforme definido
 
-**NÃƒO FAZER**:
+**NÃO FAZER**:
 - Assumir contexto sem confirmar
-- Criar cÃ³digo desnecessÃ¡rio
-- Implementar alÃ©m do escopo acordado
-- Mexer em outras Ã¡reas sem aprovaÃ§Ã£o
+- Criar código desnecessário
+- Implementar além do escopo acordado
+- Mexer em outras áreas sem aprovação
 
 ### TESTES E QUALIDADE
 - BDD scenarios na pasta tests/
-- CenÃ¡rios para validaÃ§Ã£o de regras de negÃ³cio
-- AutomaÃ§Ã£o com Playwright
-- Sempre atualizar testes apÃ³s mudanÃ§as
+- Cenários para validação de regras de negócio
+- Automação com Playwright
+- Sempre atualizar testes após mudanças
 
-## CUSTOMIZAÃ‡ÃƒO DO TEMPLATE
+## CUSTOMIZAÇÃO DO TEMPLATE
 
-Este template deve ser adaptado para cada projeto especÃ­fico:
+Este template deve ser adaptado para cada projeto específico:
 
-1. **DomÃ­nios**: Substitua exemplos por domÃ­nios reais do projeto
-2. **Regras de NegÃ³cio**: Adapte para regulamentaÃ§Ãµes especÃ­ficas
-3. **Stack**: Ajuste tecnologias conforme necessÃ¡rio
-4. **Estrutura**: Modifique organizaÃ§Ã£o conforme arquitetura escolhida
+1. **Domínios**: Substitua exemplos por domínios reais do projeto
+2. **Regras de Negócio**: Adapte para regulamentações específicas
+3. **Stack**: Ajuste tecnologias conforme necessário
+4. **Estrutura**: Modifique organização conforme arquitetura escolhida
 
 ---
-**IMPORTANTE**: Este Ã© um template base. Customize conforme as necessidades especÃ­ficas do seu projeto.
+**IMPORTANTE**: Este é um template base. Customize conforme as necessidades específicas do seu projeto.

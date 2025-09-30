@@ -1,11 +1,20 @@
 #!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
 
+# Pre-commit hook - runs without husky dependency
 # Detect package manager and run lint-staged
-if [ -f "pnpm-lock.yaml" ]; then
+
+echo "🔍 Running pre-commit checks..."
+
+if [ -f "pnpm-lock.yaml" ] && command -v pnpm >/dev/null 2>&1; then
+  echo "📦 Using pnpm..."
   pnpm exec lint-staged
-elif [ -f "yarn.lock" ]; then
+elif [ -f "yarn.lock" ] && command -v yarn >/dev/null 2>&1; then
+  echo "📦 Using yarn..."
   yarn lint-staged
-else
+elif command -v npx >/dev/null 2>&1; then
+  echo "📦 Using npm..."
   npx lint-staged
+else
+  echo "❌ No package manager found. Please install npm, yarn, or pnpm."
+  exit 1
 fi

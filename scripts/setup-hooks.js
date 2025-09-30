@@ -13,39 +13,45 @@ const { detectPackageManager, getCommands } = require('./detect-package-manager'
 console.log('🔧 Setting up Git hooks...');
 
 try {
+  // Reset any existing husky configuration
+  try {
+    execSync('git config --unset core.hookspath', { stdio: 'ignore' });
+    console.log('🧹 Cleared existing hook configuration');
+  } catch {
+    // No existing config, continue
+  }
   // Detect package manager
   const packageManager = detectPackageManager();
-  const commands = getCommands(packageManager);
-
   console.log(`📦 Using ${packageManager} package manager`);
 
-  // Install Husky
-  console.log('📦 Installing Husky...');
-  execSync(`${commands.exec} husky install`, { stdio: 'inherit' });
+  // Setup git hooks directory
+  const gitHooksDir = path.join(process.cwd(), '.git', 'hooks');
+  const templateHooksDir = path.join(process.cwd(), '.husky');
 
-  // Make sure .husky directory exists
-  const huskyDir = path.join(process.cwd(), '.husky');
-  if (!fs.existsSync(huskyDir)) {
-    fs.mkdirSync(huskyDir, { recursive: true });
+  if (!fs.existsSync(gitHooksDir)) {
+    fs.mkdirSync(gitHooksDir, { recursive: true });
   }
 
-  // Make pre-commit hook executable (for Unix systems)
-  const preCommitPath = path.join(huskyDir, 'pre-commit');
-  if (fs.existsSync(preCommitPath)) {
-    try {
-      fs.chmodSync(preCommitPath, '755');
-    } catch (error) {
-      // Windows doesn't need chmod, ignore error
-    }
-  }
+  // Copy hooks from template to git hooks
+  const hooks = ['pre-commit', 'commit-msg'];
 
-  // Make commit-msg hook executable (for Unix systems)
-  const commitMsgPath = path.join(huskyDir, 'commit-msg');
-  if (fs.existsSync(commitMsgPath)) {
-    try {
-      fs.chmodSync(commitMsgPath, '755');
-    } catch (error) {
-      // Windows doesn't need chmod, ignore error
+  for (const hook of hooks) {
+    const sourcePath = path.join(templateHooksDir, hook);
+    const targetPath = path.join(gitHooksDir, hook);
+
+    if (fs.existsSync(sourcePath)) {
+      fs.copyFileSync(sourcePath, targetPath);
+
+      // Make executable (Unix/Mac)
+      try {
+        fs.chmodSync(targetPath, '755');
+      } catch (error) {
+        // Windows doesn't need chmod, ignore error
+      }
+
+      console.log(`✅ Installed ${hook} hook`);
+    } else {
+      console.log(`⚠️ Template hook not found: ${hook}`);
     }
   }
 

@@ -1,11 +1,20 @@
 #!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
 
-# Detect package manager and run commitlint
-if [ -f "pnpm-lock.yaml" ]; then
+# Commit message hook - runs without husky dependency
+# Validate commit message format
+
+echo "📝 Validating commit message..."
+
+if [ -f "pnpm-lock.yaml" ] && command -v pnpm >/dev/null 2>&1; then
+  echo "📦 Using pnpm..."
   pnpm exec commitlint --edit $1
-elif [ -f "yarn.lock" ]; then
+elif [ -f "yarn.lock" ] && command -v yarn >/dev/null 2>&1; then
+  echo "📦 Using yarn..."
   yarn commitlint --edit $1
-else
+elif command -v npx >/dev/null 2>&1; then
+  echo "📦 Using npm..."
   npx commitlint --edit $1
+else
+  echo "⚠️ Commitlint not available. Commit message validation skipped."
+  echo "💡 Install dependencies with: [pnpm|yarn|npm] install"
 fi
