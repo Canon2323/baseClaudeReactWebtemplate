@@ -1,5 +1,5 @@
-import { useCallback } from 'react'
-import { useUserStore } from '../stores/user.store'
+import { useCallback } from "react";
+import { useUserStore } from "../stores/user.store";
 
 // Custom hook following Single Responsibility
 // Only handles single user operations
@@ -11,49 +11,53 @@ export const useUser = () => {
     setCurrentUser,
     setUserLoading,
     setUserError,
-  } = useUserStore()
+  } = useUserStore();
 
-  const fetchUser = useCallback(async (id: string) => {
-    if (!id) {
-      setUserError('User ID is required')
-      return null
-    }
+  const fetchUser = useCallback(
+    async (id: string) => {
+      if (!id) {
+        setUserError("User ID is required");
+        return null;
+      }
 
-    try {
-      setUserLoading(true)
-      setUserError(null)
+      try {
+        setUserLoading(true);
+        setUserError(null);
 
-      // TODO: Replace with actual service call when implemented
-      // const userService = getUserService()
-      // const user = await userService.getUserById(id)
-      
-      // Mock implementation for now
-      const user = null // await userService.getUserById(id)
+        // TODO: Replace with actual service call when implemented
+        // const userService = getUserService()
+        // const user = await userService.getUserById(id)
 
-      setCurrentUser(user)
-      return user
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to fetch user'
-      setUserError(errorMessage)
-      return null
-    } finally {
-      setUserLoading(false)
-    }
-  }, [setCurrentUser, setUserLoading, setUserError])
+        // Mock implementation for now
+        const user = null; // await userService.getUserById(id)
+
+        setCurrentUser(user);
+        return user;
+      } catch (error) {
+        const errorMessage =
+          error instanceof Error ? error.message : "Failed to fetch user";
+        setUserError(errorMessage);
+        return null;
+      } finally {
+        setUserLoading(false);
+      }
+    },
+    [setCurrentUser, setUserLoading, setUserError],
+  );
 
   const clearUser = useCallback(() => {
-    setCurrentUser(null)
-    setUserError(null)
-  }, [setCurrentUser, setUserError])
+    setCurrentUser(null);
+    setUserError(null);
+  }, [setCurrentUser, setUserError]);
 
   return {
     // State
     currentUser,
     isLoadingUser,
     userError,
-    
+
     // Actions
     fetchUser,
     clearUser,
-  }
-}
+  };
+};

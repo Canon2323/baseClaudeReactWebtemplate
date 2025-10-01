@@ -1,88 +1,98 @@
 // Encryption Service
 // Secure client-side encryption using Web Crypto API
 
-import type { IEncryptionService, EncryptedData, EncryptionConfig } from './storage.types'
-import { EncryptionError } from './storage.types'
+import type {
+  IEncryptionService,
+  EncryptedData,
+  EncryptionConfig,
+} from "./storage.types";
+import { EncryptionError } from "./storage.types";
 
 export class EncryptionService implements IEncryptionService {
-  private keys = new Map<string, CryptoKey>()
+  private keys = new Map<string, CryptoKey>();
   private readonly config: EncryptionConfig = {
-    algorithm: 'AES-GCM',
+    algorithm: "AES-GCM",
     keyLength: 256,
     ivLength: 12,
-    tagLength: 16
-  }
+    tagLength: 16,
+  };
 
-  async encrypt(data: string, keyId: string = 'default'): Promise<EncryptedData> {
+  async encrypt(
+    data: string,
+    keyId: string = "default",
+  ): Promise<EncryptedData> {
     try {
       // Get or generate encryption key
-      let key = await this.getKey(keyId)
+      let key = await this.getKey(keyId);
       if (!key) {
-        key = await this.generateKey(keyId)
+        key = await this.generateKey(keyId);
       }
 
       // Generate random IV
-      const iv = crypto.getRandomValues(new Uint8Array(this.config.ivLength))
+      const iv = crypto.getRandomValues(new Uint8Array(this.config.ivLength));
 
       // Encrypt the data
-      const encoder = new TextEncoder()
-      const encodedData = encoder.encode(data)
+      const encoder = new TextEncoder();
+      const encodedData = encoder.encode(data);
 
       const encryptedBuffer = await crypto.subtle.encrypt(
         {
           name: this.config.algorithm,
           iv: iv,
-          tagLength: this.config.tagLength * 8 // Convert to bits
+          tagLength: this.config.tagLength * 8, // Convert to bits
         },
         key,
-        encodedData
-      )
+        encodedData,
+      );
 
       // Convert to base64 for storage
-      const encryptedArray = new Uint8Array(encryptedBuffer)
-      const encryptedBase64 = this.arrayBufferToBase64(encryptedArray)
-      const ivBase64 = this.arrayBufferToBase64(iv)
+      const encryptedArray = new Uint8Array(encryptedBuffer);
+      const encryptedBase64 = this.arrayBufferToBase64(encryptedArray);
+      const ivBase64 = this.arrayBufferToBase64(iv);
 
       return {
         data: encryptedBase64,
         iv: ivBase64,
-        keyId
-      }
+        keyId,
+      };
     } catch (error) {
-      throw new EncryptionError(`Failed to encrypt data: ${error}`, 'encrypt')
+      throw new EncryptionError(`Failed to encrypt data: ${error}`, "encrypt");
     }
   }
 
   async decrypt(encryptedData: EncryptedData, keyId?: string): Promise<string> {
     try {
-      const effectiveKeyId = keyId || encryptedData.keyId || 'default'
+      const effectiveKeyId = keyId || encryptedData.keyId || "default";
 
       // Get encryption key
-      const key = await this.getKey(effectiveKeyId)
+      const key = await this.getKey(effectiveKeyId);
       if (!key) {
-        throw new EncryptionError(`Encryption key not found: ${effectiveKeyId}`, 'decrypt')
+        throw new EncryptionError(
+          `Encryption key not found: ${effectiveKeyId}`,
+          "decrypt",
+        );
       }
 
       // Convert from base64
-      const encryptedBytes = this.base64ToArrayBuffer(encryptedData.data)
-      const iv = this.base64ToArrayBuffer(encryptedData.iv)
+      const encryptedBytes = this.base64ToArrayBuffer(encryptedData.data);
+      const iv = this.base64ToArrayBuffer(encryptedData.iv);
 
       // Decrypt the data
       const decryptedBuffer = await crypto.subtle.decrypt(
         {
           name: this.config.algorithm,
           iv: iv,
-          tagLength: this.config.tagLength * 8 // Convert to bits
+          tagLength: this.config.tagLength * 8, // Convert to bits
         },
         key,
-        encryptedBytes
-      )
+        encryptedBytes,
+      );
 
       // Convert back to string
-      const decoder = new TextDecoder()
-      return decoder.decode(decryptedBuffer)
+      const decoder = new TextDecoder();
+      return decoder.decode(decryptedBuffer);
     } catch (error) {
-      throw new EncryptionError(`Failed to decrypt data: ${error}`, 'decrypt')
+      throw new EncryptionError(`Failed to decrypt data: ${error}`, "decrypt");
     }
   }
 
@@ -91,46 +101,48 @@ export class EncryptionService implements IEncryptionService {
       const key = await crypto.subtle.generateKey(
         {
           name: this.config.algorithm,
-          length: this.config.keyLength
+          length: this.config.keyLength,
         },
         false, // Not extractable for security
-        ['encrypt', 'decrypt']
-      )
+        ["encrypt", "decrypt"],
+      );
 
-      this.keys.set(keyId, key)
-      return key
+      this.keys.set(keyId, key);
+      return key;
     } catch (error) {
-      throw new EncryptionError(`Failed to generate key: ${error}`, 'encrypt')
+      throw new EncryptionError(`Failed to generate key: ${error}`, "encrypt");
     }
   }
 
   async getKey(keyId: string): Promise<CryptoKey | null> {
-    return this.keys.get(keyId) || null
+    return this.keys.get(keyId) || null;
   }
 
   // Utility methods
   private arrayBufferToBase64(buffer: ArrayBufferLike): string {
-    const bytes = new Uint8Array(buffer)
-    let binary = ''
+    const bytes = new Uint8Array(buffer);
+    let binary = "";
     for (let i = 0; i < bytes.byteLength; i++) {
-      binary += String.fromCharCode(bytes[i])
+      binary += String.fromCharCode(bytes[i]);
     }
-    return btoa(binary)
+    return btoa(binary);
   }
 
   private base64ToArrayBuffer(base64: string): ArrayBuffer {
-    const binary = atob(base64)
-    const bytes = new Uint8Array(binary.length)
+    const binary = atob(base64);
+    const bytes = new Uint8Array(binary.length);
     for (let i = 0; i < binary.length; i++) {
-      bytes[i] = binary.charCodeAt(i)
+      bytes[i] = binary.charCodeAt(i);
     }
-    return bytes.buffer
+    return bytes.buffer;
   }
 
   // Check if Web Crypto API is available
   static isSupported(): boolean {
-    return typeof crypto !== 'undefined' &&
-           crypto.subtle !== undefined &&
-           typeof crypto.getRandomValues === 'function'
+    return (
+      typeof crypto !== "undefined" &&
+      crypto.subtle !== undefined &&
+      typeof crypto.getRandomValues === "function"
+    );
   }
 }

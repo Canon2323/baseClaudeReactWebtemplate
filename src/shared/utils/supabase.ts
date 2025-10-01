@@ -1,12 +1,12 @@
-import { createClient } from '@supabase/supabase-js';
-import { getEnv } from '../config/env';
+import { createClient } from "@supabase/supabase-js";
+import { getEnv } from "../config/env";
 
 const env = getEnv();
 
 // Create Supabase client
 export const supabase = createClient(
   env.NEXT_PUBLIC_SUPABASE_URL!,
-  env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
 );
 
 // Create admin client (server-side only)
@@ -18,5 +18,5 @@ export const supabaseAdmin = createClient(
       autoRefreshToken: false,
       persistSession: false,
     },
-  }
+  },
 );

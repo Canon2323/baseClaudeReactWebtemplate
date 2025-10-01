@@ -2,7 +2,7 @@
 // Following clean architecture principles
 
 // Main service and factory
-export { ApiService, createApiService } from './api.service'
+export { ApiService, createApiService } from "./api.service";
 
 // Core types and interfaces
 export type {
@@ -18,14 +18,14 @@ export type {
   ApiProviderConfig,
   IApiProvider,
   ApiServiceDependencies,
-  ApiErrorResponse
-} from './api.types'
+  ApiErrorResponse,
+} from "./api.types";
 
 // Error classes
-export { ApiError, NetworkError, TimeoutError } from './api.types'
+export { ApiError, NetworkError, TimeoutError } from "./api.types";
 
 // Interceptor utilities (for advanced usage)
-export { InterceptorManager } from './interceptors/interceptor-manager'
-export { AuthInterceptor } from './interceptors/auth.interceptor'
-export { ErrorInterceptor } from './interceptors/error.interceptor'
-export { LoggingInterceptor } from './interceptors/logging.interceptor'
+export { InterceptorManager } from "./interceptors/interceptor-manager";
+export { AuthInterceptor } from "./interceptors/auth.interceptor";
+export { ErrorInterceptor } from "./interceptors/error.interceptor";
+export { LoggingInterceptor } from "./interceptors/logging.interceptor";

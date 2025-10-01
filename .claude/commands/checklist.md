@@ -158,7 +158,7 @@ interface Validateable {
 
 ```typescript
 // BAD: Depends on concrete implementation
-import { SupabaseUserService } from './supabase-service';
+import { SupabaseUserService } from "./supabase-service";
 class Component {
   service = new SupabaseUserService();
 }

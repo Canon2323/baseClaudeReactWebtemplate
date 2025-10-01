@@ -1,21 +1,21 @@
 #!/usr/bin/env node
 
-const fs = require('fs');
-const path = require('path');
-const { execSync } = require('child_process');
+const fs = require("fs");
+const path = require("path");
+const { execSync } = require("child_process");
 
 // Colors for console output
 const colors = {
-  green: '\x1b[32m',
-  blue: '\x1b[34m',
-  yellow: '\x1b[33m',
-  red: '\x1b[31m',
-  reset: '\x1b[0m',
-  bold: '\x1b[1m',
-  magenta: '\x1b[35m'
+  green: "\x1b[32m",
+  blue: "\x1b[34m",
+  yellow: "\x1b[33m",
+  red: "\x1b[31m",
+  reset: "\x1b[0m",
+  bold: "\x1b[1m",
+  magenta: "\x1b[35m",
 };
 
-function log(message, color = 'reset') {
+function log(message, color = "reset") {
   console.log(`${colors[color]}${message}${colors.reset}`);
 }
 
@@ -40,11 +40,11 @@ function info(message) {
 }
 
 function checkPrerequisites() {
-  step('Checking prerequisites for GitHub Spec Kit');
+  step("Checking prerequisites for GitHub Spec Kit");
 
   try {
     // Check Python 3.11+
-    const pythonVersion = execSync('python --version', { encoding: 'utf8' });
+    const pythonVersion = execSync("python --version", { encoding: "utf8" });
     const versionMatch = pythonVersion.match(/Python (\d+)\.(\d+)/);
 
     if (versionMatch) {
@@ -58,19 +58,19 @@ function checkPrerequisites() {
         return false;
       }
     } else {
-      error('Could not detect Python version');
+      error("Could not detect Python version");
       return false;
     }
 
     // Check uv
     try {
-      execSync('uv --version', { stdio: 'pipe' });
-      success('uv package manager found');
+      execSync("uv --version", { stdio: "pipe" });
+      success("uv package manager found");
     } catch {
-      warning('uv not found. Installing uv...');
+      warning("uv not found. Installing uv...");
       try {
-        execSync('pip install uv', { stdio: 'inherit' });
-        success('uv installed successfully');
+        execSync("pip install uv", { stdio: "inherit" });
+        success("uv installed successfully");
       } catch (err) {
         error(`Failed to install uv: ${err.message}`);
         return false;
@@ -80,33 +80,38 @@ function checkPrerequisites() {
     return true;
   } catch (err) {
     error(`Prerequisites check failed: ${err.message}`);
-    log('\n📋 Required:', 'yellow');
-    log('1. Python 3.11+ installed and in PATH', 'yellow');
-    log('2. pip package manager', 'yellow');
-    log('\n🔧 Install Python: https://python.org/downloads/', 'blue');
+    log("\n📋 Required:", "yellow");
+    log("1. Python 3.11+ installed and in PATH", "yellow");
+    log("2. pip package manager", "yellow");
+    log("\n🔧 Install Python: https://python.org/downloads/", "blue");
     return false;
   }
 }
 
 function initializeSpecKit() {
-  step('Initializing GitHub Spec Kit in project');
+  step("Initializing GitHub Spec Kit in project");
 
   try {
     // Check if already initialized
-    const specsDir = path.join(process.cwd(), 'specs');
+    const specsDir = path.join(process.cwd(), "specs");
     if (fs.existsSync(specsDir)) {
-      warning('Specs directory already exists. Skipping initialization.');
+      warning("Specs directory already exists. Skipping initialization.");
       return true;
     }
 
     // Initialize spec-kit in current directory
-    info('Running: uvx --from git+https://github.com/github/spec-kit.git specify init .');
-    execSync('uvx --from git+https://github.com/github/spec-kit.git specify init .', {
-      stdio: 'inherit',
-      cwd: process.cwd()
-    });
+    info(
+      "Running: uvx --from git+https://github.com/github/spec-kit.git specify init .",
+    );
+    execSync(
+      "uvx --from git+https://github.com/github/spec-kit.git specify init .",
+      {
+        stdio: "inherit",
+        cwd: process.cwd(),
+      },
+    );
 
-    success('GitHub Spec Kit initialized successfully');
+    success("GitHub Spec Kit initialized successfully");
     return true;
   } catch (err) {
     error(`Failed to initialize Spec Kit: ${err.message}`);
@@ -115,7 +120,7 @@ function initializeSpecKit() {
 }
 
 function createSpecKitDocs() {
-  step('Creating Spec Kit documentation and examples');
+  step("Creating Spec Kit documentation and examples");
 
   const specKitGuide = `# 📋 Spec-Driven Development with GitHub Spec Kit
 
@@ -271,18 +276,18 @@ Este template já inclui:
 **Combine especificações estruturadas com nossa arquitetura SOLID para desenvolvimento de alta qualidade! 🚀**
 `;
 
-  const docsDir = path.join(process.cwd(), 'docs');
-  const specKitDocsPath = path.join(docsDir, 'SPEC-DRIVEN-DEVELOPMENT.md');
+  const docsDir = path.join(process.cwd(), "docs");
+  const specKitDocsPath = path.join(docsDir, "SPEC-DRIVEN-DEVELOPMENT.md");
 
   try {
     fs.writeFileSync(specKitDocsPath, specKitGuide);
-    success('Spec Kit documentation created: docs/SPEC-DRIVEN-DEVELOPMENT.md');
+    success("Spec Kit documentation created: docs/SPEC-DRIVEN-DEVELOPMENT.md");
   } catch (err) {
     warning(`Could not create documentation: ${err.message}`);
   }
 
   // Create example specs if they don't exist
-  const specsDir = path.join(process.cwd(), 'specs');
+  const specsDir = path.join(process.cwd(), "specs");
   if (fs.existsSync(specsDir)) {
     const exampleSpec = `# Example Project Specification
 
@@ -311,11 +316,11 @@ This is an example specification generated by GitHub Spec Kit.
 **Next step:** Use \`/plan\` command to create technical implementation plan.
 `;
 
-    const examplePath = path.join(specsDir, 'example.md');
+    const examplePath = path.join(specsDir, "example.md");
     if (!fs.existsSync(examplePath)) {
       try {
         fs.writeFileSync(examplePath, exampleSpec);
-        success('Example specification created: specs/example.md');
+        success("Example specification created: specs/example.md");
       } catch (err) {
         warning(`Could not create example spec: ${err.message}`);
       }
@@ -324,20 +329,22 @@ This is an example specification generated by GitHub Spec Kit.
 }
 
 function updatePackageJson() {
-  step('Adding Spec Kit scripts to package.json');
+  step("Adding Spec Kit scripts to package.json");
 
-  const packageJsonPath = path.join(process.cwd(), 'package.json');
+  const packageJsonPath = path.join(process.cwd(), "package.json");
 
   try {
-    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
 
     // Add spec-kit related scripts
     packageJson.scripts = packageJson.scripts || {};
 
     const newScripts = {
-      'spec:init': 'uvx --from git+https://github.com/github/spec-kit.git specify init .',
-      'spec:example': 'echo "Use /specify command in Claude Code to create specifications"',
-      'spec:docs': 'echo "See docs/SPEC-DRIVEN-DEVELOPMENT.md for usage guide"'
+      "spec:init":
+        "uvx --from git+https://github.com/github/spec-kit.git specify init .",
+      "spec:example":
+        'echo "Use /specify command in Claude Code to create specifications"',
+      "spec:docs": 'echo "See docs/SPEC-DRIVEN-DEVELOPMENT.md for usage guide"',
     };
 
     let scriptsAdded = 0;
@@ -352,26 +359,31 @@ function updatePackageJson() {
       fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
       success(`Added ${scriptsAdded} Spec Kit scripts to package.json`);
     } else {
-      info('Spec Kit scripts already exist in package.json');
+      info("Spec Kit scripts already exist in package.json");
     }
-
   } catch (err) {
     warning(`Could not update package.json: ${err.message}`);
   }
 }
 
 async function main() {
-  log('📋 GitHub Spec Kit Setup for Spec-Driven Development', 'bold');
-  log('=====================================================\n', 'blue');
+  log("📋 GitHub Spec Kit Setup for Spec-Driven Development", "bold");
+  log("=====================================================\n", "blue");
 
-  log('Setting up GitHub Spec Kit for structured AI-driven development...', 'blue');
-  log('This enables specification-first development with Claude Code.\n', 'yellow');
+  log(
+    "Setting up GitHub Spec Kit for structured AI-driven development...",
+    "blue",
+  );
+  log(
+    "This enables specification-first development with Claude Code.\n",
+    "yellow",
+  );
 
-  info('What will be installed:');
-  log('  📋 GitHub Spec Kit CLI tool', 'green');
-  log('  📁 specs/ directory structure', 'green');
-  log('  📚 Spec-Driven Development documentation', 'green');
-  log('  🔧 npm scripts for common tasks', 'green');
+  info("What will be installed:");
+  log("  📋 GitHub Spec Kit CLI tool", "green");
+  log("  📁 specs/ directory structure", "green");
+  log("  📚 Spec-Driven Development documentation", "green");
+  log("  🔧 npm scripts for common tasks", "green");
 
   // Check prerequisites
   const prereqsOk = checkPrerequisites();
@@ -391,30 +403,30 @@ async function main() {
   // Update package.json
   updatePackageJson();
 
-  log('\n🎉 GitHub Spec Kit setup completed successfully!', 'bold');
-  log('==============================================\n', 'green');
+  log("\n🎉 GitHub Spec Kit setup completed successfully!", "bold");
+  log("==============================================\n", "green");
 
-  log('📋 What was installed:', 'bold');
-  log('  ✅ GitHub Spec Kit CLI tool', 'green');
-  log('  ✅ specs/ directory initialized', 'green');
-  log('  ✅ Documentation and examples created', 'green');
-  log('  ✅ npm scripts added', 'green');
+  log("📋 What was installed:", "bold");
+  log("  ✅ GitHub Spec Kit CLI tool", "green");
+  log("  ✅ specs/ directory initialized", "green");
+  log("  ✅ Documentation and examples created", "green");
+  log("  ✅ npm scripts added", "green");
 
-  log('\n📝 Next Steps:', 'bold');
-  log('1. 📖 Read the guide:', 'blue');
-  log('   cat docs/SPEC-DRIVEN-DEVELOPMENT.md', 'yellow');
-  log('2. 🚀 Start specifying in Claude Code:', 'blue');
-  log('   /specify Build [your feature description]', 'yellow');
-  log('3. 📋 Plan implementation:', 'blue');
-  log('   /plan Use this template\'s SOLID architecture', 'yellow');
+  log("\n📝 Next Steps:", "bold");
+  log("1. 📖 Read the guide:", "blue");
+  log("   cat docs/SPEC-DRIVEN-DEVELOPMENT.md", "yellow");
+  log("2. 🚀 Start specifying in Claude Code:", "blue");
+  log("   /specify Build [your feature description]", "yellow");
+  log("3. 📋 Plan implementation:", "blue");
+  log("   /plan Use this template's SOLID architecture", "yellow");
 
-  log('\n💡 Key Benefits:', 'bold');
-  log('- 📋 Specification-first development', 'magenta');
-  log('- 🤖 Structured AI interactions', 'magenta');
-  log('- 📚 Living documentation', 'magenta');
-  log('- 🏗️ Integrates with SOLID architecture', 'magenta');
+  log("\n💡 Key Benefits:", "bold");
+  log("- 📋 Specification-first development", "magenta");
+  log("- 🤖 Structured AI interactions", "magenta");
+  log("- 📚 Living documentation", "magenta");
+  log("- 🏗️ Integrates with SOLID architecture", "magenta");
 
-  log('\n🚀 Your project now supports Spec-Driven Development!', 'bold');
+  log("\n🚀 Your project now supports Spec-Driven Development!", "bold");
 }
 
 if (require.main === module) {

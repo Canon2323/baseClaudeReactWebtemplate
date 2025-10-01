@@ -1,6 +1,12 @@
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { ThemeSelector } from '@/shared/components/ui/theme-selector';
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { ThemeSelector } from "@/shared/components/ui/theme-selector";
 
 export default function HomePage() {
   return (
@@ -31,7 +37,8 @@ export default function HomePage() {
                 🏗️ SOLID Architecture
               </CardTitle>
               <CardDescription>
-                Built following SOLID principles for maintainable and scalable code
+                Built following SOLID principles for maintainable and scalable
+                code
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -82,9 +89,7 @@ export default function HomePage() {
 
         {/* CTA Section */}
         <div className="flex flex-col sm:flex-row gap-4">
-          <Button size="lg">
-            Get Started
-          </Button>
+          <Button size="lg">Get Started</Button>
           <Button variant="outline" size="lg">
             View Documentation
           </Button>

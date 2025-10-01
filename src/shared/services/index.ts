@@ -2,19 +2,24 @@
 // Following clean architecture principles
 
 // Base services and interfaces
-export { BaseService } from './base.service'
-export type { IRepository, IValidator } from './base.service'
+export { BaseService } from "./base.service";
+export type { IRepository, IValidator } from "./base.service";
 
 // Supabase integration
-export { SupabaseService, createSupabaseService } from './supabase.service'
-export type { ISupabaseService, ISupabaseConfig } from './supabase.service'
+export { SupabaseService, createSupabaseService } from "./supabase.service";
+export type { ISupabaseService, ISupabaseConfig } from "./supabase.service";
 
 // Validation
-export { ValidationService, ValidationError, createValidationService, commonSchemas } from './validation.service'
-export type { IValidationService } from './validation.service'
+export {
+  ValidationService,
+  ValidationError,
+  createValidationService,
+  commonSchemas,
+} from "./validation.service";
+export type { IValidationService } from "./validation.service";
 
 // API Service
-export { ApiService, createApiService } from './api'
+export { ApiService, createApiService } from "./api";
 export type {
   IApiService,
   RequestConfig,
@@ -23,8 +28,8 @@ export type {
   ApiServiceDependencies,
   RequestInterceptor,
   ResponseInterceptor,
-  ErrorInterceptor
-} from './api'
+  ErrorInterceptor,
+} from "./api";
 
 // Storage Service
 export {
@@ -34,8 +39,8 @@ export {
   CrossTabSyncService,
   LocalStorageProvider,
   SessionStorageProvider,
-  MemoryStorageProvider
-} from './storage'
+  MemoryStorageProvider,
+} from "./storage";
 export type {
   IStorageService,
   StorageOptions,
@@ -52,8 +57,8 @@ export type {
   StorageServiceDependencies,
   IEncryptionService,
   EncryptedData,
-  EncryptionConfig
-} from './storage'
+  EncryptionConfig,
+} from "./storage";
 
 // Dependency injection
 export {
@@ -64,5 +69,5 @@ export {
   resolveService,
   hasService,
   SERVICE_KEYS,
-} from './dependency-container'
-export type { IDependencyContainer } from './dependency-container'
+} from "./dependency-container";
+export type { IDependencyContainer } from "./dependency-container";

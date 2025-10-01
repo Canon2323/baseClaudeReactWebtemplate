@@ -3,10 +3,10 @@ export {
   DatabaseProviderFactory,
   registerDefaultDatabaseProviders,
   validateDatabaseConfig,
-  DatabaseConfigBuilder
-} from './database-factory'
+  DatabaseConfigBuilder,
+} from "./database-factory";
 
-export { SupabaseDatabaseProvider } from './providers/supabase-database-provider'
+export { SupabaseDatabaseProvider } from "./providers/supabase-database-provider";
 
 // Re-export types
 export type {
@@ -27,8 +27,8 @@ export type {
   SupabaseConfig,
   PlanetScaleConfig,
   PrismaConfig,
-  MongoDBConfig
-} from '@/shared/types/database'
+  MongoDBConfig,
+} from "@/shared/types/database";
 
 // Re-export provider components
 export {
@@ -39,20 +39,31 @@ export {
   useDatabaseStorage,
   useDatabaseStatus,
   withDatabase,
-  DatabaseStatus
-} from '@/shared/components/providers/database-provider'
+  DatabaseStatus,
+} from "@/shared/components/providers/database-provider";
 
 // Helper para criar configuração facilmente
 export const createDatabaseConfig = {
   supabase: (url: string, anonKey: string, serviceRoleKey?: string) =>
-    DatabaseConfigBuilder.create().useSupabase(url, anonKey, serviceRoleKey).build(),
+    DatabaseConfigBuilder.create()
+      .useSupabase(url, anonKey, serviceRoleKey)
+      .build(),
 
-  planetscale: (host: string, username: string, password: string, database: string) =>
-    DatabaseConfigBuilder.create().usePlanetScale(host, username, password, database).build(),
+  planetscale: (
+    host: string,
+    username: string,
+    password: string,
+    database: string,
+  ) =>
+    DatabaseConfigBuilder.create()
+      .usePlanetScale(host, username, password, database)
+      .build(),
 
   prisma: (databaseUrl: string) =>
     DatabaseConfigBuilder.create().usePrisma(databaseUrl).build(),
 
   mongodb: (connectionString: string, database: string) =>
-    DatabaseConfigBuilder.create().useMongoDB(connectionString, database).build()
-}
+    DatabaseConfigBuilder.create()
+      .useMongoDB(connectionString, database)
+      .build(),
+};

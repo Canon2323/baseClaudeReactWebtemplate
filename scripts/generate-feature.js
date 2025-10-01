@@ -1,63 +1,58 @@
 #!/usr/bin/env node
 
-const fs = require('fs')
-const path = require('path')
+const fs = require("fs");
+const path = require("path");
 
 // Script para gerar uma nova feature seguindo o padrão Vertical Slice
 function generateFeature(featureName) {
   if (!featureName) {
-    console.error('❌ Por favor, forneça um nome para a feature:')
-    console.log('npm run generate:feature <nome-da-feature>')
-    process.exit(1)
+    console.error("❌ Por favor, forneça um nome para a feature:");
+    console.log("npm run generate:feature <nome-da-feature>");
+    process.exit(1);
   }
 
-  const kebabCase = featureName.toLowerCase().replace(/\s+/g, '-')
-  const pascalCase = kebabCase.split('-').map(word => 
-    word.charAt(0).toUpperCase() + word.slice(1)
-  ).join('')
-  
-  const featurePath = path.join('src', 'features', kebabCase)
+  const kebabCase = featureName.toLowerCase().replace(/\s+/g, "-");
+  const pascalCase = kebabCase
+    .split("-")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join("");
+
+  const featurePath = path.join("src", "features", kebabCase);
 
   // Verificar se a feature já existe
   if (fs.existsSync(featurePath)) {
-    console.error(`❌ Feature '${kebabCase}' já existe!`)
-    process.exit(1)
+    console.error(`❌ Feature '${kebabCase}' já existe!`);
+    process.exit(1);
   }
 
-  console.log(`🚀 Gerando feature: ${kebabCase}`)
+  console.log(`🚀 Gerando feature: ${kebabCase}`);
 
   // Criar estrutura de diretórios
-  const dirs = [
-    'components',
-    'stores', 
-    'hooks',
-    'services',
-    'types'
-  ]
+  const dirs = ["components", "stores", "hooks", "services", "types"];
 
-  dirs.forEach(dir => {
-    const dirPath = path.join(featurePath, dir)
-    fs.mkdirSync(dirPath, { recursive: true })
-    console.log(`📁 ${dirPath}`)
-  })
+  dirs.forEach((dir) => {
+    const dirPath = path.join(featurePath, dir);
+    fs.mkdirSync(dirPath, { recursive: true });
+    console.log(`📁 ${dirPath}`);
+  });
 
   // Gerar arquivos base
-  generateTypes(featurePath, kebabCase, pascalCase)
-  generateService(featurePath, kebabCase, pascalCase)
-  generateStore(featurePath, kebabCase, pascalCase)
-  generateHooks(featurePath, kebabCase, pascalCase)
-  generateComponent(featurePath, kebabCase, pascalCase)
-  generateIndex(featurePath, kebabCase, pascalCase)
+  generateTypes(featurePath, kebabCase, pascalCase);
+  generateService(featurePath, kebabCase, pascalCase);
+  generateStore(featurePath, kebabCase, pascalCase);
+  generateHooks(featurePath, kebabCase, pascalCase);
+  generateComponent(featurePath, kebabCase, pascalCase);
+  generateIndex(featurePath, kebabCase, pascalCase);
 
-  console.log('')
-  console.log('✅ Feature criada com sucesso!')
-  console.log(`📂 Localização: ${featurePath}`)
-  console.log('')
-  console.log('📝 Próximos passos:')
-  console.log(`1. Implementar as interfaces em ${kebabCase}.service.ts`)
-  console.log(`2. Adicionar validações específicas`)
-  console.log(`3. Customizar componentes conforme necessário`)
-  console.log(`4. Adicionar testes`)
+  console.log("");
+  console.log("✅ Feature criada com sucesso!");
+  console.log(`📂 Localização: ${featurePath}`);
+  console.log("");
+  console.log("📝 Próximos passos:");
+  console.log(`1. Implementar as interfaces em ${kebabCase}.service.ts`);
+  console.log(`2. Adicionar validações específicas`);
+  console.log(`3. Customizar componentes conforme necessário`);
+  console.log(`4. Adicionar testes`);
 }
 
 function generateTypes(featurePath, kebabCase, pascalCase) {
@@ -89,10 +84,13 @@ export interface ${pascalCase}ListResponse {
   ${kebabCase}s: ${pascalCase}[]
   total: number
   hasMore: boolean
-}`
+}`;
 
-  fs.writeFileSync(path.join(featurePath, 'types', `${kebabCase}.types.ts`), content)
-  console.log(`📄 types/${kebabCase}.types.ts`)
+  fs.writeFileSync(
+    path.join(featurePath, "types", `${kebabCase}.types.ts`),
+    content,
+  );
+  console.log(`📄 types/${kebabCase}.types.ts`);
 }
 
 function generateService(featurePath, kebabCase, pascalCase) {
@@ -169,10 +167,13 @@ export class ${pascalCase}Service {
 
     await this.${kebabCase}Repository.delete(id)
   }
-}`
+}`;
 
-  fs.writeFileSync(path.join(featurePath, 'services', `${kebabCase}.service.ts`), content)
-  console.log(`📄 services/${kebabCase}.service.ts`)
+  fs.writeFileSync(
+    path.join(featurePath, "services", `${kebabCase}.service.ts`),
+    content,
+  );
+  console.log(`📄 services/${kebabCase}.service.ts`);
 }
 
 function generateStore(featurePath, kebabCase, pascalCase) {
@@ -310,10 +311,13 @@ export const use${pascalCase}Store = create<${pascalCase}Store>()(
       name: '${kebabCase}-store',
     }
   )
-)`
+)`;
 
-  fs.writeFileSync(path.join(featurePath, 'stores', `${kebabCase}.store.ts`), content)
-  console.log(`📄 stores/${kebabCase}.store.ts`)
+  fs.writeFileSync(
+    path.join(featurePath, "stores", `${kebabCase}.store.ts`),
+    content,
+  );
+  console.log(`📄 stores/${kebabCase}.store.ts`);
 }
 
 function generateHooks(featurePath, kebabCase, pascalCase) {
@@ -402,7 +406,7 @@ export const use${pascalCase}s = () => {
     create${pascalCase},
     setFilter,
   }
-}`
+}`;
 
   // Hook para item único
   const singleHookContent = `import { useCallback } from 'react'
@@ -454,19 +458,25 @@ export const use${pascalCase} = () => {
     fetch${pascalCase},
     clear${pascalCase},
   }
-}`
+}`;
 
   // Index
   const indexContent = `export { use${pascalCase} } from './use${pascalCase}'
-export { use${pascalCase}s } from './use${pascalCase}s'`
+export { use${pascalCase}s } from './use${pascalCase}s'`;
 
-  fs.writeFileSync(path.join(featurePath, 'hooks', `use${pascalCase}.ts`), singleHookContent)
-  fs.writeFileSync(path.join(featurePath, 'hooks', `use${pascalCase}s.ts`), listHookContent)
-  fs.writeFileSync(path.join(featurePath, 'hooks', 'index.ts'), indexContent)
-  
-  console.log(`📄 hooks/use${pascalCase}.ts`)
-  console.log(`📄 hooks/use${pascalCase}s.ts`)
-  console.log(`📄 hooks/index.ts`)
+  fs.writeFileSync(
+    path.join(featurePath, "hooks", `use${pascalCase}.ts`),
+    singleHookContent,
+  );
+  fs.writeFileSync(
+    path.join(featurePath, "hooks", `use${pascalCase}s.ts`),
+    listHookContent,
+  );
+  fs.writeFileSync(path.join(featurePath, "hooks", "index.ts"), indexContent);
+
+  console.log(`📄 hooks/use${pascalCase}.ts`);
+  console.log(`📄 hooks/use${pascalCase}s.ts`);
+  console.log(`📄 hooks/index.ts`);
 }
 
 function generateComponent(featurePath, kebabCase, pascalCase) {
@@ -523,15 +533,21 @@ export const ${pascalCase}List = () => {
       </div>
     </div>
   )
-}`
+}`;
 
-  const indexContent = `export { ${pascalCase}List } from './${pascalCase}List'`
+  const indexContent = `export { ${pascalCase}List } from './${pascalCase}List'`;
 
-  fs.writeFileSync(path.join(featurePath, 'components', `${pascalCase}List.tsx`), content)
-  fs.writeFileSync(path.join(featurePath, 'components', 'index.ts'), indexContent)
-  
-  console.log(`📄 components/${pascalCase}List.tsx`)
-  console.log(`📄 components/index.ts`)
+  fs.writeFileSync(
+    path.join(featurePath, "components", `${pascalCase}List.tsx`),
+    content,
+  );
+  fs.writeFileSync(
+    path.join(featurePath, "components", "index.ts"),
+    indexContent,
+  );
+
+  console.log(`📄 components/${pascalCase}List.tsx`);
+  console.log(`📄 components/index.ts`);
 }
 
 function generateIndex(featurePath, kebabCase, pascalCase) {
@@ -553,12 +569,12 @@ export type { ${pascalCase}Store } from './stores/${kebabCase}.store'
 export { use${pascalCase}, use${pascalCase}s } from './hooks'
 
 // Components
-export { ${pascalCase}List } from './components'`
+export { ${pascalCase}List } from './components'`;
 
-  fs.writeFileSync(path.join(featurePath, 'index.ts'), content)
-  console.log(`📄 index.ts`)
+  fs.writeFileSync(path.join(featurePath, "index.ts"), content);
+  console.log(`📄 index.ts`);
 }
 
 // Executar o script
-const featureName = process.argv[2]
-generateFeature(featureName)
+const featureName = process.argv[2];
+generateFeature(featureName);

@@ -5,6 +5,7 @@ Este diretório contém os componentes UI base do shadcn/ui configurados para o 
 ## 📦 Componentes Incluídos
 
 ### **Button**
+
 Componente base para botões com múltiplas variações.
 
 ```tsx
@@ -23,10 +24,17 @@ import { Button } from '@/components/ui/button';
 ```
 
 ### **Card**
+
 Componente para cards com header, content e footer.
 
 ```tsx
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from "@/components/ui/card";
 
 <Card>
   <CardHeader>
@@ -36,12 +44,13 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/com
   <CardContent>
     <p>Card content goes here</p>
   </CardContent>
-</Card>
+</Card>;
 ```
 
 ## 🚀 Adicionando Novos Componentes
 
 ### **Via CLI (Recomendado)**
+
 ```bash
 # Instalar componente específico
 npx shadcn-ui@latest add dialog
@@ -53,6 +62,7 @@ npx shadcn-ui@latest add dialog form input select
 ```
 
 ### **Componentes Comuns Recomendados**
+
 ```bash
 # Essenciais para formulários
 npm run setup:forms  # Instala zod, react-hook-form, @hookform/resolvers
@@ -94,23 +104,29 @@ src/components/
 ## 🎯 Princípios SOLID nos Componentes
 
 ### **Single Responsibility**
+
 Cada componente tem uma função específica e bem definida.
 
 ### **Open/Closed**
+
 Componentes são extensíveis via props sem modificar o código base.
 
 ### **Liskov Substitution**
+
 Todos os componentes seguem a mesma interface base do shadcn/ui.
 
 ### **Interface Segregation**
+
 Props específicas para cada componente, sem dependências desnecessárias.
 
 ### **Dependency Inversion**
+
 Componentes dependem de abstrações (props) não de implementações concretas.
 
 ## 🔧 Customização
 
 ### **Themes**
+
 Modificar cores e estilos via `src/app/globals.css`:
 
 ```css
@@ -122,6 +138,7 @@ Modificar cores e estilos via `src/app/globals.css`:
 ```
 
 ### **Variantes Customizadas**
+
 Estender componentes com novas variantes:
 
 ```tsx
@@ -135,9 +152,9 @@ const buttonVariants = cva(
         outline: "...",
         // Adicionar nova variante
         gradient: "bg-gradient-to-r from-blue-500 to-purple-600 text-white",
-      }
-    }
-  }
+      },
+    },
+  },
 );
 ```
 

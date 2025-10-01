@@ -1,8 +1,8 @@
-'use client'
+"use client";
 
-import * as React from 'react'
-import { Monitor, Moon, Sun, Palette } from 'lucide-react'
-import { Button } from '@/shared/components/ui/button'
+import * as React from "react";
+import { Monitor, Moon, Sun, Palette } from "lucide-react";
+import { Button } from "@/shared/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,12 +10,15 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/shared/components/ui/dropdown-menu'
-import { useExtendedTheme, useTheme } from '@/shared/components/providers/theme-provider'
+} from "@/shared/components/ui/dropdown-menu";
+import {
+  useExtendedTheme,
+  useTheme,
+} from "@/shared/components/providers/theme-provider";
 
 // Componente para trocar entre light/dark/system (Single Responsibility)
 export function ThemeToggle() {
-  const { setTheme, theme } = useTheme()
+  const { setTheme, theme } = useTheme();
 
   return (
     <DropdownMenu>
@@ -27,26 +30,26 @@ export function ThemeToggle() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => setTheme('light')}>
+        <DropdownMenuItem onClick={() => setTheme("light")}>
           <Sun className="mr-2 h-4 w-4" />
           Light
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme('dark')}>
+        <DropdownMenuItem onClick={() => setTheme("dark")}>
           <Moon className="mr-2 h-4 w-4" />
           Dark
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme('system')}>
+        <DropdownMenuItem onClick={() => setTheme("system")}>
           <Monitor className="mr-2 h-4 w-4" />
           System
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 }
 
 // Componente para seleção de cores de tema (Single Responsibility)
 export function ThemeColorSelector() {
-  const { availableThemes, currentTheme, setTheme } = useExtendedTheme()
+  const { availableThemes, currentTheme, setTheme } = useExtendedTheme();
 
   return (
     <DropdownMenu>
@@ -73,7 +76,7 @@ export function ThemeColorSelector() {
         ))}
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 }
 
 // Componente combinado (Composite Pattern)
@@ -83,20 +86,20 @@ export function ThemeSelector() {
       <ThemeColorSelector />
       <ThemeToggle />
     </div>
-  )
+  );
 }
 
 // Componente para preview de cores do tema (Single Responsibility)
 interface ThemePreviewProps {
-  themeId: string
-  className?: string
+  themeId: string;
+  className?: string;
 }
 
 export function ThemePreview({ themeId, className }: ThemePreviewProps) {
-  const { availableThemes } = useExtendedTheme()
-  const theme = availableThemes.find(t => t.id === themeId)
+  const { availableThemes } = useExtendedTheme();
+  const theme = availableThemes.find((t) => t.id === themeId);
 
-  if (!theme) return null
+  if (!theme) return null;
 
   return (
     <div className={`flex gap-1 ${className}`}>
@@ -116,12 +119,12 @@ export function ThemePreview({ themeId, className }: ThemePreviewProps) {
         title={`${theme.name} - Accent`}
       />
     </div>
-  )
+  );
 }
 
 // Grid de seleção visual de temas (Single Responsibility)
 export function ThemeGrid() {
-  const { availableThemes, currentTheme, setTheme } = useExtendedTheme()
+  const { availableThemes, currentTheme, setTheme } = useExtendedTheme();
 
   return (
     <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
@@ -131,8 +134,8 @@ export function ThemeGrid() {
           onClick={() => setTheme(theme.id)}
           className={`group relative rounded-lg border-2 p-4 text-left transition-colors hover:border-primary ${
             currentTheme === theme.id
-              ? 'border-primary bg-primary/5'
-              : 'border-border hover:border-primary/50'
+              ? "border-primary bg-primary/5"
+              : "border-border hover:border-primary/50"
           }`}
         >
           <div className="flex items-center justify-between">
@@ -145,5 +148,5 @@ export function ThemeGrid() {
         </button>
       ))}
     </div>
-  )
+  );
 }

@@ -6,7 +6,7 @@ export interface ApiResponse<T = any> {
   data?: T;
   error?: string;
   message?: string;
-  status: 'success' | 'error';
+  status: "success" | "error";
 }
 
 export interface PaginatedResponse<T> extends ApiResponse<T[]> {
@@ -73,12 +73,12 @@ export type ValueOf<T> = T[keyof T];
 /**
  * Environment types
  */
-export type Environment = 'development' | 'production' | 'test';
+export type Environment = "development" | "production" | "test";
 
 /**
  * Theme types
  */
-export type Theme = 'light' | 'dark' | 'system';
+export type Theme = "light" | "dark" | "system";
 
 /**
  * Common component props

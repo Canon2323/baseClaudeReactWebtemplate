@@ -1,7 +1,13 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 interface ErrorProps {
   error: Error & { digest?: string };
@@ -26,7 +32,7 @@ export default function Error({ error, reset }: ErrorProps) {
         </CardHeader>
         <CardContent className="space-y-4">
           {/* Error details (only in development) */}
-          {process.env.NODE_ENV === 'development' && (
+          {process.env.NODE_ENV === "development" && (
             <details className="rounded-md border p-3">
               <summary className="cursor-pointer text-sm font-medium">
                 Error Details
@@ -39,12 +45,10 @@ export default function Error({ error, reset }: ErrorProps) {
 
           {/* Action buttons */}
           <div className="flex flex-col gap-2">
-            <Button onClick={reset}>
-              Try again
-            </Button>
-            <Button 
-              variant="outline" 
-              onClick={() => window.location.href = '/'}
+            <Button onClick={reset}>Try again</Button>
+            <Button
+              variant="outline"
+              onClick={() => (window.location.href = "/")}
             >
               Go to Homepage
             </Button>

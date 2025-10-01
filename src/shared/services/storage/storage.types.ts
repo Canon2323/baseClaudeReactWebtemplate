@@ -1,215 +1,223 @@
 // Storage Service Types and Interfaces
 // Following the contract specification from specs/master/contracts/storage-service.contract.ts
 
-export type StorageProviderType = 'localStorage' | 'sessionStorage' | 'memory' | 'cookie'
+export type StorageProviderType =
+  | "localStorage"
+  | "sessionStorage"
+  | "memory"
+  | "cookie";
 
 export interface StorageOptions {
   /** Storage provider to use */
-  provider?: StorageProviderType
+  provider?: StorageProviderType;
 
   /** Time to live in milliseconds */
-  ttl?: number
+  ttl?: number;
 
   /** Enable compression for large data */
-  compress?: boolean
+  compress?: boolean;
 
   /** Enable cross-tab synchronization */
-  sync?: boolean
+  sync?: boolean;
 }
 
 export interface SecureStorageOptions extends StorageOptions {
   /** Enable encryption (default: true) */
-  encrypt?: boolean
+  encrypt?: boolean;
 
   /** Encryption key ID for key rotation */
-  keyId?: string
+  keyId?: string;
 }
 
 export interface StorageItem<T = unknown> {
   /** Storage key */
-  key: string
+  key: string;
 
   /** Stored value */
-  value: T
+  value: T;
 
   /** Timestamp when item was stored */
-  timestamp: number
+  timestamp: number;
 
   /** Time to live in milliseconds */
-  ttl?: number
+  ttl?: number;
 
   /** Whether data is compressed */
-  compressed?: boolean
+  compressed?: boolean;
 
   /** Whether data is encrypted */
-  encrypted?: boolean
+  encrypted?: boolean;
 }
 
 export interface SecureStorageItem {
   /** Encrypted data string */
-  data: string
+  data: string;
 
   /** Initialization vector for encryption */
-  iv: string
+  iv: string;
 
   /** Timestamp when item was stored */
-  timestamp: number
+  timestamp: number;
 
   /** Time to live in milliseconds */
-  ttl?: number
+  ttl?: number;
 
   /** Encryption key ID */
-  keyId?: string
+  keyId?: string;
 }
 
 export interface StorageUsage {
   /** Bytes currently used */
-  used: number
+  used: number;
 
   /** Total quota in bytes */
-  quota: number
+  quota: number;
 
   /** Usage percentage (0-100) */
-  percentage: number
+  percentage: number;
 
   /** Storage provider type */
-  provider: StorageProviderType
+  provider: StorageProviderType;
 }
 
 export interface StorageEvent<T = unknown> {
   /** Storage key that changed */
-  key: string
+  key: string;
 
   /** Previous value (null if new item) */
-  oldValue: T | null
+  oldValue: T | null;
 
   /** New value (null if deleted) */
-  newValue: T | null
+  newValue: T | null;
 
   /** Timestamp of change */
-  timestamp: number
+  timestamp: number;
 
   /** Storage provider that changed */
-  provider: StorageProviderType
+  provider: StorageProviderType;
 
   /** Source of change (local or cross-tab) */
-  source: 'local' | 'remote'
+  source: "local" | "remote";
 }
 
-export type StorageEventCallback = <T>(event: StorageEvent<T>) => void
+export type StorageEventCallback = <T>(event: StorageEvent<T>) => void;
 
 export interface CrossTabMessage<T = unknown> {
   /** Message type identifier */
-  type: 'storage-change'
+  type: "storage-change";
 
   /** Storage key that changed */
-  key: string
+  key: string;
 
   /** New value (null if deleted) */
-  value: T | null
+  value: T | null;
 
   /** Timestamp of change */
-  timestamp: number
+  timestamp: number;
 
   /** Message signature for security */
-  signature?: string
+  signature?: string;
 }
 
 export interface CleanupStrategy {
   /** Cleanup strategy type */
-  type: 'lru' | 'ttl' | 'percentage' | 'manual'
+  type: "lru" | "ttl" | "percentage" | "manual";
 
   /** Maximum age for TTL strategy (milliseconds) */
-  maxAge?: number
+  maxAge?: number;
 
   /** Maximum items for LRU strategy */
-  maxItems?: number
+  maxItems?: number;
 
   /** Target percentage for percentage strategy */
-  targetPercentage?: number
+  targetPercentage?: number;
 
   /** Specific keys to remove for manual strategy */
-  keysToRemove?: string[]
+  keysToRemove?: string[];
 }
 
 export interface StorageProvider {
   /** Store item in provider */
-  setItem(key: string, value: string): void | Promise<void>
+  setItem(key: string, value: string): void | Promise<void>;
 
   /** Retrieve item from provider */
-  getItem(key: string): string | null | Promise<string | null>
+  getItem(key: string): string | null | Promise<string | null>;
 
   /** Remove item from provider */
-  removeItem(key: string): void | Promise<void>
+  removeItem(key: string): void | Promise<void>;
 
   /** Clear all items from provider */
-  clear(): void | Promise<void>
+  clear(): void | Promise<void>;
 
   /** Get all keys from provider */
-  keys(): string[] | Promise<string[]>
+  keys(): string[] | Promise<string[]>;
 
   /** Get usage statistics */
-  getUsage(): StorageUsage | Promise<StorageUsage>
+  getUsage(): StorageUsage | Promise<StorageUsage>;
 }
 
 export interface EncryptionConfig {
   /** Must be AES-GCM */
-  algorithm: 'AES-GCM'
+  algorithm: "AES-GCM";
 
   /** Must be 256 bits */
-  keyLength: 256
+  keyLength: 256;
 
   /** Must be 12 bytes (96 bits) */
-  ivLength: 12
+  ivLength: 12;
 
   /** Must be 16 bytes (128 bits) */
-  tagLength: 16
+  tagLength: 16;
 }
 
 export interface EncryptedData {
   /** Base64 encoded encrypted data */
-  data: string
+  data: string;
 
   /** Base64 encoded initialization vector */
-  iv: string
+  iv: string;
 
   /** Optional key ID for key rotation */
-  keyId?: string
+  keyId?: string;
 }
 
 export interface IEncryptionService {
   /** Encrypt data with optional key ID */
-  encrypt(data: string, keyId?: string): Promise<EncryptedData>
+  encrypt(data: string, keyId?: string): Promise<EncryptedData>;
 
   /** Decrypt data with optional key ID */
-  decrypt(encryptedData: EncryptedData, keyId?: string): Promise<string>
+  decrypt(encryptedData: EncryptedData, keyId?: string): Promise<string>;
 
   /** Generate new encryption key */
-  generateKey(keyId: string): Promise<CryptoKey>
+  generateKey(keyId: string): Promise<CryptoKey>;
 
   /** Retrieve existing encryption key */
-  getKey(keyId: string): Promise<CryptoKey | null>
+  getKey(keyId: string): Promise<CryptoKey | null>;
 }
 
 // Main Storage Service interface
 export interface IStorageService {
   // Basic storage operations
-  set<T>(key: string, value: T, options?: StorageOptions): Promise<void>
-  get<T>(key: string, defaultValue?: T): Promise<T | null>
-  remove(key: string): Promise<void>
-  clear(): Promise<void>
-  keys(): Promise<string[]>
+  set<T>(key: string, value: T, options?: StorageOptions): Promise<void>;
+  get<T>(key: string, defaultValue?: T): Promise<T | null>;
+  remove(key: string): Promise<void>;
+  clear(): Promise<void>;
+  keys(): Promise<string[]>;
 
   // Secure storage operations
-  setSecure<T>(key: string, value: T, options?: SecureStorageOptions): Promise<void>
-  getSecure<T>(key: string, defaultValue?: T): Promise<T | null>
+  setSecure<T>(
+    key: string,
+    value: T,
+    options?: SecureStorageOptions,
+  ): Promise<void>;
+  getSecure<T>(key: string, defaultValue?: T): Promise<T | null>;
 
   // Storage events
-  subscribe(callback: StorageEventCallback): () => void
+  subscribe(callback: StorageEventCallback): () => void;
 
   // Quota management
-  getUsage(): Promise<StorageUsage>
-  cleanup(strategy?: CleanupStrategy): Promise<void>
+  getUsage(): Promise<StorageUsage>;
+  cleanup(strategy?: CleanupStrategy): Promise<void>;
 }
 
 // Error classes
@@ -217,38 +225,34 @@ export class StorageError extends Error {
   constructor(
     message: string,
     public code?: string,
-    public provider?: StorageProviderType
+    public provider?: StorageProviderType,
   ) {
-    super(message)
-    this.name = 'StorageError'
+    super(message);
+    this.name = "StorageError";
   }
 }
 
 export class StorageQuotaError extends StorageError {
-  constructor(
-    used: number,
-    quota: number,
-    provider: StorageProviderType
-  ) {
-    super(`Storage quota exceeded: ${used}/${quota} bytes`)
-    this.code = 'QUOTA_EXCEEDED'
-    this.provider = provider
+  constructor(used: number, quota: number, provider: StorageProviderType) {
+    super(`Storage quota exceeded: ${used}/${quota} bytes`);
+    this.code = "QUOTA_EXCEEDED";
+    this.provider = provider;
   }
 }
 
 export class EncryptionError extends StorageError {
-  constructor(message: string, operation: 'encrypt' | 'decrypt') {
-    super(`Encryption ${operation} failed: ${message}`)
-    this.code = `ENCRYPTION_${operation.toUpperCase()}_FAILED`
+  constructor(message: string, operation: "encrypt" | "decrypt") {
+    super(`Encryption ${operation} failed: ${message}`);
+    this.code = `ENCRYPTION_${operation.toUpperCase()}_FAILED`;
   }
 }
 
 // Service dependencies
 export interface StorageServiceDependencies {
-  supabaseService: ISupabaseService
+  supabaseService: ISupabaseService;
 }
 
 // Re-export external types
 export interface ISupabaseService {
-  getClient(): any // Supabase client
+  getClient(): any; // Supabase client
 }

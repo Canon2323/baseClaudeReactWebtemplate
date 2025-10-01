@@ -1,6 +1,10 @@
-import { useCallback } from 'react'
-import { useUserStore } from '../stores/user.store'
-import type { UserListFilter, CreateUserInput, UpdateUserInput } from '../types/user.types'
+import { useCallback } from "react";
+import { useUserStore } from "../stores/user.store";
+import type {
+  UserListFilter,
+  CreateUserInput,
+  UpdateUserInput,
+} from "../types/user.types";
 
 // Custom hook following Single Responsibility
 // Only handles user list operations
@@ -21,114 +25,139 @@ export const useUsers = () => {
     setFilter,
     setHasMore,
     setTotal,
-  } = useUserStore()
+  } = useUserStore();
 
-  const fetchUsers = useCallback(async (newFilter?: Partial<UserListFilter>) => {
-    try {
-      setUsersLoading(true)
-      setUsersError(null)
+  const fetchUsers = useCallback(
+    async (newFilter?: Partial<UserListFilter>) => {
+      try {
+        setUsersLoading(true);
+        setUsersError(null);
 
-      if (newFilter) {
-        setFilter(newFilter)
+        if (newFilter) {
+          setFilter(newFilter);
+        }
+
+        // TODO: Replace with actual service call when implemented
+        // const userService = getUserService()
+        // const result = await userService.getUsers({ ...filter, ...newFilter })
+
+        // Mock implementation for now
+        const result = {
+          users: [],
+          total: 0,
+          hasMore: false,
+        };
+
+        setUsers(result.users);
+        setTotal(result.total);
+        setHasMore(result.hasMore);
+      } catch (error) {
+        setUsersError(
+          error instanceof Error ? error.message : "Failed to fetch users",
+        );
+      } finally {
+        setUsersLoading(false);
       }
+    },
+    [
+      filter,
+      setUsers,
+      setUsersLoading,
+      setUsersError,
+      setFilter,
+      setTotal,
+      setHasMore,
+    ],
+  );
 
-      // TODO: Replace with actual service call when implemented
-      // const userService = getUserService()
-      // const result = await userService.getUsers({ ...filter, ...newFilter })
-      
-      // Mock implementation for now
-      const result = {
-        users: [],
-        total: 0,
-        hasMore: false,
+  const createUser = useCallback(
+    async (input: CreateUserInput) => {
+      try {
+        setUsersLoading(true);
+        setUsersError(null);
+
+        // TODO: Replace with actual service call
+        // const userService = getUserService()
+        // const newUser = await userService.createUser(input)
+
+        // Mock implementation
+        const newUser = {
+          id: crypto.randomUUID(),
+          ...input,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        };
+
+        addUser(newUser);
+        return newUser;
+      } catch (error) {
+        const errorMessage =
+          error instanceof Error ? error.message : "Failed to create user";
+        setUsersError(errorMessage);
+        throw new Error(errorMessage);
+      } finally {
+        setUsersLoading(false);
       }
+    },
+    [addUser, setUsersLoading, setUsersError],
+  );
 
-      setUsers(result.users)
-      setTotal(result.total)
-      setHasMore(result.hasMore)
-    } catch (error) {
-      setUsersError(error instanceof Error ? error.message : 'Failed to fetch users')
-    } finally {
-      setUsersLoading(false)
-    }
-  }, [filter, setUsers, setUsersLoading, setUsersError, setFilter, setTotal, setHasMore])
+  const updateUserById = useCallback(
+    async (id: string, input: UpdateUserInput) => {
+      try {
+        setUsersLoading(true);
+        setUsersError(null);
 
-  const createUser = useCallback(async (input: CreateUserInput) => {
-    try {
-      setUsersLoading(true)
-      setUsersError(null)
+        // TODO: Replace with actual service call
+        // const userService = getUserService()
+        // const updatedUser = await userService.updateUser(id, input)
 
-      // TODO: Replace with actual service call
-      // const userService = getUserService()
-      // const newUser = await userService.createUser(input)
-      
-      // Mock implementation
-      const newUser = {
-        id: crypto.randomUUID(),
-        ...input,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        // Mock implementation
+        const updates = { ...input, updatedAt: new Date() };
+
+        updateUser(id, updates);
+        return updates;
+      } catch (error) {
+        const errorMessage =
+          error instanceof Error ? error.message : "Failed to update user";
+        setUsersError(errorMessage);
+        throw new Error(errorMessage);
+      } finally {
+        setUsersLoading(false);
       }
+    },
+    [updateUser, setUsersLoading, setUsersError],
+  );
 
-      addUser(newUser)
-      return newUser
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to create user'
-      setUsersError(errorMessage)
-      throw new Error(errorMessage)
-    } finally {
-      setUsersLoading(false)
-    }
-  }, [addUser, setUsersLoading, setUsersError])
+  const deleteUser = useCallback(
+    async (id: string) => {
+      try {
+        setUsersLoading(true);
+        setUsersError(null);
 
-  const updateUserById = useCallback(async (id: string, input: UpdateUserInput) => {
-    try {
-      setUsersLoading(true)
-      setUsersError(null)
+        // TODO: Replace with actual service call
+        // const userService = getUserService()
+        // await userService.deleteUser(id)
 
-      // TODO: Replace with actual service call
-      // const userService = getUserService()
-      // const updatedUser = await userService.updateUser(id, input)
-      
-      // Mock implementation
-      const updates = { ...input, updatedAt: new Date() }
-
-      updateUser(id, updates)
-      return updates
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to update user'
-      setUsersError(errorMessage)
-      throw new Error(errorMessage)
-    } finally {
-      setUsersLoading(false)
-    }
-  }, [updateUser, setUsersLoading, setUsersError])
-
-  const deleteUser = useCallback(async (id: string) => {
-    try {
-      setUsersLoading(true)
-      setUsersError(null)
-
-      // TODO: Replace with actual service call
-      // const userService = getUserService()
-      // await userService.deleteUser(id)
-
-      removeUser(id)
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to delete user'
-      setUsersError(errorMessage)
-      throw new Error(errorMessage)
-    } finally {
-      setUsersLoading(false)
-    }
-  }, [removeUser, setUsersLoading, setUsersError])
+        removeUser(id);
+      } catch (error) {
+        const errorMessage =
+          error instanceof Error ? error.message : "Failed to delete user";
+        setUsersError(errorMessage);
+        throw new Error(errorMessage);
+      } finally {
+        setUsersLoading(false);
+      }
+    },
+    [removeUser, setUsersLoading, setUsersError],
+  );
 
   const loadMore = useCallback(async () => {
-    if (!hasMore || isLoadingUsers) return
-    
-    const nextOffset = users.length
-    await fetchUsers({ ...filter, offset: nextOffset })
-  }, [hasMore, isLoadingUsers, users.length, filter, fetchUsers])
+    if (!hasMore || isLoadingUsers) return;
+
+    const nextOffset = users.length;
+    await fetchUsers({ ...filter, offset: nextOffset });
+  }, [hasMore, isLoadingUsers, users.length, filter, fetchUsers]);
 
   return {
     // State
@@ -138,7 +167,7 @@ export const useUsers = () => {
     filter,
     hasMore,
     total,
-    
+
     // Actions
     fetchUsers,
     createUser,
@@ -146,5 +175,5 @@ export const useUsers = () => {
     deleteUser,
     loadMore,
     setFilter,
-  }
-}
+  };
+};

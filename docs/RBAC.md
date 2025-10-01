@@ -5,6 +5,7 @@ Sistema completo de controle de acesso baseado em roles, inspirado no [Next.js S
 ## 🎯 Visão Geral
 
 O sistema RBAC fornece:
+
 - **Controle granular** de permissões por recurso/ação
 - **Roles hierárquicos** (super_admin > admin > owner > member > viewer)
 - **Multi-tenant** com suporte a organizações
@@ -42,6 +43,7 @@ database/
 ### RLS (Row Level Security)
 
 Todas as tabelas têm RLS habilitado com políticas que:
+
 - Permitem leitura para usuários autenticados
 - Restringem escrita apenas para admins
 - Verificam automaticamente via `auth.uid()`
@@ -72,18 +74,16 @@ psql -h localhost -p 54322 -U postgres -d postgres -f database/rbac-schema.sql
 
 ```tsx
 // app/layout.tsx
-import { RBACProvider } from '@/shared/components/providers/rbac-provider'
+import { RBACProvider } from "@/shared/components/providers/rbac-provider";
 
 export default function RootLayout({ children }) {
   return (
     <html>
       <body>
-        <RBACProvider>
-          {children}
-        </RBACProvider>
+        <RBACProvider>{children}</RBACProvider>
       </body>
     </html>
-  )
+  );
 }
 ```
 
@@ -99,18 +99,22 @@ SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
 ### 1. Hooks para Lógica
 
 ```tsx
-import { useRBAC, useIsAdmin, useCanAccessResource } from '@/shared/hooks/use-rbac'
+import {
+  useRBAC,
+  useIsAdmin,
+  useCanAccessResource,
+} from "@/shared/hooks/use-rbac";
 
 function MyComponent() {
-  const { hasPermission, hasRole, userRoles } = useRBAC()
-  const isAdmin = useIsAdmin()
-  const { canRead, canWrite, canDelete } = useCanAccessResource('users')
+  const { hasPermission, hasRole, userRoles } = useRBAC();
+  const isAdmin = useIsAdmin();
+  const { canRead, canWrite, canDelete } = useCanAccessResource("users");
 
-  if (hasPermission('users.create')) {
+  if (hasPermission("users.create")) {
     // Usuário pode criar usuários
   }
 
-  if (hasRole('admin')) {
+  if (hasRole("admin")) {
     // Usuário é admin
   }
 
@@ -119,20 +123,24 @@ function MyComponent() {
       {canWrite && <EditButton />}
       {canDelete && <DeleteButton />}
     </div>
-  )
+  );
 }
 ```
 
 ### 2. Componentes de Proteção
 
 ```tsx
-import { RBACGuard, AdminGuard, PermissionGate } from '@/shared/components/rbac/rbac-guard'
+import {
+  RBACGuard,
+  AdminGuard,
+  PermissionGate,
+} from "@/shared/components/rbac/rbac-guard";
 
 function AdminPage() {
   return (
     <div>
       {/* Proteção por permissão */}
-      <RBACGuard permissions={['users.create']}>
+      <RBACGuard permissions={["users.create"]}>
         <CreateUserButton />
       </RBACGuard>
 
@@ -148,7 +156,7 @@ function AdminPage() {
 
       {/* Multiple permissions (ANY) */}
       <RBACGuard
-        permissions={['users.read', 'users.update']}
+        permissions={["users.read", "users.update"]}
         requireAllPermissions={false}
       >
         <UsersList />
@@ -156,50 +164,49 @@ function AdminPage() {
 
       {/* Render prop pattern */}
       <RBACGuard
-        permissions={['billing.update']}
-        render={(hasAccess, loading) => (
-          loading ? <Spinner /> :
-          hasAccess ? <BillingForm /> : <UpgradePrompt />
-        )}
+        permissions={["billing.update"]}
+        render={(hasAccess, loading) =>
+          loading ? (
+            <Spinner />
+          ) : hasAccess ? (
+            <BillingForm />
+          ) : (
+            <UpgradePrompt />
+          )
+        }
       />
     </div>
-  )
+  );
 }
 ```
 
 ### 3. HOC para Páginas Inteiras
 
 ```tsx
-import { withRBACGuard } from '@/shared/components/rbac/rbac-guard'
+import { withRBACGuard } from "@/shared/components/rbac/rbac-guard";
 
-const AdminPage = withRBACGuard(
-  () => <div>Admin Content</div>,
-  {
-    roles: ['admin', 'super_admin'],
-    fallback: <div>Acesso negado</div>
-  }
-)
+const AdminPage = withRBACGuard(() => <div>Admin Content</div>, {
+  roles: ["admin", "super_admin"],
+  fallback: <div>Acesso negado</div>,
+});
 ```
 
 ### 4. Gerenciamento Programático
 
 ```tsx
-import { getRBACProvider } from '@/shared/services/rbac/rbac-factory'
+import { getRBACProvider } from "@/shared/services/rbac/rbac-factory";
 
 async function assignRole() {
-  const rbac = getRBACProvider()
+  const rbac = getRBACProvider();
 
   // Atribuir role ao usuário
-  await rbac.assignRoleToUser('user-id', 'role-id', {
-    organizationId: 'org-id',
-    expiresAt: new Date('2024-12-31')
-  })
+  await rbac.assignRoleToUser("user-id", "role-id", {
+    organizationId: "org-id",
+    expiresAt: new Date("2024-12-31"),
+  });
 
   // Verificar permissão
-  const hasPermission = await rbac.userHasPermission(
-    'user-id',
-    'users.create'
-  )
+  const hasPermission = await rbac.userHasPermission("user-id", "users.create");
 }
 ```
 
@@ -229,12 +236,12 @@ await rbac.userHasPermission('user-id', 'users.create', 'org-123')
 
 ```typescript
 DEFAULT_ROLES = {
-  SUPER_ADMIN: 'super_admin',  // Acesso total ao sistema
-  ADMIN: 'admin',              // Administrador da organização
-  OWNER: 'owner',              // Dono da organização
-  MEMBER: 'member',            // Membro com acesso limitado
-  VIEWER: 'viewer'             // Apenas leitura
-}
+  SUPER_ADMIN: "super_admin", // Acesso total ao sistema
+  ADMIN: "admin", // Administrador da organização
+  OWNER: "owner", // Dono da organização
+  MEMBER: "member", // Membro com acesso limitado
+  VIEWER: "viewer", // Apenas leitura
+};
 ```
 
 ### Permissions por Recurso
@@ -242,38 +249,38 @@ DEFAULT_ROLES = {
 ```typescript
 DEFAULT_PERMISSIONS = {
   // Usuários
-  USERS_CREATE: 'users.create',
-  USERS_READ: 'users.read',
-  USERS_UPDATE: 'users.update',
-  USERS_DELETE: 'users.delete',
-  USERS_INVITE: 'users.invite',
+  USERS_CREATE: "users.create",
+  USERS_READ: "users.read",
+  USERS_UPDATE: "users.update",
+  USERS_DELETE: "users.delete",
+  USERS_INVITE: "users.invite",
 
   // Organização
-  ORGANIZATION_READ: 'organization.read',
-  ORGANIZATION_UPDATE: 'organization.update',
-  ORGANIZATION_DELETE: 'organization.delete',
-  ORGANIZATION_BILLING: 'organization.billing',
+  ORGANIZATION_READ: "organization.read",
+  ORGANIZATION_UPDATE: "organization.update",
+  ORGANIZATION_DELETE: "organization.delete",
+  ORGANIZATION_BILLING: "organization.billing",
 
   // Conteúdo
-  CONTENT_CREATE: 'content.create',
-  CONTENT_READ: 'content.read',
-  CONTENT_UPDATE: 'content.update',
-  CONTENT_DELETE: 'content.delete',
-  CONTENT_PUBLISH: 'content.publish',
+  CONTENT_CREATE: "content.create",
+  CONTENT_READ: "content.read",
+  CONTENT_UPDATE: "content.update",
+  CONTENT_DELETE: "content.delete",
+  CONTENT_PUBLISH: "content.publish",
 
   // Billing
-  BILLING_READ: 'billing.read',
-  BILLING_UPDATE: 'billing.update',
-  BILLING_CANCEL: 'billing.cancel',
+  BILLING_READ: "billing.read",
+  BILLING_UPDATE: "billing.update",
+  BILLING_CANCEL: "billing.cancel",
 
   // Analytics
-  ANALYTICS_READ: 'analytics.read',
-  REPORTS_EXPORT: 'reports.export',
+  ANALYTICS_READ: "analytics.read",
+  REPORTS_EXPORT: "reports.export",
 
   // Sistema
-  SYSTEM_LOGS: 'system.logs',
-  SYSTEM_SETTINGS: 'system.settings'
-}
+  SYSTEM_LOGS: "system.logs",
+  SYSTEM_SETTINGS: "system.settings",
+};
 ```
 
 ## 🔄 JWT Claims Automáticos
@@ -295,15 +302,15 @@ Isso permite verificações rápidas no frontend sem consultas extras ao banco.
 
 ```tsx
 function ConditionalContent() {
-  const { hasPermission } = useRBAC()
+  const { hasPermission } = useRBAC();
 
   return (
     <div>
-      {hasPermission('content.create') && <CreateButton />}
-      {hasPermission('content.publish') && <PublishButton />}
-      {hasPermission('analytics.read') && <AnalyticsWidget />}
+      {hasPermission("content.create") && <CreateButton />}
+      {hasPermission("content.publish") && <PublishButton />}
+      {hasPermission("analytics.read") && <AnalyticsWidget />}
     </div>
-  )
+  );
 }
 ```
 
@@ -311,21 +318,21 @@ function ConditionalContent() {
 
 ```tsx
 function UserForm() {
-  const { canAccess } = useRBAC()
+  const { canAccess } = useRBAC();
 
   return (
     <form>
       <input name="name" />
       <input name="email" />
 
-      {canAccess('users', 'update') && (
+      {canAccess("users", "update") && (
         <select name="role">
           <option value="member">Member</option>
           <option value="admin">Admin</option>
         </select>
       )}
     </form>
-  )
+  );
 }
 ```
 
@@ -333,45 +340,42 @@ function UserForm() {
 
 ```tsx
 function Navigation() {
-  const { hasPermission } = useRBAC()
+  const { hasPermission } = useRBAC();
 
   const menuItems = [
-    { label: 'Dashboard', path: '/', permission: null },
-    { label: 'Users', path: '/users', permission: 'users.read' },
-    { label: 'Analytics', path: '/analytics', permission: 'analytics.read' },
-    { label: 'Settings', path: '/settings', permission: 'organization.update' }
-  ]
+    { label: "Dashboard", path: "/", permission: null },
+    { label: "Users", path: "/users", permission: "users.read" },
+    { label: "Analytics", path: "/analytics", permission: "analytics.read" },
+    { label: "Settings", path: "/settings", permission: "organization.update" },
+  ];
 
   return (
     <nav>
       {menuItems
-        .filter(item => !item.permission || hasPermission(item.permission))
-        .map(item => (
+        .filter((item) => !item.permission || hasPermission(item.permission))
+        .map((item) => (
           <Link key={item.path} href={item.path}>
             {item.label}
           </Link>
-        ))
-      }
+        ))}
     </nav>
-  )
+  );
 }
 ```
 
 ## 🚨 Error Handling
 
 ```tsx
-import { RBACErrorBoundary } from '@/shared/components/providers/rbac-provider'
+import { RBACErrorBoundary } from "@/shared/components/providers/rbac-provider";
 
 function App() {
   return (
     <RBACProvider>
-      <RBACErrorBoundary
-        fallback={<div>Erro ao carregar permissões</div>}
-      >
+      <RBACErrorBoundary fallback={<div>Erro ao carregar permissões</div>}>
         <MyApp />
       </RBACErrorBoundary>
     </RBACProvider>
-  )
+  );
 }
 ```
 
@@ -424,15 +428,15 @@ if (hasPermission('reports.advanced')) {
 
 ```tsx
 function PerformanceMonitor() {
-  const { loading } = useRBAC()
+  const { loading } = useRBAC();
 
   useEffect(() => {
     if (loading) {
-      console.time('RBAC Load')
+      console.time("RBAC Load");
     } else {
-      console.timeEnd('RBAC Load')
+      console.timeEnd("RBAC Load");
     }
-  }, [loading])
+  }, [loading]);
 }
 ```
 

@@ -15,21 +15,25 @@ src/middleware.ts
 The middleware intercepts every request before it reaches your pages and handles:
 
 ### 1. Route Protection
+
 - Blocks access to protected routes for unauthenticated users
 - Redirects unauthorized users to login page
 - Checks user permissions for admin routes
 
 ### 2. Authentication Checks
+
 - Validates authentication tokens/sessions
 - Handles authentication state management
 - Manages user session persistence
 
 ### 3. Request/Response Modifications
+
 - Adds security headers
 - Modifies request/response objects
 - Handles CORS policies
 
 ### 4. Redirects and Rewrites
+
 - Automatic redirects based on auth state
 - URL rewrites for cleaner paths
 - Conditional routing based on user roles
@@ -39,15 +43,15 @@ The middleware intercepts every request before it reaches your pages and handles
 ```typescript
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  
+
   // Skip middleware for static files
-  if (pathname.startsWith('/_next') || pathname.includes('.')) {
+  if (pathname.startsWith("/_next") || pathname.includes(".")) {
     return NextResponse.next();
   }
-  
+
   // Your middleware logic here
   // - Check authentication
-  // - Validate permissions  
+  // - Validate permissions
   // - Handle redirects
 }
 ```
@@ -55,50 +59,54 @@ export function middleware(request: NextRequest) {
 ## ⚙️ Configuration
 
 ### Protected Routes
+
 Define protected routes in `src/config/routes.ts`:
 
 ```typescript
 export const routes = {
-  protected: ['/dashboard', '/profile', '/settings'],
-  admin: ['/admin', '/admin/*'],
-  auth: ['/login', '/register'],
-  public: ['/', '/about', '/contact']
+  protected: ["/dashboard", "/profile", "/settings"],
+  admin: ["/admin", "/admin/*"],
+  auth: ["/login", "/register"],
+  public: ["/", "/about", "/contact"],
 };
 ```
 
 ### Matcher Configuration
+
 Control which paths the middleware runs on:
 
 ```typescript
 export const config = {
-  matcher: [
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
-  ],
-}
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+};
 ```
 
 ## 🔐 Authentication Integration
 
 ### With Supabase Auth
+
 ```typescript
-import { createServerClient } from '@supabase/ssr'
+import { createServerClient } from "@supabase/ssr";
 
 export async function middleware(request: NextRequest) {
   // Create Supabase client
-  const supabase = createServerClient(/* config */)
-  
+  const supabase = createServerClient(/* config */);
+
   // Check authentication
-  const { data: { user } } = await supabase.auth.getUser()
-  
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   if (!user && isProtectedRoute(pathname)) {
-    return NextResponse.redirect(new URL('/login', request.url))
+    return NextResponse.redirect(new URL("/login", request.url));
   }
 }
 ```
 
 ### With NextAuth.js
+
 ```typescript
-import { withAuth } from "next-auth/middleware"
+import { withAuth } from "next-auth/middleware";
 
 export default withAuth(
   function middleware(request) {
@@ -106,39 +114,42 @@ export default withAuth(
   },
   {
     callbacks: {
-      authorized: ({ token }) => !!token
+      authorized: ({ token }) => !!token,
     },
-  }
-)
+  },
+);
 ```
 
 ## 🛠 Customization
 
 ### Adding New Protected Routes
+
 1. Update `src/config/routes.ts`
 2. Add route patterns to middleware logic
 3. Test with different user states
 
 ### Custom Headers
+
 ```typescript
 export function middleware(request: NextRequest) {
-  const response = NextResponse.next()
-  
+  const response = NextResponse.next();
+
   // Add security headers
-  response.headers.set('X-Frame-Options', 'DENY')
-  response.headers.set('X-Content-Type-Options', 'nosniff')
-  
-  return response
+  response.headers.set("X-Frame-Options", "DENY");
+  response.headers.set("X-Content-Type-Options", "nosniff");
+
+  return response;
 }
 ```
 
 ### Role-Based Access
+
 ```typescript
 export function middleware(request: NextRequest) {
-  const userRole = getUserRole(request) // Your logic
-  
-  if (isAdminRoute(pathname) && userRole !== 'admin') {
-    return NextResponse.redirect(new URL('/unauthorized', request.url))
+  const userRole = getUserRole(request); // Your logic
+
+  if (isAdminRoute(pathname) && userRole !== "admin") {
+    return NextResponse.redirect(new URL("/unauthorized", request.url));
   }
 }
 ```
@@ -162,10 +173,11 @@ export function middleware(request: NextRequest) {
    - Cache authentication checks when possible
 
 ### Debug Logging
+
 ```typescript
 export function middleware(request: NextRequest) {
-  console.log('Middleware running for:', request.nextUrl.pathname)
-  
+  console.log("Middleware running for:", request.nextUrl.pathname);
+
   // Your middleware logic
 }
 ```

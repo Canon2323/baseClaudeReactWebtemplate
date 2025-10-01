@@ -1,36 +1,36 @@
 // User domain types - specific to user feature
 export interface UserProfile {
-  id: string
-  email: string
-  name: string
-  avatar?: string
-  bio?: string
-  createdAt: Date
-  updatedAt: Date
+  id: string;
+  email: string;
+  name: string;
+  avatar?: string;
+  bio?: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface CreateUserInput {
-  email: string
-  name: string
-  bio?: string
+  email: string;
+  name: string;
+  bio?: string;
 }
 
 export interface UpdateUserInput {
-  name?: string
-  bio?: string
-  avatar?: string
+  name?: string;
+  bio?: string;
+  avatar?: string;
 }
 
 export interface UserListFilter {
-  search?: string
-  sortBy?: 'name' | 'email' | 'createdAt'
-  sortOrder?: 'asc' | 'desc'
-  limit?: number
-  offset?: number
+  search?: string;
+  sortBy?: "name" | "email" | "createdAt";
+  sortOrder?: "asc" | "desc";
+  limit?: number;
+  offset?: number;
 }
 
 export interface UserListResponse {
-  users: UserProfile[]
-  total: number
-  hasMore: boolean
+  users: UserProfile[];
+  total: number;
+  hasMore: boolean;
 }

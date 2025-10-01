@@ -1,7 +1,11 @@
 // Authentication Interceptor
 // Automatically injects Supabase auth tokens into requests
 
-import type { ApiRequest, ISupabaseService, RequestInterceptor } from '../api.types'
+import type {
+  ApiRequest,
+  ISupabaseService,
+  RequestInterceptor,
+} from "../api.types";
 
 export class AuthInterceptor {
   constructor(private supabaseService: ISupabaseService) {}
@@ -10,7 +14,9 @@ export class AuthInterceptor {
     return async (request: ApiRequest): Promise<ApiRequest> => {
       try {
         // Get current session from Supabase
-        const { data: { session } } = await this.supabaseService.getClient().auth.getSession()
+        const {
+          data: { session },
+        } = await this.supabaseService.getClient().auth.getSession();
 
         if (session?.access_token) {
           // Inject Authorization header
@@ -18,16 +24,16 @@ export class AuthInterceptor {
             ...request,
             headers: {
               ...request.headers,
-              'Authorization': `Bearer ${session.access_token}`
-            }
-          }
+              Authorization: `Bearer ${session.access_token}`,
+            },
+          };
         }
 
-        return request
+        return request;
       } catch (error) {
-        console.warn('Failed to inject auth token:', error)
-        return request
+        console.warn("Failed to inject auth token:", error);
+        return request;
       }
-    }
+    };
   }
 }

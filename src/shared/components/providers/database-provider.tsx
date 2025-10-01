@@ -1,40 +1,52 @@
-'use client'
+"use client";
 
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
-import type { IDatabaseProvider, DatabaseProviderConfig } from '@/shared/types/database'
-import { DatabaseProviderFactory, registerDefaultDatabaseProviders } from '@/shared/services/database/database-factory'
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  type ReactNode,
+} from "react";
+import type {
+  IDatabaseProvider,
+  DatabaseProviderConfig,
+} from "@/shared/types/database";
+import {
+  DatabaseProviderFactory,
+  registerDefaultDatabaseProviders,
+} from "@/shared/services/database/database-factory";
 
 // Context (Dependency Inversion)
 interface DatabaseContextType {
-  provider: IDatabaseProvider | null
-  isConnected: boolean
-  isLoading: boolean
-  error: string | null
+  provider: IDatabaseProvider | null;
+  isConnected: boolean;
+  isLoading: boolean;
+  error: string | null;
 }
 
-const DatabaseContext = createContext<DatabaseContextType | null>(null)
+const DatabaseContext = createContext<DatabaseContextType | null>(null);
 
 // Provider Props
 interface DatabaseProviderProps {
-  children: ReactNode
-  config?: DatabaseProviderConfig
+  children: ReactNode;
+  config?: DatabaseProviderConfig;
 }
 
 // Hook para usar o contexto (Interface Segregation)
 export const useDatabase = (): DatabaseContextType => {
-  const context = useContext(DatabaseContext)
+  const context = useContext(DatabaseContext);
   if (!context) {
-    throw new Error('useDatabase must be used within a DatabaseProvider')
+    throw new Error("useDatabase must be used within a DatabaseProvider");
   }
-  return context
-}
+  return context;
+};
 
 // Hook especializado para operações CRUD (Single Responsibility)
 export const useDatabaseOperations = () => {
-  const { provider } = useDatabase()
+  const { provider } = useDatabase();
 
   if (!provider) {
-    throw new Error('Database provider not initialized')
+    throw new Error("Database provider not initialized");
   }
 
   return {
@@ -65,195 +77,204 @@ export const useDatabaseOperations = () => {
     query: provider.query.bind(provider),
 
     // Transactions
-    transaction: provider.transaction.bind(provider)
-  }
-}
+    transaction: provider.transaction.bind(provider),
+  };
+};
 
 // Hook especializado para realtime (Single Responsibility)
 export const useDatabaseRealtime = () => {
-  const { provider } = useDatabase()
+  const { provider } = useDatabase();
 
   if (!provider) {
-    throw new Error('Database provider not initialized')
+    throw new Error("Database provider not initialized");
   }
 
   return {
     subscribe: provider.subscribe.bind(provider),
-    unsubscribe: provider.unsubscribe.bind(provider)
-  }
-}
+    unsubscribe: provider.unsubscribe.bind(provider),
+  };
+};
 
 // Hook especializado para storage (Single Responsibility)
 export const useDatabaseStorage = () => {
-  const { provider } = useDatabase()
+  const { provider } = useDatabase();
 
   if (!provider) {
-    throw new Error('Database provider not initialized')
+    throw new Error("Database provider not initialized");
   }
 
   return {
     uploadFile: provider.uploadFile?.bind(provider),
     downloadFile: provider.downloadFile?.bind(provider),
-    deleteFile: provider.deleteFile?.bind(provider)
-  }
-}
+    deleteFile: provider.deleteFile?.bind(provider),
+  };
+};
 
 // Hook para status de conexão (Single Responsibility)
 export const useDatabaseStatus = () => {
-  const { isConnected, isLoading, error } = useDatabase()
-  return { isConnected, isLoading, error }
-}
+  const { isConnected, isLoading, error } = useDatabase();
+  return { isConnected, isLoading, error };
+};
 
 // Provider Component
 export const DatabaseProvider = ({
   children,
-  config = { type: 'supabase', options: {} }
+  config = { type: "supabase", options: {} },
 }: DatabaseProviderProps) => {
-  const [provider, setProvider] = useState<IDatabaseProvider | null>(null)
-  const [isConnected, setIsConnected] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const [provider, setProvider] = useState<IDatabaseProvider | null>(null);
+  const [isConnected, setIsConnected] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   // Inicialização do provider (Open/Closed Principle)
   useEffect(() => {
-    let mounted = true
+    let mounted = true;
 
     const initializeDatabase = async () => {
       try {
-        setIsLoading(true)
-        setError(null)
+        setIsLoading(true);
+        setError(null);
 
         // Registrar providers disponíveis
-        await registerDefaultDatabaseProviders()
+        await registerDefaultDatabaseProviders();
 
         // Criar provider baseado na configuração
-        const databaseProvider = await DatabaseProviderFactory.createProvider(config)
+        const databaseProvider =
+          await DatabaseProviderFactory.createProvider(config);
 
-        if (!mounted) return
+        if (!mounted) return;
 
-        setProvider(databaseProvider)
+        setProvider(databaseProvider);
 
         // Verificar conexão
-        const connected = await databaseProvider.isConnected()
-        setIsConnected(connected)
+        const connected = await databaseProvider.isConnected();
+        setIsConnected(connected);
 
         if (!connected) {
-          console.warn('Database provider initialized but not connected')
+          console.warn("Database provider initialized but not connected");
         }
 
-        setIsLoading(false)
-
+        setIsLoading(false);
       } catch (error) {
-        console.error('Failed to initialize database provider:', error)
+        console.error("Failed to initialize database provider:", error);
         if (mounted) {
-          setError(error instanceof Error ? error.message : 'Failed to initialize database')
-          setIsLoading(false)
-          setIsConnected(false)
+          setError(
+            error instanceof Error
+              ? error.message
+              : "Failed to initialize database",
+          );
+          setIsLoading(false);
+          setIsConnected(false);
         }
       }
-    }
+    };
 
-    initializeDatabase()
+    initializeDatabase();
 
     return () => {
-      mounted = false
-    }
-  }, [config])
+      mounted = false;
+    };
+  }, [config]);
 
   // Health check periódico
   useEffect(() => {
-    if (!provider) return
+    if (!provider) return;
 
     const healthCheckInterval = setInterval(async () => {
       try {
-        const health = await provider.getHealth()
-        setIsConnected(health.status === 'healthy')
+        const health = await provider.getHealth();
+        setIsConnected(health.status === "healthy");
 
-        if (health.status === 'unhealthy') {
-          setError(`Database unhealthy: ${health.details?.error || 'Unknown error'}`)
+        if (health.status === "unhealthy") {
+          setError(
+            `Database unhealthy: ${health.details?.error || "Unknown error"}`,
+          );
         } else {
-          setError(null)
+          setError(null);
         }
       } catch (error) {
-        setIsConnected(false)
-        setError('Health check failed')
+        setIsConnected(false);
+        setError("Health check failed");
       }
-    }, 30000) // Check every 30 seconds
+    }, 30000); // Check every 30 seconds
 
-    return () => clearInterval(healthCheckInterval)
-  }, [provider])
+    return () => clearInterval(healthCheckInterval);
+  }, [provider]);
 
   // Cleanup na desmontagem
   useEffect(() => {
     return () => {
       if (provider) {
-        provider.cleanup()
+        provider.cleanup();
       }
-    }
-  }, [provider])
+    };
+  }, [provider]);
 
   // Context value (Single Responsibility)
   const contextValue: DatabaseContextType = {
     provider,
     isConnected,
     isLoading,
-    error
-  }
+    error,
+  };
 
   return (
     <DatabaseContext.Provider value={contextValue}>
       {children}
     </DatabaseContext.Provider>
-  )
-}
+  );
+};
 
 // HOC para componentes que precisam de database (Higher-Order Component Pattern)
 export function withDatabase<P extends object>(
   Component: React.ComponentType<P>,
-  options: { requireConnection?: boolean; fallback?: ReactNode } = {}
+  options: { requireConnection?: boolean; fallback?: ReactNode } = {},
 ) {
-  const { requireConnection = true, fallback = <div>Loading database...</div> } = options
+  const {
+    requireConnection = true,
+    fallback = <div>Loading database...</div>,
+  } = options;
 
   return function DatabaseConnectedComponent(props: P) {
-    const { isConnected, isLoading } = useDatabaseStatus()
+    const { isConnected, isLoading } = useDatabaseStatus();
 
     if (isLoading) {
-      return <>{fallback}</>
+      return <>{fallback}</>;
     }
 
     if (requireConnection && !isConnected) {
-      return <div>Database not connected</div>
+      return <div>Database not connected</div>;
     }
 
-    return <Component {...props} />
-  }
+    return <Component {...props} />;
+  };
 }
 
 // Componente para verificação de conexão (Single Responsibility)
 interface DatabaseStatusProps {
-  children: ReactNode
-  fallback?: ReactNode
-  requireConnection?: boolean
+  children: ReactNode;
+  fallback?: ReactNode;
+  requireConnection?: boolean;
 }
 
 export const DatabaseStatus = ({
   children,
   fallback = <div>Loading database...</div>,
-  requireConnection = true
+  requireConnection = true,
 }: DatabaseStatusProps) => {
-  const { isConnected, isLoading, error } = useDatabaseStatus()
+  const { isConnected, isLoading, error } = useDatabaseStatus();
 
   if (isLoading) {
-    return <>{fallback}</>
+    return <>{fallback}</>;
   }
 
   if (error) {
-    return <div>Database error: {error}</div>
+    return <div>Database error: {error}</div>;
   }
 
   if (requireConnection && !isConnected) {
-    return <div>Database not connected</div>
+    return <div>Database not connected</div>;
   }
 
-  return <>{children}</>
-}
+  return <>{children}</>;
+};

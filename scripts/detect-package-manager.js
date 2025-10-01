@@ -5,13 +5,13 @@
  * Prioridade: pnpm > yarn > npm
  */
 
-const { execSync } = require('child_process');
-const fs = require('fs');
-const path = require('path');
+const { execSync } = require("child_process");
+const fs = require("fs");
+const path = require("path");
 
 function hasCommand(command) {
   try {
-    execSync(`${command} --version`, { stdio: 'ignore' });
+    execSync(`${command} --version`, { stdio: "ignore" });
     return true;
   } catch {
     return false;
@@ -21,9 +21,9 @@ function hasCommand(command) {
 function detectPackageManager() {
   // Verifica se há lock files existentes
   const lockFiles = {
-    'pnpm-lock.yaml': 'pnpm',
-    'yarn.lock': 'yarn',
-    'package-lock.json': 'npm'
+    "pnpm-lock.yaml": "pnpm",
+    "yarn.lock": "yarn",
+    "package-lock.json": "npm",
   };
 
   for (const [file, manager] of Object.entries(lockFiles)) {
@@ -35,39 +35,39 @@ function detectPackageManager() {
   }
 
   // Se não há lock files, verifica disponibilidade por prioridade
-  if (hasCommand('pnpm')) return 'pnpm';
-  if (hasCommand('yarn')) return 'yarn';
-  if (hasCommand('npm')) return 'npm';
+  if (hasCommand("pnpm")) return "pnpm";
+  if (hasCommand("yarn")) return "yarn";
+  if (hasCommand("npm")) return "npm";
 
-  throw new Error('Nenhum gerenciador de pacotes encontrado!');
+  throw new Error("Nenhum gerenciador de pacotes encontrado!");
 }
 
 function getCommands(manager) {
   const commands = {
     pnpm: {
-      install: 'pnpm install',
-      run: 'pnpm',
-      add: 'pnpm add',
-      addDev: 'pnpm add -D',
-      remove: 'pnpm remove',
-      exec: 'pnpm exec'
+      install: "pnpm install",
+      run: "pnpm",
+      add: "pnpm add",
+      addDev: "pnpm add -D",
+      remove: "pnpm remove",
+      exec: "pnpm exec",
     },
     yarn: {
-      install: 'yarn install',
-      run: 'yarn',
-      add: 'yarn add',
-      addDev: 'yarn add -D',
-      remove: 'yarn remove',
-      exec: 'yarn'
+      install: "yarn install",
+      run: "yarn",
+      add: "yarn add",
+      addDev: "yarn add -D",
+      remove: "yarn remove",
+      exec: "yarn",
     },
     npm: {
-      install: 'npm install',
-      run: 'npm run',
-      add: 'npm install',
-      addDev: 'npm install -D',
-      remove: 'npm uninstall',
-      exec: 'npx'
-    }
+      install: "npm install",
+      run: "npm run",
+      add: "npm install",
+      addDev: "npm install -D",
+      remove: "npm uninstall",
+      exec: "npx",
+    },
   };
 
   return commands[manager];
@@ -85,7 +85,7 @@ if (require.main === module) {
     console.log(`   Adicionar: ${commands.add} <package>`);
     console.log(`   Remover: ${commands.remove} <package>`);
   } catch (error) {
-    console.error('❌', error.message);
+    console.error("❌", error.message);
     process.exit(1);
   }
 }

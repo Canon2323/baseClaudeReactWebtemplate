@@ -1,5 +1,5 @@
 packages:
-  - '.'
+  - "."
 
 # pnpm configuration
 prefer-workspace-packages: true

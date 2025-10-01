@@ -1,39 +1,28 @@
-import { useEffect } from 'react'
-import { useUsers } from '../hooks'
+import { useEffect } from "react";
+import { useUsers } from "../hooks";
 
 // Simple UserList component following Single Responsibility
 // Only renders user list UI
 export const UserList = () => {
-  const { 
-    users, 
-    isLoadingUsers, 
-    usersError, 
-    fetchUsers, 
-    deleteUser 
-  } = useUsers()
+  const { users, isLoadingUsers, usersError, fetchUsers, deleteUser } =
+    useUsers();
 
   useEffect(() => {
-    fetchUsers()
-  }, [fetchUsers])
+    fetchUsers();
+  }, [fetchUsers]);
 
   if (isLoadingUsers) {
-    return <div className="text-center p-4">Loading users...</div>
+    return <div className="text-center p-4">Loading users...</div>;
   }
 
   if (usersError) {
     return (
-      <div className="text-center p-4 text-red-600">
-        Error: {usersError}
-      </div>
-    )
+      <div className="text-center p-4 text-red-600">Error: {usersError}</div>
+    );
   }
 
   if (users.length === 0) {
-    return (
-      <div className="text-center p-4 text-gray-500">
-        No users found
-      </div>
-    )
+    return <div className="text-center p-4 text-gray-500">No users found</div>;
   }
 
   return (
@@ -41,7 +30,7 @@ export const UserList = () => {
       <h2 className="text-2xl font-bold">Users</h2>
       <div className="grid gap-4">
         {users.map((user) => (
-          <div 
+          <div
             key={user.id}
             className="p-4 border rounded-lg flex justify-between items-start"
           >
@@ -62,5 +51,5 @@ export const UserList = () => {
         ))}
       </div>
     </div>
-  )
-}
+  );
+};

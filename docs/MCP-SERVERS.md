@@ -5,17 +5,20 @@ This project includes **11+ MCP (Model Context Protocol) servers** installed loc
 ## 🔧 **Como Funciona o Sistema MCP**
 
 ### **Arquitetura Local**
+
 - **MCPs instalados localmente** no `node_modules/` do projeto
 - **Configuração autocontida** via `.mcp.json`
 - **Zero dependência global** - cada projeto tem suas versões
 - **Segurança VibeKit** com tokens isolados
 
 ### **Script Principal**
+
 ```bash
 npm run setup:mcp  # Instala tudo automaticamente
 ```
 
 O script `scripts/setup-mcp.js`:
+
 1. Instala pacotes MCP no `node_modules/`
 2. Cria `.mcp.json` com paths locais
 3. Gera `.env.mcp.example` com templates
@@ -24,6 +27,7 @@ O script `scripts/setup-mcp.js`:
 ## 📋 Configured MCP Servers
 
 ### **Core Development**
+
 1. **shadcn/ui MCP** (`@heilgar/shadcn-ui-mcp-server`)
    - Instalação e gerenciamento de componentes
    - Comandos: "Add button component", "Install card from shadcn"
@@ -37,6 +41,7 @@ O script `scripts/setup-mcp.js`:
    - Conexão local: `http://127.0.0.1:3845/mcp`
 
 ### **Repository & Version Control**
+
 4. **GitHub MCP** (via uvx)
    - Operações de repositório, issues, PRs
    - Comandos: "Create issue", "Check PR status"
@@ -46,6 +51,7 @@ O script `scripts/setup-mcp.js`:
    - Comandos: commit, branch, status
 
 ### **Web & Data**
+
 6. **Apify MCP** (`@apify/actors-mcp-server`)
    - Web scraping e extração de dados
    - Comandos: "Scrape website data"
@@ -55,6 +61,7 @@ O script `scripts/setup-mcp.js`:
    - Alternativa ao Playwright padrão
 
 ### **AI & Documentation**
+
 8. **Gemini MCP** (via npx)
    - Integração com Google Gemini AI
    - Comandos: "Ask Gemini about..."
@@ -68,6 +75,7 @@ O script `scripts/setup-mcp.js`:
     - Comandos avançados de programação
 
 ### **Services Integration**
+
 11. **Stripe MCP** (`@stripe/mcp`)
     - Processamento de pagamentos e webhooks
     - Comandos: "Create payment intent", "List customers"
@@ -77,6 +85,7 @@ O script `scripts/setup-mcp.js`:
     - Modo read-only para segurança
 
 ### **System Tools**
+
 - **Filesystem MCP** (`@modelcontextprotocol/server-filesystem`)
   - Operações de arquivo locais
 - **Local Git Operations**
@@ -85,35 +94,43 @@ O script `scripts/setup-mcp.js`:
 ## 🚀 **Guia Passo a Passo Completo**
 
 ### **1. Instalar MCPs Localmente**
+
 ```bash
 npm run setup:mcp
 ```
+
 **O que acontece:**
+
 - Instala 11+ pacotes MCP em `node_modules/`
 - Cria `.mcp.json` com configuração local
 - Gera `.env.mcp.example` com templates de API keys
 - Atualiza `.gitignore` para segurança
 
 ### **2. Configurar API Tokens**
+
 ```bash
 cp .env.mcp.example .env.local
 # Editar .env.local com suas chaves reais
 ```
 
 **Tokens Essenciais:**
+
 - `SUPABASE_ACCESS_TOKEN` - Para operações de banco
 - `GITHUB_PERSONAL_ACCESS_TOKEN` - Para repositório
 
 **Tokens Opcionais:**
+
 - `APIFY_TOKEN` - Web scraping
 - `GEMINI_API_KEY` - AI integration
 - `CONTEXT7_API_KEY` - Documentação
 - `STRIPE_SECRET_KEY` - Pagamentos (use TEST keys)
 
 ### **3. Restart Claude Code**
+
 ⚠️ **IMPORTANTE:** Restart completo do Claude Code para carregar MCPs
 
 ### **4. Verificar MCPs Ativos**
+
 ```bash
 # No Claude Code, use o comando:
 /mcp
@@ -122,11 +139,13 @@ cp .env.mcp.example .env.local
 ### **5. Casos Especiais**
 
 **Figma MCP:**
+
 1. Abrir Figma Desktop
 2. Preferences → Enable local MCP Server
 3. Server ativo em `http://127.0.0.1:3845/mcp`
 
 **Serena MCP:**
+
 ```bash
 pip install uv  # Requer Python + uv
 ```
@@ -134,10 +153,12 @@ pip install uv  # Requer Python + uv
 ## 🔑 Required API Keys
 
 ### Essential (Core functionality)
+
 - **Supabase Access Token**: Database operations
 - **GitHub Personal Access Token**: Repository integration
 
-### Optional (Enhanced features)  
+### Optional (Enhanced features)
+
 - **Apify Token**: Web scraping capabilities
 - **Gemini API Key**: AI model integration
 - **Context7 API Key**: Documentation search
@@ -146,12 +167,15 @@ pip install uv  # Requer Python + uv
 ## 🛠 Special Setup Requirements
 
 ### Figma MCP
+
 1. Install Figma Desktop app
 2. Go to Preferences → Enable local MCP Server
 3. Server runs automatically at http://127.0.0.1:3845/mcp
 
-### Serena MCP  
+### Serena MCP
+
 Requires Python and uv:
+
 ```bash
 pip install uv
 ```
@@ -159,26 +183,31 @@ pip install uv
 ## 💡 **Vantagens da Abordagem Local**
 
 ### **✅ Autocontido**
+
 - MCPs instalados no `node_modules/` do projeto
 - Configuração `.mcp.json` específica do projeto
 - Template funcionará em qualquer ambiente
 
 ### **✅ Controle de Versão**
+
 - Cada projeto tem suas próprias versões de MCP
 - `package.json` trava versões específicas
 - Atualizações controladas por projeto
 
 ### **✅ Portabilidade**
+
 - Zero dependência de configuração global
 - Clone → `npm install` → `npm run setup:mcp` → Funciona
 - Funciona em qualquer máquina/CI/Docker
 
 ### **✅ Isolamento**
+
 - Sem conflitos entre projetos diferentes
 - Ambientes de desenvolvimento isolados
 - Tokens específicos por projeto
 
 ### **✅ Segurança VibeKit**
+
 - Tokens em `.env.local` (nunca commitados)
 - Modo read-only quando possível
 - Rotação de tokens por projeto
@@ -187,16 +216,19 @@ pip install uv
 ## 🔍 Troubleshooting
 
 ### MCP Server Not Showing
+
 1. Restart Claude Code completely
 2. Check API keys in .env.local
 3. Use `/mcp` command to verify status
 
 ### Figma MCP Connection Issues
+
 1. Ensure Figma Desktop is running
-2. Check "Enable local MCP Server" is ON in Figma Preferences  
+2. Check "Enable local MCP Server" is ON in Figma Preferences
 3. Try http://127.0.0.1:3845/sse if /mcp doesn't work
 
 ### Permission Errors
+
 - GitHub: Token needs `repo` scope
 - Supabase: Use read-only mode for safety
 - Stripe: Always use test keys in development
@@ -204,6 +236,7 @@ pip install uv
 ## 📚 **Exemplos de Uso Prático**
 
 ### **shadcn/ui MCP**
+
 ```
 "Add a button component to my project"
 "Install the card component from shadcn"
@@ -211,6 +244,7 @@ pip install uv
 ```
 
 ### **Playwright MCP**
+
 ```
 "Test the login form on localhost:3000"
 "Take a screenshot of the homepage"
@@ -218,6 +252,7 @@ pip install uv
 ```
 
 ### **GitHub MCP**
+
 ```
 "Create a new issue for the bug we found"
 "Check the status of PR #123"
@@ -225,6 +260,7 @@ pip install uv
 ```
 
 ### **Supabase MCP**
+
 ```
 "Show me the users table structure"
 "Count how many active users we have"
@@ -232,6 +268,7 @@ pip install uv
 ```
 
 ### **Stripe MCP**
+
 ```
 "List recent payments in test mode"
 "Create a test payment intent for $10"
@@ -239,6 +276,7 @@ pip install uv
 ```
 
 ### **Apify MCP**
+
 ```
 "Scrape pricing data from competitor site"
 "Extract contact information from this page"
@@ -249,7 +287,7 @@ pip install uv
 
 1. **Never commit API keys** - Use .env.local only
 2. **Use read-only tokens** when possible
-3. **Rotate keys regularly** for security  
+3. **Rotate keys regularly** for security
 4. **Use test environments** for development
 5. **Review MCP permissions** before granting access
 
@@ -264,12 +302,14 @@ pip install uv
 ## 🎯 **Resumo Executivo**
 
 **✅ Sistema MCP LOCAL implementado e funcional**
+
 - **11+ servidores MCP** instalados automaticamente
 - **Configuração autocontida** no projeto
 - **Segurança VibeKit** com tokens isolados
 - **Zero dependência global** de Claude Code
 
 **🚀 Para ativar:**
+
 ```bash
 npm run setup:mcp          # Instalar MCPs
 cp .env.mcp.example .env.local  # Configurar tokens
@@ -278,6 +318,7 @@ cp .env.mcp.example .env.local  # Configurar tokens
 ```
 
 **💪 Funcionalidades:**
+
 - Desenvolvimento com shadcn/ui e Playwright
 - Operações GitHub e Git locais
 - Web scraping com Apify
@@ -287,6 +328,7 @@ cp .env.mcp.example .env.local  # Configurar tokens
 - E muito mais...
 
 **🔒 Segurança:**
+
 - Tokens nunca commitados
 - Modo read-only padrão
 - Documentação completa de best practices

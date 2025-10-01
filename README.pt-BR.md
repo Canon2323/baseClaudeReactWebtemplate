@@ -74,6 +74,7 @@ npm run dev
 ### 🪝 Hooks de Qualidade de Código
 
 Verificações automáticas de qualidade em operações Git:
+
 - **Pre-commit**: Auto-formatação, lint e verificação de tipos antes dos commits
 - **Pre-push**: Validação final antes de enviar ao remoto
 - **Commit-msg**: Valida formato de mensagem de commit (opcional)
@@ -149,12 +150,14 @@ docs/             # 📚 Documentação
 ### 🎯 Features vs Shared - Quando usar cada um?
 
 **Features/** - Código específico do domínio de negócio:
+
 - ✅ Componentes que só existem em um contexto (ex: `UserProfileCard`)
 - ✅ Lógica de negócio específica (ex: `calculateOrderTotal`)
 - ✅ Estado local do domínio (ex: `useProductFilters`)
 - ✅ Types do domínio (ex: `interface Product`)
 
 **Shared/** - Código reutilizável entre múltiplos domínios:
+
 - ✅ Componentes genéricos (ex: `Button`, `Modal`, `Toast`)
 - ✅ Hooks utilitários (ex: `useDebounce`, `useLocalStorage`)
 - ✅ Estado global da aplicação (ex: `authStore`, `themeStore`)
@@ -170,22 +173,25 @@ docs/             # 📚 Documentação
 **O que são:** Interfaces e tipos TypeScript que definem a estrutura dos dados.
 
 **Quando usar:**
+
 - Definir formato de dados da API
 - Criar contratos entre camadas
 - Garantir type safety
 - Documentar estruturas de dados
 
 **Exemplo:**
+
 ```typescript
 // features/users/types/user.types.ts
 export interface User {
-  id: string
-  email: string
-  name: string
+  id: string;
+  email: string;
+  name: string;
 }
 ```
 
 **Onde colocar:**
+
 - `features/[domain]/types/` - Types específicos do domínio
 - `shared/types/` - Types compartilhados globalmente
 
@@ -194,29 +200,33 @@ export interface User {
 **O que são:** Funções que encapsulam lógica de estado e side effects do React.
 
 **Quando usar:**
+
 - Compartilhar lógica entre componentes
 - Gerenciar estado local do componente
 - Executar side effects (API calls, subscriptions)
 - Abstrair lógica complexa de UI
 
 **Exemplo:**
+
 ```typescript
 // features/users/hooks/useUser.ts
 export function useUser(userId: string) {
-  const [user, setUser] = useState<User>()
-  const [loading, setLoading] = useState(true)
+  const [user, setUser] = useState<User>();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    userService.getById(userId)
+    userService
+      .getById(userId)
       .then(setUser)
-      .finally(() => setLoading(false))
-  }, [userId])
+      .finally(() => setLoading(false));
+  }, [userId]);
 
-  return { user, loading }
+  return { user, loading };
 }
 ```
 
 **Onde colocar:**
+
 - `features/[domain]/hooks/` - Hooks específicos do domínio
 - `shared/hooks/` - Hooks utilitários globais
 
@@ -225,12 +235,14 @@ export function useUser(userId: string) {
 **O que são:** Containers de estado compartilhado entre componentes usando Zustand.
 
 **Quando usar:**
+
 - Estado que precisa ser acessado por múltiplos componentes
 - Dados que persistem entre navegações de página
 - Cache de dados do usuário
 - Estado da aplicação (tema, idioma, autenticação)
 
 **Exemplo:**
+
 ```typescript
 // shared/stores/auth.store.ts
 export const useAuthStore = create((set) => ({
@@ -238,30 +250,32 @@ export const useAuthStore = create((set) => ({
   isAuthenticated: false,
 
   login: (user) => set({ user, isAuthenticated: true }),
-  logout: () => set({ user: null, isAuthenticated: false })
-}))
+  logout: () => set({ user: null, isAuthenticated: false }),
+}));
 ```
 
 **Onde colocar:**
+
 - `shared/stores/` - Estado global (auth, tema, UI)
 - `features/[domain]/stores/` - Estado específico do domínio
 
 ## 🎯 Guia de Decisão Rápido
 
-| Preciso de... | Use | Exemplo |
-|---------------|-----|---------|
-| Definir formato de dados | **Types** | `interface Product { id: string; name: string }` |
-| Buscar dados em um componente | **Hook** | `useProduct(id)` retorna produto e loading |
-| Compartilhar estado entre páginas | **Store** | Carrinho de compras, usuário logado |
-| Validar estrutura de dados | **Types** + Zod | Schema de validação com types |
-| Estado temporário do formulário | **Hook** | `useForm()` com react-hook-form |
-| Cache de dados da API | **Store** ou React Query | Lista de produtos já carregados |
-| Lógica reutilizável de UI | **Hook** | `useModal()`, `useDebounce()` |
-| Configurações globais | **Store** | Tema, idioma, preferências |
+| Preciso de...                     | Use                      | Exemplo                                          |
+| --------------------------------- | ------------------------ | ------------------------------------------------ |
+| Definir formato de dados          | **Types**                | `interface Product { id: string; name: string }` |
+| Buscar dados em um componente     | **Hook**                 | `useProduct(id)` retorna produto e loading       |
+| Compartilhar estado entre páginas | **Store**                | Carrinho de compras, usuário logado              |
+| Validar estrutura de dados        | **Types** + Zod          | Schema de validação com types                    |
+| Estado temporário do formulário   | **Hook**                 | `useForm()` com react-hook-form                  |
+| Cache de dados da API             | **Store** ou React Query | Lista de produtos já carregados                  |
+| Lógica reutilizável de UI         | **Hook**                 | `useModal()`, `useDebounce()`                    |
+| Configurações globais             | **Store**                | Tema, idioma, preferências                       |
 
 ## 🛡️ Middleware
 
 O arquivo `src/middleware.ts` gerencia:
+
 - Proteção de rotas e autenticação
 - Modificações de request/response
 - Redirects e rewrites
@@ -283,6 +297,7 @@ Para alterar chaves: editar `scripts/setup-all.js` linhas 127-129.
 ## 🧪 Testes
 
 ### Testes Unitários (Jest)
+
 ```bash
 npm run test           # Rodar testes
 npm run test:watch     # Modo watch
@@ -290,6 +305,7 @@ npm run test:coverage  # Cobertura
 ```
 
 ### Testes E2E (Playwright)
+
 ```bash
 npm run test:e2e       # Rodar testes E2E
 npm run test:e2e:ui    # Interface visual
@@ -307,6 +323,7 @@ npm run generate:feature
 ```
 
 Isso criará estrutura completa:
+
 ```
 features/products/
 ├── components/
@@ -343,6 +360,7 @@ if (hasPermission('billing.read')) {
 ```
 
 **Funcionalidades:**
+
 - 🎯 **Permissões granulares** - Controle de acesso baseado em recursos
 - 🏢 **Multi-tenant** - Permissões com escopo de organização
 - ⚡ **Integração JWT** - Permissões no token para performance
@@ -371,6 +389,7 @@ implement specs/plan.md
 ```
 
 **Benefícios:**
+
 - 📋 **Desenvolvimento estruturado** com especificações claras
 - 🤖 **Interações AI aprimoradas** com contexto consistente
 - 📚 **Documentação viva** que evolui com o código
@@ -381,17 +400,20 @@ Veja [Guia de Desenvolvimento Orientado por Specs](docs/SPEC-DRIVEN-DEVELOPMENT.
 ## 📋 Checklist de Boas Práticas
 
 ### Antes de Implementar
+
 - [ ] Verificar se já existe código similar
 - [ ] Confirmar requisitos com o usuário
 - [ ] Planejar seguindo princípios SOLID
 
 ### Durante Implementação
+
 - [ ] Uma responsabilidade por classe/função
 - [ ] Usar tipos TypeScript apropriados
 - [ ] Reutilizar código existente
 - [ ] Seguir padrões do projeto
 
 ### Depois de Implementar
+
 - [ ] Rodar linter e type-check
 - [ ] Adicionar/atualizar testes
 - [ ] Solicitar aprovação do usuário
@@ -407,6 +429,7 @@ Veja [Guia de Desenvolvimento Orientado por Specs](docs/SPEC-DRIVEN-DEVELOPMENT.
 ## 🙏 **Agradecimentos**
 
 Este template integra e adapta código do excelente **Next.js SaaS Starter** da Vercel:
+
 - **Repositório**: [nextjs/saas-starter](https://github.com/nextjs/saas-starter)
 - **Funcionalidades integradas**: Pagamentos Stripe, sistema RBAC, activity logging
 - **Adaptado com**: Arquitetura SOLID, integração MCP, Desenvolvimento Orientado por Specs
@@ -414,6 +437,7 @@ Este template integra e adapta código do excelente **Next.js SaaS Starter** da 
 **Agradecimentos especiais à equipe Vercel** por criar uma base tão sólida para aplicações SaaS! 🚀
 
 Aprimoramos a abordagem deles com:
+
 - ✅ Implementação de **princípios SOLID**
 - ✅ **11+ servidores MCP** para desenvolvimento aprimorado
 - ✅ Metodologia de **Desenvolvimento Orientado por Specs**

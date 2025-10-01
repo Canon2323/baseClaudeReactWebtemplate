@@ -1,21 +1,21 @@
 #!/usr/bin/env node
 
-const fs = require('fs');
-const path = require('path');
-const { execSync } = require('child_process');
+const fs = require("fs");
+const path = require("path");
+const { execSync } = require("child_process");
 
 // Colors for console output
 const colors = {
-  green: '\x1b[32m',
-  blue: '\x1b[34m', 
-  yellow: '\x1b[33m',
-  red: '\x1b[31m',
-  reset: '\x1b[0m',
-  bold: '\x1b[1m',
-  magenta: '\x1b[35m'
+  green: "\x1b[32m",
+  blue: "\x1b[34m",
+  yellow: "\x1b[33m",
+  red: "\x1b[31m",
+  reset: "\x1b[0m",
+  bold: "\x1b[1m",
+  magenta: "\x1b[35m",
 };
 
-function log(message, color = 'reset') {
+function log(message, color = "reset") {
   console.log(`${colors[color]}${message}${colors.reset}`);
 }
 
@@ -40,18 +40,18 @@ function info(message) {
 }
 
 function setupHusky() {
-  step('Setting up Husky and lint-staged for Claude Code');
-  
+  step("Setting up Husky and lint-staged for Claude Code");
+
   try {
     // Create .husky directory manually (works without git)
-    const huskyDir = path.join(process.cwd(), '.husky');
+    const huskyDir = path.join(process.cwd(), ".husky");
     if (!fs.existsSync(huskyDir)) {
       fs.mkdirSync(huskyDir, { recursive: true });
-      info('Created .husky directory');
+      info("Created .husky directory");
     }
-    
+
     // Create husky.sh file (required for hooks to work)
-    const huskyShPath = path.join(huskyDir, '_', 'husky.sh');
+    const huskyShPath = path.join(huskyDir, "_", "husky.sh");
     const huskyShContent = `#!/usr/bin/env sh
 if [ -z "$husky_skip_init" ]; then
   debug () {
@@ -88,17 +88,17 @@ if [ -z "$husky_skip_init" ]; then
 
   exit $exitCode
 fi`;
-    
+
     // Create _ directory and husky.sh
-    const underscoreDir = path.join(huskyDir, '_');
+    const underscoreDir = path.join(huskyDir, "_");
     if (!fs.existsSync(underscoreDir)) {
       fs.mkdirSync(underscoreDir, { recursive: true });
     }
     fs.writeFileSync(huskyShPath, huskyShContent, { mode: 0o755 });
-    success('Husky core files created');
+    success("Husky core files created");
 
     // Create pre-commit hook
-    const preCommitPath = path.join(process.cwd(), '.husky', 'pre-commit');
+    const preCommitPath = path.join(process.cwd(), ".husky", "pre-commit");
     const preCommitContent = `#!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
@@ -111,10 +111,10 @@ echo "📝 Code formatted, linted, and type-checked ✨"
 `;
 
     fs.writeFileSync(preCommitPath, preCommitContent, { mode: 0o755 });
-    success('Pre-commit hook created');
+    success("Pre-commit hook created");
 
     // Create commit-msg hook for conventional commits
-    const commitMsgPath = path.join(process.cwd(), '.husky', 'commit-msg');
+    const commitMsgPath = path.join(process.cwd(), ".husky", "commit-msg");
     const commitMsgContent = `#!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
@@ -126,10 +126,10 @@ echo "💬 Commit message validated!"
 `;
 
     fs.writeFileSync(commitMsgPath, commitMsgContent, { mode: 0o755 });
-    success('Commit message hook created');
+    success("Commit message hook created");
 
     // Create pre-push hook for additional checks
-    const prePushPath = path.join(process.cwd(), '.husky', 'pre-push');
+    const prePushPath = path.join(process.cwd(), ".husky", "pre-push");
     const prePushContent = `#!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
@@ -147,7 +147,7 @@ echo "✅ Pre-push checks completed!"
 `;
 
     fs.writeFileSync(prePushPath, prePushContent, { mode: 0o755 });
-    success('Pre-push hook created');
+    success("Pre-push hook created");
 
     return true;
   } catch (err) {
@@ -157,41 +157,41 @@ echo "✅ Pre-push checks completed!"
 }
 
 function createCommitLintConfig() {
-  step('Creating commit message guidelines');
-  
+  step("Creating commit message guidelines");
+
   const commitLintConfig = {
-    extends: ['@commitlint/config-conventional'],
+    extends: ["@commitlint/config-conventional"],
     rules: {
-      'type-enum': [
+      "type-enum": [
         2,
-        'always',
+        "always",
         [
-          'feat',     // New feature
-          'fix',      // Bug fix
-          'docs',     // Documentation only changes
-          'style',    // Changes that do not affect the meaning of the code
-          'refactor', // Code change that neither fixes a bug nor adds a feature
-          'perf',     // Code change that improves performance
-          'test',     // Adding missing tests or correcting existing tests
-          'build',    // Changes that affect the build system or dependencies
-          'ci',       // Changes to CI configuration files and scripts
-          'chore',    // Other changes that don't modify src or test files
-          'revert',   // Reverts a previous commit
+          "feat", // New feature
+          "fix", // Bug fix
+          "docs", // Documentation only changes
+          "style", // Changes that do not affect the meaning of the code
+          "refactor", // Code change that neither fixes a bug nor adds a feature
+          "perf", // Code change that improves performance
+          "test", // Adding missing tests or correcting existing tests
+          "build", // Changes that affect the build system or dependencies
+          "ci", // Changes to CI configuration files and scripts
+          "chore", // Other changes that don't modify src or test files
+          "revert", // Reverts a previous commit
         ],
       ],
-      'subject-case': [2, 'never', ['start-case', 'pascal-case']],
-      'subject-max-length': [2, 'always', 50],
-      'body-max-line-length': [2, 'always', 72],
+      "subject-case": [2, "never", ["start-case", "pascal-case"]],
+      "subject-max-length": [2, "always", 50],
+      "body-max-line-length": [2, "always", 72],
     },
   };
 
   try {
     fs.writeFileSync(
-      path.join(process.cwd(), 'commitlint.config.js'),
-      `module.exports = ${JSON.stringify(commitLintConfig, null, 2)};`
+      path.join(process.cwd(), "commitlint.config.js"),
+      `module.exports = ${JSON.stringify(commitLintConfig, null, 2)};`,
     );
-    success('Commitlint configuration created');
-    
+    success("Commitlint configuration created");
+
     // Create commit message template
     const commitTemplate = `# Commit Message Guidelines
 #
@@ -217,11 +217,8 @@ function createCommitLintConfig() {
 # - Breaking changes: BREAKING CHANGE: description
 `;
 
-    fs.writeFileSync(
-      path.join(process.cwd(), '.gitmessage'),
-      commitTemplate
-    );
-    success('Git commit message template created');
+    fs.writeFileSync(path.join(process.cwd(), ".gitmessage"), commitTemplate);
+    success("Git commit message template created");
 
     return true;
   } catch (err) {
@@ -231,26 +228,21 @@ function createCommitLintConfig() {
 }
 
 function updatePackageJson() {
-  step('Adding Husky scripts to package.json');
-  
+  step("Adding Husky scripts to package.json");
+
   try {
-    const packageJsonPath = path.join(process.cwd(), 'package.json');
-    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
-    
+    const packageJsonPath = path.join(process.cwd(), "package.json");
+    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
+
     // Add lint-staged configuration
-    packageJson['lint-staged'] = {
-      '**/*.{js,jsx,ts,tsx}': [
-        'eslint --fix',
-        'prettier --write',
-      ],
-      '**/*.{json,md,css,scss}': [
-        'prettier --write',
-      ],
-      '**/*.{ts,tsx}': () => 'npm run type-check',
+    packageJson["lint-staged"] = {
+      "**/*.{js,jsx,ts,tsx}": ["eslint --fix", "prettier --write"],
+      "**/*.{json,md,css,scss}": ["prettier --write"],
+      "**/*.{ts,tsx}": () => "npm run type-check",
     };
 
     fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
-    success('Package.json updated with lint-staged configuration');
+    success("Package.json updated with lint-staged configuration");
     return true;
   } catch (err) {
     warning(`Could not update package.json: ${err.message}`);
@@ -258,59 +250,64 @@ function updatePackageJson() {
   }
 }
 
-
 async function main() {
-  log('🪝 Setting up Git Hooks with Husky for Claude Code', 'bold');
-  log('====================================================\n', 'blue');
-  
-  log('Configuring automatic code quality checks on Git operations...', 'blue');
-  log('This ensures consistent code style and quality in your repository.\n', 'yellow');
-  
-  info('Features to be configured:');
-  log('  Pre-commit: ESLint, Prettier, TypeScript checks', 'green');
-  log('  Commit-msg: Conventional commit validation (optional)', 'green');
-  log('  Pre-push: Final validation before pushing', 'green');
-  log('  lint-staged: Only check staged files for performance\n', 'green');
-  
+  log("🪝 Setting up Git Hooks with Husky for Claude Code", "bold");
+  log("====================================================\n", "blue");
+
+  log("Configuring automatic code quality checks on Git operations...", "blue");
+  log(
+    "This ensures consistent code style and quality in your repository.\n",
+    "yellow",
+  );
+
+  info("Features to be configured:");
+  log("  Pre-commit: ESLint, Prettier, TypeScript checks", "green");
+  log("  Commit-msg: Conventional commit validation (optional)", "green");
+  log("  Pre-push: Final validation before pushing", "green");
+  log("  lint-staged: Only check staged files for performance\n", "green");
+
   const huskySuccess = setupHusky();
-  
+
   if (huskySuccess) {
     createCommitLintConfig();
     updatePackageJson();
-    
-    log('\n🎉 Husky and lint-staged setup completed!', 'bold');
-    log('==============================================\n', 'green');
-    
-    log('✅ Git hooks configured:', 'bold');
-    log('  🔍 Pre-commit: Code quality checks', 'green');
-    log('  💬 Commit-msg: Message validation', 'green');
-    log('  🚀 Pre-push: Final validation', 'green');
-    log('  ⚡ lint-staged: Performance optimization', 'green');
-    
-    log('\n📝 Next Steps:', 'bold');
-    log('1. 🔧 Install dependencies:', 'blue');
-    log('   npm install', 'yellow');
-    log('2. 🎯 Test the hooks:', 'blue');
-    log('   git add . && git commit -m "test: verify hooks work"', 'yellow');
-    log('3. 📚 Read the documentation:', 'blue');
-    log('   Check docs/HOOKS.md for usage guidelines', 'yellow');
-    
-    log('\n💡 Pro Tips:', 'bold');
-    log('- Hooks run automatically on git commands', 'magenta');
-    log('- Use conventional commit format for better history', 'magenta');
-    log('- Run "npm run pre-commit" to test manually', 'magenta');
-    log('- Check docs/HOOKS.md for customization guide', 'magenta');
-    
-    log('\n🛡️ Quality Assurance:', 'bold');
-    log('- Code is auto-formatted on every commit', 'yellow');
-    log('- ESLint issues are fixed automatically', 'yellow');  
-    log('- TypeScript errors prevent commits', 'yellow');
-    log('- Only staged files are processed for speed', 'yellow');
-    
-    log('\n🪝 Your repository now enforces code quality automatically!', 'bold');
+
+    log("\n🎉 Husky and lint-staged setup completed!", "bold");
+    log("==============================================\n", "green");
+
+    log("✅ Git hooks configured:", "bold");
+    log("  🔍 Pre-commit: Code quality checks", "green");
+    log("  💬 Commit-msg: Message validation", "green");
+    log("  🚀 Pre-push: Final validation", "green");
+    log("  ⚡ lint-staged: Performance optimization", "green");
+
+    log("\n📝 Next Steps:", "bold");
+    log("1. 🔧 Install dependencies:", "blue");
+    log("   npm install", "yellow");
+    log("2. 🎯 Test the hooks:", "blue");
+    log('   git add . && git commit -m "test: verify hooks work"', "yellow");
+    log("3. 📚 Read the documentation:", "blue");
+    log("   Check docs/HOOKS.md for usage guidelines", "yellow");
+
+    log("\n💡 Pro Tips:", "bold");
+    log("- Hooks run automatically on git commands", "magenta");
+    log("- Use conventional commit format for better history", "magenta");
+    log('- Run "npm run pre-commit" to test manually', "magenta");
+    log("- Check docs/HOOKS.md for customization guide", "magenta");
+
+    log("\n🛡️ Quality Assurance:", "bold");
+    log("- Code is auto-formatted on every commit", "yellow");
+    log("- ESLint issues are fixed automatically", "yellow");
+    log("- TypeScript errors prevent commits", "yellow");
+    log("- Only staged files are processed for speed", "yellow");
+
+    log(
+      "\n🪝 Your repository now enforces code quality automatically!",
+      "bold",
+    );
   } else {
-    log('\n💥 Husky setup failed!', 'red');
-    log('Check the errors above and try again.', 'red');
+    log("\n💥 Husky setup failed!", "red");
+    log("Check the errors above and try again.", "red");
     process.exit(1);
   }
 }

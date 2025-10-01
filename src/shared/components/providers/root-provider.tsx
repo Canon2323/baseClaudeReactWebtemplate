@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { ThemeProvider } from './theme-provider';
-import { AuthProvider } from './auth-provider';
-import { DatabaseProvider } from './database-provider';
+import { ThemeProvider } from "./theme-provider";
+import { AuthProvider } from "./auth-provider";
+import { DatabaseProvider } from "./database-provider";
 
 interface RootProviderProps {
   children: React.ReactNode;
@@ -23,9 +23,7 @@ export function RootProvider({ children }: RootProviderProps) {
       disableTransitionOnChange
     >
       <DatabaseProvider>
-        <AuthProvider>
-          {children}
-        </AuthProvider>
+        <AuthProvider>{children}</AuthProvider>
       </DatabaseProvider>
     </ThemeProvider>
   );

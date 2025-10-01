@@ -5,6 +5,7 @@ Este template suporta **pnpm**, **yarn** e **npm** como gerenciadores de pacotes
 ## 🚀 Instalação Rápida
 
 ### pnpm (Recomendado)
+
 ```bash
 # Instalar pnpm globalmente
 npm install -g pnpm
@@ -17,6 +18,7 @@ pnpm dev
 ```
 
 ### Yarn
+
 ```bash
 # Instalar yarn globalmente
 npm install -g yarn
@@ -29,6 +31,7 @@ yarn dev
 ```
 
 ### npm (Fallback)
+
 ```bash
 # Instalar dependências
 npm install
@@ -72,6 +75,7 @@ Todos os scripts funcionam com qualquer gerenciador:
 ## ⚡ Por que pnpm?
 
 ### Vantagens do pnpm:
+
 - **🔒 Segurança**: Menos vulnerabilidades que npm
 - **⚡ Performance**: 2x mais rápido que npm/yarn
 - **💾 Espaço**: Deduplica dependências globalmente
@@ -79,6 +83,7 @@ Todos os scripts funcionam com qualquer gerenciador:
 - **📦 Workspaces**: Suporte nativo a monorepos
 
 ### Comparação de Performance:
+
 ```bash
 # Instalação inicial (projeto limpo)
 npm install     # ~45s
@@ -94,6 +99,7 @@ pnpm install    # ~5s
 ## 🔄 Migração Entre Gerenciadores
 
 ### De npm para pnpm:
+
 ```bash
 # Remover npm artifacts
 rm package-lock.json
@@ -104,6 +110,7 @@ pnpm install
 ```
 
 ### De yarn para pnpm:
+
 ```bash
 # Remover yarn artifacts
 rm yarn.lock
@@ -114,6 +121,7 @@ pnpm install
 ```
 
 ### De pnpm para yarn:
+
 ```bash
 # Remover pnpm artifacts
 rm pnpm-lock.yaml
@@ -126,6 +134,7 @@ yarn install
 ## ⚙️ Configurações
 
 ### .npmrc (pnpm/npm)
+
 ```ini
 engine-strict=true
 save-exact=true
@@ -134,9 +143,10 @@ dedupe-peer-dependents=true
 ```
 
 ### pnpm-workspace.yaml
+
 ```yaml
 packages:
-  - '.'
+  - "."
 
 prefer-workspace-packages: true
 auto-install-peers: true
@@ -145,11 +155,13 @@ auto-install-peers: true
 ## 🚨 Problemas de Segurança
 
 ### npm Issues Recentes:
+
 - Vulnerabilidades em dependências core
 - Supply chain attacks
 - Malicious packages
 
 ### pnpm Security:
+
 - ✅ Isolated dependency trees
 - ✅ Strict package verification
 - ✅ Content addressing
@@ -172,6 +184,7 @@ node scripts/detect-package-manager.js
 ## 🛠️ Troubleshooting
 
 ### Cache Corrompido:
+
 ```bash
 # pnpm
 pnpm store prune
@@ -184,6 +197,7 @@ npm cache clean --force
 ```
 
 ### Dependências Conflitantes:
+
 ```bash
 # pnpm (mais rigoroso, detecta conflitos)
 pnpm install --shamefully-hoist
@@ -196,6 +210,7 @@ npm install --legacy-peer-deps
 ```
 
 ### Lock File Desatualizado:
+
 ```bash
 # Regenerar lock file
 rm [pnpm-lock.yaml|yarn.lock|package-lock.json]

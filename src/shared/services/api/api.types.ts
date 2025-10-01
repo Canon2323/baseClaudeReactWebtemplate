@@ -1,115 +1,134 @@
 // API Service Types and Interfaces
 // Following the contract specification from specs/master/contracts/api-service.contract.ts
 
-export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'HEAD' | 'OPTIONS'
+export type HttpMethod =
+  | "GET"
+  | "POST"
+  | "PUT"
+  | "PATCH"
+  | "DELETE"
+  | "HEAD"
+  | "OPTIONS";
 
 export interface RequestConfig {
   /** Custom headers to include in request */
-  headers?: Record<string, string>
+  headers?: Record<string, string>;
 
   /** Request timeout in milliseconds (max 60000) */
-  timeout?: number
+  timeout?: number;
 
   /** AbortSignal for request cancellation */
-  signal?: AbortSignal
+  signal?: AbortSignal;
 
   /** Cache strategy for the request */
-  cache?: RequestCache
+  cache?: RequestCache;
 
   /** Credentials mode for the request */
-  credentials?: RequestCredentials
+  credentials?: RequestCredentials;
 
   /** Custom status code validation function */
-  validateStatus?: (status: number) => boolean
+  validateStatus?: (status: number) => boolean;
 }
 
 export interface ApiRequest {
   /** Request URL (must be valid URL) */
-  url: string
+  url: string;
 
   /** HTTP method */
-  method: HttpMethod
+  method: HttpMethod;
 
   /** Request headers */
-  headers?: Record<string, string>
+  headers?: Record<string, string>;
 
   /** Request body (will be JSON serialized if object) */
-  body?: unknown
+  body?: unknown;
 
   /** Request timeout in milliseconds */
-  timeout?: number
+  timeout?: number;
 
   /** AbortSignal for cancellation */
-  signal?: AbortSignal
+  signal?: AbortSignal;
 
   /** Cache strategy */
-  cache?: RequestCache
+  cache?: RequestCache;
 
   /** Credentials mode */
-  credentials?: RequestCredentials
+  credentials?: RequestCredentials;
 }
 
 export interface ApiResponse<T = unknown> {
   /** Response data (parsed JSON or raw) */
-  data: T
+  data: T;
 
   /** HTTP status code */
-  status: number
+  status: number;
 
   /** HTTP status text */
-  statusText: string
+  statusText: string;
 
   /** Response headers */
-  headers: Headers
+  headers: Headers;
 
   /** Original request configuration */
-  config: ApiRequest
+  config: ApiRequest;
 }
 
 export interface ApiErrorResponse {
-  error: string
-  message: string
-  status: number
-  statusText: string
-  details?: unknown
+  error: string;
+  message: string;
+  status: number;
+  statusText: string;
+  details?: unknown;
 }
 
 // Request interceptor function
 export type RequestInterceptor = (
-  request: ApiRequest
-) => ApiRequest | Promise<ApiRequest>
+  request: ApiRequest,
+) => ApiRequest | Promise<ApiRequest>;
 
 // Response interceptor configuration
 export interface ResponseInterceptor {
   /** Handler for successful responses */
-  onFulfilled?: (response: ApiResponse) => ApiResponse | Promise<ApiResponse>
+  onFulfilled?: (response: ApiResponse) => ApiResponse | Promise<ApiResponse>;
 
   /** Handler for error responses */
-  onRejected?: (error: ApiError) => ApiError | Promise<ApiError>
+  onRejected?: (error: ApiError) => ApiError | Promise<ApiError>;
 }
 
 export interface InterceptorConfig {
-  id: string
-  type: 'request' | 'response'
-  handler: RequestInterceptor | ResponseInterceptor
+  id: string;
+  type: "request" | "response";
+  handler: RequestInterceptor | ResponseInterceptor;
 }
 
 // Main API Service interface
 export interface IApiService {
   // Core HTTP methods
-  get<T>(url: string, config?: RequestConfig): Promise<ApiResponse<T>>
-  post<T>(url: string, data?: unknown, config?: RequestConfig): Promise<ApiResponse<T>>
-  put<T>(url: string, data?: unknown, config?: RequestConfig): Promise<ApiResponse<T>>
-  patch<T>(url: string, data?: unknown, config?: RequestConfig): Promise<ApiResponse<T>>
-  delete<T>(url: string, config?: RequestConfig): Promise<ApiResponse<T>>
+  get<T>(url: string, config?: RequestConfig): Promise<ApiResponse<T>>;
+  post<T>(
+    url: string,
+    data?: unknown,
+    config?: RequestConfig,
+  ): Promise<ApiResponse<T>>;
+  put<T>(
+    url: string,
+    data?: unknown,
+    config?: RequestConfig,
+  ): Promise<ApiResponse<T>>;
+  patch<T>(
+    url: string,
+    data?: unknown,
+    config?: RequestConfig,
+  ): Promise<ApiResponse<T>>;
+  delete<T>(url: string, config?: RequestConfig): Promise<ApiResponse<T>>;
 
   // Low-level request method
-  request<T>(request: ApiRequest): Promise<ApiResponse<T>>
+  request<T>(request: ApiRequest): Promise<ApiResponse<T>>;
 
   // Interceptor management
-  addRequestInterceptor(interceptor: RequestInterceptor): string
-  addResponseInterceptor(interceptor: ResponseInterceptor): string
-  removeInterceptor(id: string): void
+  addRequestInterceptor(interceptor: RequestInterceptor): string;
+  addResponseInterceptor(interceptor: ResponseInterceptor): string;
+  removeInterceptor(id: string): void;
 }
 
 // Error classes
@@ -119,54 +138,60 @@ export class ApiError extends Error {
     public status: number,
     public statusText: string,
     public response?: ApiErrorResponse,
-    public request?: ApiRequest
+    public request?: ApiRequest,
   ) {
-    super(message)
-    this.name = 'ApiError'
+    super(message);
+    this.name = "ApiError";
   }
 }
 
 export class NetworkError extends ApiError {
   constructor(message: string, request?: ApiRequest) {
-    super(message, 0, 'Network Error', undefined, request)
-    this.name = 'NetworkError'
+    super(message, 0, "Network Error", undefined, request);
+    this.name = "NetworkError";
   }
 }
 
 export class TimeoutError extends ApiError {
   constructor(timeout: number, request?: ApiRequest) {
-    super(`Request timeout after ${timeout}ms`, 0, 'Timeout', undefined, request)
-    this.name = 'TimeoutError'
+    super(
+      `Request timeout after ${timeout}ms`,
+      0,
+      "Timeout",
+      undefined,
+      request,
+    );
+    this.name = "TimeoutError";
   }
 }
 
 // Provider types
-export type ApiProviderType = 'fetch' | 'axios'
+export type ApiProviderType = "fetch" | "axios";
 
 export interface ApiProviderConfig {
-  type: ApiProviderType
-  baseURL?: string
-  timeout?: number
-  headers?: Record<string, string>
-  validateStatus?: (status: number) => boolean
+  type: ApiProviderType;
+  baseURL?: string;
+  timeout?: number;
+  headers?: Record<string, string>;
+  validateStatus?: (status: number) => boolean;
 }
 
 export interface IApiProvider {
-  request<T>(request: ApiRequest): Promise<ApiResponse<T>>
-  createInstance(config: ApiProviderConfig): IApiProvider
+  request<T>(request: ApiRequest): Promise<ApiResponse<T>>;
+  createInstance(config: ApiProviderConfig): IApiProvider;
 }
 
 // Service dependencies
 export interface ApiServiceDependencies {
-  supabaseService: ISupabaseService
-  validationService: IValidationService
+  supabaseService: ISupabaseService;
+  validationService: IValidationService;
 }
 
 // Re-export external types (will be properly imported)
 export interface ISupabaseService {
-  getClient(): any // Supabase client
+  getClient(): any; // Supabase client
 }
 
 export interface IValidationService {
-  validate(schema: unknown, data: unknown): Promise<void>
+  validate(schema: unknown, data: unknown): Promise<void>;
 }

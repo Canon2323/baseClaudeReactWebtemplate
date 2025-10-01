@@ -1,4 +1,4 @@
-import { createClient, type SupabaseClient } from '@supabase/supabase-js'
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import type {
   IDatabaseProvider,
   DatabaseRecord,
@@ -11,24 +11,24 @@ import type {
   TransactionContext,
   RealtimeSubscription,
   RealtimeEvent,
-  RealtimeCallback
-} from '@/shared/types/database'
-import { getEnv } from '@/config/env'
+  RealtimeCallback,
+} from "@/shared/types/database";
+import { getEnv } from "@/config/env";
 
 export class SupabaseDatabaseProvider implements IDatabaseProvider {
-  private client: SupabaseClient
-  private adminClient?: SupabaseClient
-  private subscriptions: Map<string, any> = new Map()
-  private transactionCounter = 0
+  private client: SupabaseClient;
+  private adminClient?: SupabaseClient;
+  private subscriptions: Map<string, any> = new Map();
+  private transactionCounter = 0;
 
   constructor() {
-    const env = getEnv()
+    const env = getEnv();
 
     // Client principal (com auth context)
     this.client = createClient(
       env.NEXT_PUBLIC_SUPABASE_URL!,
-      env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    )
+      env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    );
 
     // Admin client (para operações privilegiadas)
     if (env.SUPABASE_SERVICE_ROLE_KEY) {
@@ -40,43 +40,53 @@ export class SupabaseDatabaseProvider implements IDatabaseProvider {
             autoRefreshToken: false,
             persistSession: false,
           },
-        }
-      )
+        },
+      );
     }
   }
 
   // Conexão e health check
   async isConnected(): Promise<boolean> {
     try {
-      const { error } = await this.client.from('_health_check').select('*').limit(1)
-      return !error
+      const { error } = await this.client
+        .from("_health_check")
+        .select("*")
+        .limit(1);
+      return !error;
     } catch {
-      return false
+      return false;
     }
   }
 
-  async getHealth(): Promise<{ status: 'healthy' | 'unhealthy'; details?: any }> {
+  async getHealth(): Promise<{
+    status: "healthy" | "unhealthy";
+    details?: any;
+  }> {
     try {
-      const startTime = Date.now()
-      const { error } = await this.client.from('_health_check').select('*').limit(1)
-      const responseTime = Date.now() - startTime
+      const startTime = Date.now();
+      const { error } = await this.client
+        .from("_health_check")
+        .select("*")
+        .limit(1);
+      const responseTime = Date.now() - startTime;
 
-      if (error && error.code !== 'PGRST116') { // Table not found é ok para health check
+      if (error && error.code !== "PGRST116") {
+        // Table not found é ok para health check
         return {
-          status: 'unhealthy',
-          details: { error: error.message, responseTime }
-        }
+          status: "unhealthy",
+          details: { error: error.message, responseTime },
+        };
       }
 
       return {
-        status: 'healthy',
-        details: { responseTime }
-      }
+        status: "healthy",
+        details: { responseTime },
+      };
     } catch (error) {
       return {
-        status: 'unhealthy',
-        details: { error: (error as Error).message }
-      }
+        status: "unhealthy",
+        details: { error: (error as Error).message },
+      };
     }
   }
 
@@ -85,103 +95,108 @@ export class SupabaseDatabaseProvider implements IDatabaseProvider {
   // Create
   async insert<T extends DatabaseRecord>(
     table: string,
-    data: InsertData | InsertData[]
+    data: InsertData | InsertData[],
   ): Promise<DatabaseResponse<T[]>> {
     try {
-      const { data: result, error, count } = await this.client
-        .from(table)
-        .insert(data)
-        .select()
+      const {
+        data: result,
+        error,
+        count,
+      } = await this.client.from(table).insert(data).select();
 
       return {
         data: result as T[],
         error: error ? this.mapSupabaseError(error) : null,
-        count
-      }
+        count,
+      };
     } catch (error) {
       return {
         data: null,
         error: this.mapSupabaseError(error),
-        count: 0
-      }
+        count: 0,
+      };
     }
   }
 
   // Read
   async select<T extends DatabaseRecord>(
     table: string,
-    options: QueryOptions = {}
+    options: QueryOptions = {},
   ): Promise<DatabaseResponse<T[]>> {
     try {
-      let query = this.client.from(table).select(
-        options.select ? options.select.join(',') : '*',
-        { count: 'exact' }
-      )
+      let query = this.client
+        .from(table)
+        .select(options.select ? options.select.join(",") : "*", {
+          count: "exact",
+        });
 
       // Where conditions
       if (options.where) {
         Object.entries(options.where).forEach(([key, value]) => {
           if (Array.isArray(value)) {
-            query = query.in(key, value)
+            query = query.in(key, value);
           } else if (value === null) {
-            query = query.is(key, null)
+            query = query.is(key, null);
           } else {
-            query = query.eq(key, value)
+            query = query.eq(key, value);
           }
-        })
+        });
       }
 
       // Order by
       if (options.orderBy) {
         options.orderBy.forEach(({ column, ascending = true }) => {
-          query = query.order(column, { ascending })
-        })
+          query = query.order(column, { ascending });
+        });
       }
 
       // Pagination
       if (options.limit) {
-        query = query.limit(options.limit)
+        query = query.limit(options.limit);
       }
       if (options.offset) {
-        query = query.range(options.offset, (options.offset + (options.limit || 1000)) - 1)
+        query = query.range(
+          options.offset,
+          options.offset + (options.limit || 1000) - 1,
+        );
       }
 
-      const { data, error, count } = await query
+      const { data, error, count } = await query;
 
       return {
         data: data as T[],
         error: error ? this.mapSupabaseError(error) : null,
-        count
-      }
+        count,
+      };
     } catch (error) {
       return {
         data: null,
         error: this.mapSupabaseError(error),
-        count: 0
-      }
+        count: 0,
+      };
     }
   }
 
   async selectOne<T extends DatabaseRecord>(
     table: string,
-    id: string
+    id: string,
   ): Promise<DatabaseResponse<T>> {
     try {
       const { data, error } = await this.client
         .from(table)
-        .select('*')
-        .eq('id', id)
-        .single()
+        .select("*")
+        .eq("id", id)
+        .single();
 
       return {
         data: data as T,
-        error: error ? this.mapSupabaseError(error) : null
-      }
+        error: error ? this.mapSupabaseError(error) : null,
+      };
     } catch (error) {
       return {
         data: null,
-        error: this.mapSupabaseError(error)
-      }
+        error: this.mapSupabaseError(error),
+      };
     }
   }
 
@@ -189,40 +204,40 @@ export class SupabaseDatabaseProvider implements IDatabaseProvider {
     table: string,
     field: string,
     value: any,
-    options: Omit<QueryOptions, 'where'> = {}
+    options: Omit<QueryOptions, "where"> = {},
   ): Promise<DatabaseResponse<T[]>> {
     return this.select<T>(table, {
       ...options,
-      where: { [field]: value }
-    })
+      where: { [field]: value },
+    });
   }
 
   // Update
   async update<T extends DatabaseRecord>(
     table: string,
     id: string,
-    data: UpdateData
+    data: UpdateData,
   ): Promise<DatabaseResponse<T>> {
     try {
       const { data: result, error } = await this.client
         .from(table)
         .update({
           ...data,
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
         })
-        .eq('id', id)
+        .eq("id", id)
         .select()
-        .single()
+        .single();
 
       return {
         data: result as T,
-        error: error ? this.mapSupabaseError(error) : null
-      }
+        error: error ? this.mapSupabaseError(error) : null,
+      };
     } catch (error) {
       return {
         data: null,
-        error: this.mapSupabaseError(error)
-      }
+        error: this.mapSupabaseError(error),
+      };
     }
   }
 
@@ -230,80 +245,84 @@ export class SupabaseDatabaseProvider implements IDatabaseProvider {
     table: string,
     field: string,
     value: any,
-    data: UpdateData
+    data: UpdateData,
   ): Promise<DatabaseResponse<T[]>> {
     try {
-      const { data: result, error, count } = await this.client
+      const {
+        data: result,
+        error,
+        count,
+      } = await this.client
         .from(table)
         .update({
           ...data,
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
         })
         .eq(field, value)
-        .select()
+        .select();
 
       return {
         data: result as T[],
         error: error ? this.mapSupabaseError(error) : null,
-        count
-      }
+        count,
+      };
     } catch (error) {
       return {
         data: null,
         error: this.mapSupabaseError(error),
-        count: 0
-      }
+        count: 0,
+      };
     }
   }
 
   // Delete
   async delete<T extends DatabaseRecord>(
     table: string,
-    id: string
+    id: string,
   ): Promise<DatabaseResponse<T>> {
     try {
       const { data, error } = await this.client
         .from(table)
         .delete()
-        .eq('id', id)
+        .eq("id", id)
         .select()
-        .single()
+        .single();
 
       return {
         data: data as T,
-        error: error ? this.mapSupabaseError(error) : null
-      }
+        error: error ? this.mapSupabaseError(error) : null,
+      };
     } catch (error) {
       return {
         data: null,
-        error: this.mapSupabaseError(error)
-      }
+        error: this.mapSupabaseError(error),
+      };
     }
   }
 
   async deleteBy<T extends DatabaseRecord>(
     table: string,
     field: string,
-    value: any
+    value: any,
   ): Promise<DatabaseResponse<T[]>> {
     try {
       const { data, error, count } = await this.client
         .from(table)
         .delete()
         .eq(field, value)
-        .select()
+        .select();
 
       return {
         data: data as T[],
         error: error ? this.mapSupabaseError(error) : null,
-        count
-      }
+        count,
+      };
     } catch (error) {
       return {
         data: null,
         error: this.mapSupabaseError(error),
-        count: 0
-      }
+        count: 0,
+      };
     }
   }
 
@@ -311,69 +330,78 @@ export class SupabaseDatabaseProvider implements IDatabaseProvider {
   async upsert<T extends DatabaseRecord>(
     table: string,
     data: UpsertData | UpsertData[],
-    conflictColumns: string[] = ['id']
+    conflictColumns: string[] = ["id"],
   ): Promise<DatabaseResponse<T[]>> {
     try {
-      const { data: result, error, count } = await this.client
+      const {
+        data: result,
+        error,
+        count,
+      } = await this.client
         .from(table)
         .upsert(data, {
-          onConflict: conflictColumns.join(','),
-          ignoreDuplicates: false
+          onConflict: conflictColumns.join(","),
+          ignoreDuplicates: false,
         })
-        .select()
+        .select();
 
       return {
         data: result as T[],
         error: error ? this.mapSupabaseError(error) : null,
-        count
-      }
+        count,
+      };
     } catch (error) {
       return {
         data: null,
         error: this.mapSupabaseError(error),
-        count: 0
-      }
+        count: 0,
+      };
     }
   }
 
   // Raw Queries
-  async query<T = any>(sql: string, params: any[] = []): Promise<DatabaseResponse<T[]>> {
+  async query<T = any>(
+    sql: string,
+    params: any[] = [],
+  ): Promise<DatabaseResponse<T[]>> {
     try {
       // Supabase não tem execução direta de SQL via JS client
       // Isso seria feito via RPC (stored procedures) ou Edge Functions
-      throw new Error('Raw SQL queries are not supported via Supabase client. Use RPC functions instead.')
+      throw new Error(
+        "Raw SQL queries are not supported via Supabase client. Use RPC functions instead.",
+      );
     } catch (error) {
       return {
         data: null,
-        error: this.mapSupabaseError(error)
-      }
+        error: this.mapSupabaseError(error),
+      };
     }
   }
 
   // Transações (simuladas com RPC)
   async transaction<T>(
-    callback: (ctx: TransactionContext) => Promise<T>
+    callback: (ctx: TransactionContext) => Promise<T>,
   ): Promise<DatabaseResponse<T>> {
     try {
-      const transactionId = `tx_${++this.transactionCounter}_${Date.now()}`
+      const transactionId = `tx_${++this.transactionCounter}_${Date.now()}`;
       const context: TransactionContext = {
         id: transactionId,
-        isActive: true
-      }
+        isActive: true,
+      };
 
       // Supabase não tem transações diretas no client
       // Alternativas: usar RPC functions ou aceitar que operações são independentes
-      const result = await callback(context)
+      const result = await callback(context);
 
       return {
         data: result,
-        error: null
-      }
+        error: null,
+      };
     } catch (error) {
       return {
         data: null,
-        error: this.mapSupabaseError(error)
-      }
+        error: this.mapSupabaseError(error),
+      };
     }
   }
 
@@ -381,72 +409,78 @@ export class SupabaseDatabaseProvider implements IDatabaseProvider {
   async subscribe<T = any>(
     table: string,
     callback: RealtimeCallback<T>,
-    options: { event?: 'INSERT' | 'UPDATE' | 'DELETE' | '*' } = {}
+    options: { event?: "INSERT" | "UPDATE" | "DELETE" | "*" } = {},
   ): Promise<RealtimeSubscription> {
-    const subscriptionId = `sub_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
-    const event = options.event || '*'
+    const subscriptionId = `sub_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const event = options.event || "*";
 
     const channel = this.client
       .channel(subscriptionId)
-      .on('postgres_changes', {
-        event,
-        schema: 'public',
-        table
-      }, (payload) => {
-        const realtimeEvent: RealtimeEvent<T> = {
-          eventType: payload.eventType as any,
-          new: payload.new as T,
-          old: payload.old as T,
-          table: payload.table,
-          schema: payload.schema,
-          commit_timestamp: payload.commit_timestamp
-        }
-        callback(realtimeEvent)
-      })
-      .subscribe()
+      .on(
+        "postgres_changes",
+        {
+          event,
+          schema: "public",
+          table,
+        },
+        (payload) => {
+          const realtimeEvent: RealtimeEvent<T> = {
+            eventType: payload.eventType as any,
+            new: payload.new as T,
+            old: payload.old as T,
+            table: payload.table,
+            schema: payload.schema,
+            commit_timestamp: payload.commit_timestamp,
+          };
+          callback(realtimeEvent);
+        },
+      )
+      .subscribe();
 
-    this.subscriptions.set(subscriptionId, channel)
+    this.subscriptions.set(subscriptionId, channel);
 
     return {
       id: subscriptionId,
       table,
-      unsubscribe: () => this.unsubscribe(subscriptionId)
-    }
+      unsubscribe: () => this.unsubscribe(subscriptionId),
+    };
   }
 
   async unsubscribe(subscriptionId: string): Promise<void> {
-    const channel = this.subscriptions.get(subscriptionId)
+    const channel = this.subscriptions.get(subscriptionId);
     if (channel) {
-      await this.client.removeChannel(channel)
-      this.subscriptions.delete(subscriptionId)
+      await this.client.removeChannel(channel);
+      this.subscriptions.delete(subscriptionId);
     }
   }
 
   // Utilidades
   async count(
     table: string,
-    options: Pick<QueryOptions, 'where'> = {}
+    options: Pick<QueryOptions, "where"> = {},
   ): Promise<DatabaseResponse<number>> {
     try {
-      let query = this.client.from(table).select('*', { count: 'exact', head: true })
+      let query = this.client
+        .from(table)
+        .select("*", { count: "exact", head: true });
 
       if (options.where) {
         Object.entries(options.where).forEach(([key, value]) => {
-          query = query.eq(key, value)
-        })
+          query = query.eq(key, value);
+        });
       }
 
-      const { count, error } = await query
+      const { count, error } = await query;
 
       return {
         data: count || 0,
-        error: error ? this.mapSupabaseError(error) : null
-      }
+        error: error ? this.mapSupabaseError(error) : null,
+      };
     } catch (error) {
       return {
         data: null,
-        error: this.mapSupabaseError(error)
-      }
+        error: this.mapSupabaseError(error),
+      };
     }
   }
 
@@ -454,18 +488,18 @@ export class SupabaseDatabaseProvider implements IDatabaseProvider {
     try {
       const { count, error } = await this.client
         .from(table)
-        .select('id', { count: 'exact', head: true })
-        .eq('id', id)
+        .select("id", { count: "exact", head: true })
+        .eq("id", id);
 
       return {
         data: (count || 0) > 0,
-        error: error ? this.mapSupabaseError(error) : null
-      }
+        error: error ? this.mapSupabaseError(error) : null,
+      };
     } catch (error) {
       return {
         data: null,
-        error: this.mapSupabaseError(error)
-      }
+        error: this.mapSupabaseError(error),
+      };
     }
   }
 
@@ -473,116 +507,117 @@ export class SupabaseDatabaseProvider implements IDatabaseProvider {
   async uploadFile(
     bucket: string,
     path: string,
-    file: File | Buffer
+    file: File | Buffer,
   ): Promise<DatabaseResponse<{ path: string; url: string }>> {
     try {
       const { data, error } = await this.client.storage
         .from(bucket)
-        .upload(path, file)
+        .upload(path, file);
 
       if (error) {
         return {
           data: null,
-          error: this.mapSupabaseError(error)
-        }
+          error: this.mapSupabaseError(error),
+        };
       }
 
-      const { data: { publicUrl } } = this.client.storage
-        .from(bucket)
-        .getPublicUrl(path)
+      const {
+        data: { publicUrl },
+      } = this.client.storage.from(bucket).getPublicUrl(path);
 
       return {
         data: {
           path: data.path,
-          url: publicUrl
+          url: publicUrl,
         },
-        error: null
-      }
+        error: null,
+      };
     } catch (error) {
       return {
         data: null,
-        error: this.mapSupabaseError(error)
-      }
+        error: this.mapSupabaseError(error),
+      };
     }
   }
 
   async downloadFile(
     bucket: string,
-    path: string
+    path: string,
   ): Promise<DatabaseResponse<{ data: Blob; url: string }>> {
     try {
       const { data, error } = await this.client.storage
         .from(bucket)
-        .download(path)
+        .download(path);
 
       if (error) {
         return {
           data: null,
-          error: this.mapSupabaseError(error)
-        }
+          error: this.mapSupabaseError(error),
+        };
       }
 
-      const { data: { publicUrl } } = this.client.storage
-        .from(bucket)
-        .getPublicUrl(path)
+      const {
+        data: { publicUrl },
+      } = this.client.storage.from(bucket).getPublicUrl(path);
 
       return {
         data: {
           data: data as Blob,
-          url: publicUrl
+          url: publicUrl,
         },
-        error: null
-      }
+        error: null,
+      };
     } catch (error) {
       return {
         data: null,
-        error: this.mapSupabaseError(error)
-      }
+        error: this.mapSupabaseError(error),
+      };
     }
   }
 
-  async deleteFile(bucket: string, path: string): Promise<DatabaseResponse<void>> {
+  async deleteFile(
+    bucket: string,
+    path: string,
+  ): Promise<DatabaseResponse<void>> {
     try {
-      const { error } = await this.client.storage
-        .from(bucket)
-        .remove([path])
+      const { error } = await this.client.storage.from(bucket).remove([path]);
 
       return {
         data: error ? null : undefined,
-        error: error ? this.mapSupabaseError(error) : null
-      }
+        error: error ? this.mapSupabaseError(error) : null,
+      };
     } catch (error) {
       return {
         data: null,
-        error: this.mapSupabaseError(error)
-      }
+        error: this.mapSupabaseError(error),
+      };
     }
   }
 
   // Inicialização e cleanup
   async initialize(): Promise<void> {
     // Verificar conexão
-    const health = await this.getHealth()
-    if (health.status === 'unhealthy') {
-      console.warn('Supabase connection is unhealthy:', health.details)
+    const health = await this.getHealth();
+    if (health.status === "unhealthy") {
+      console.warn("Supabase connection is unhealthy:", health.details);
     }
   }
 
   async cleanup(): Promise<void> {
     // Limpar todas as subscriptions
     for (const [id] of this.subscriptions) {
-      await this.unsubscribe(id)
+      await this.unsubscribe(id);
     }
-    this.subscriptions.clear()
+    this.subscriptions.clear();
   }
 
   // Mapper para erros (Single Responsibility)
   private mapSupabaseError(error: any): DatabaseError {
     return {
-      code: error.code || error.error_code || 'unknown_error',
-      message: error.message || 'An unknown database error occurred',
+      code: error.code || error.error_code || "unknown_error",
+      message: error.message || "An unknown database error occurred",
       details: error,
-      hint: error.hint
-    }
+      hint: error.hint,
+    };
   }
 }

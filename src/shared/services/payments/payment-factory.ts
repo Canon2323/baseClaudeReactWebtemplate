@@ -2,164 +2,191 @@
 // Repository: https://github.com/nextjs/saas-starter
 // Enhanced with SOLID Factory Pattern
 
-import type { IPaymentProvider, PaymentProviderType, PaymentProviderConfig } from '@/shared/types/payments'
+import type {
+  IPaymentProvider,
+  PaymentProviderType,
+  PaymentProviderConfig,
+} from "@/shared/types/payments";
 
 // Factory for creating payment providers (Factory Pattern + Strategy Pattern)
 export class PaymentProviderFactory {
-  private static providers: Map<PaymentProviderType, () => Promise<IPaymentProvider>> = new Map()
+  private static providers: Map<
+    PaymentProviderType,
+    () => Promise<IPaymentProvider>
+  > = new Map();
 
   // Register provider (Open/Closed Principle)
   static registerProvider(
     type: PaymentProviderType,
-    factory: () => Promise<IPaymentProvider>
+    factory: () => Promise<IPaymentProvider>,
   ): void {
-    this.providers.set(type, factory)
+    this.providers.set(type, factory);
   }
 
   // Create provider based on type (Strategy Pattern)
-  static async createProvider(config: PaymentProviderConfig): Promise<IPaymentProvider> {
-    const factory = this.providers.get(config.type)
+  static async createProvider(
+    config: PaymentProviderConfig,
+  ): Promise<IPaymentProvider> {
+    const factory = this.providers.get(config.type);
 
     if (!factory) {
-      throw new Error(`Payment provider '${config.type}' not registered`)
+      throw new Error(`Payment provider '${config.type}' not registered`);
     }
 
-    const provider = await factory()
-    await provider.initialize()
+    const provider = await factory();
+    await provider.initialize();
 
-    return provider
+    return provider;
   }
 
   // List available providers
   static getAvailableProviders(): PaymentProviderType[] {
-    return Array.from(this.providers.keys())
+    return Array.from(this.providers.keys());
   }
 
   // Check if provider is available
   static isProviderAvailable(type: PaymentProviderType): boolean {
-    return this.providers.has(type)
+    return this.providers.has(type);
   }
 
   // Clear all registered providers
   static clearProviders(): void {
-    this.providers.clear()
+    this.providers.clear();
   }
 }
 
 // Auto-registration of available providers
 export const registerDefaultPaymentProviders = async () => {
   // Stripe Provider (default)
-  PaymentProviderFactory.registerProvider('stripe', async () => {
-    const { StripePaymentProvider } = await import('./providers/stripe-payment-provider')
-    return new StripePaymentProvider()
-  })
+  PaymentProviderFactory.registerProvider("stripe", async () => {
+    const { StripePaymentProvider } = await import(
+      "./providers/stripe-payment-provider"
+    );
+    return new StripePaymentProvider();
+  });
 
   // Paddle Provider (future)
-  PaymentProviderFactory.registerProvider('paddle', async () => {
-    const { PaddlePaymentProvider } = await import('./providers/paddle-payment-provider')
-    return new PaddlePaymentProvider()
-  })
+  PaymentProviderFactory.registerProvider("paddle", async () => {
+    const { PaddlePaymentProvider } = await import(
+      "./providers/paddle-payment-provider"
+    );
+    return new PaddlePaymentProvider();
+  });
 
   // LemonSqueezy Provider (future)
-  PaymentProviderFactory.registerProvider('lemonsqueezy', async () => {
-    const { LemonSqueezyPaymentProvider } = await import('./providers/lemonsqueezy-payment-provider')
-    return new LemonSqueezyPaymentProvider()
-  })
-}
+  PaymentProviderFactory.registerProvider("lemonsqueezy", async () => {
+    const { LemonSqueezyPaymentProvider } = await import(
+      "./providers/lemonsqueezy-payment-provider"
+    );
+    return new LemonSqueezyPaymentProvider();
+  });
+};
 
 // Utility to validate payment configuration
-export const validatePaymentConfig = (config: PaymentProviderConfig): boolean => {
+export const validatePaymentConfig = (
+  config: PaymentProviderConfig,
+): boolean => {
   if (!config.type) {
-    throw new Error('Payment provider type is required')
+    throw new Error("Payment provider type is required");
   }
 
   if (!PaymentProviderFactory.isProviderAvailable(config.type)) {
-    throw new Error(`Payment provider '${config.type}' is not available`)
+    throw new Error(`Payment provider '${config.type}' is not available`);
   }
 
   // Provider-specific validations
   switch (config.type) {
-    case 'stripe':
+    case "stripe":
       if (!config.options.publishableKey || !config.options.secretKey) {
-        throw new Error('Stripe requires publishableKey and secretKey in options')
+        throw new Error(
+          "Stripe requires publishableKey and secretKey in options",
+        );
       }
-      break
+      break;
 
-    case 'paddle':
+    case "paddle":
       if (!config.options.vendorId || !config.options.apiKey) {
-        throw new Error('Paddle requires vendorId and apiKey in options')
+        throw new Error("Paddle requires vendorId and apiKey in options");
       }
-      break
+      break;
 
-    case 'lemonsqueezy':
+    case "lemonsqueezy":
       if (!config.options.apiKey) {
-        throw new Error('LemonSqueezy requires apiKey in options')
+        throw new Error("LemonSqueezy requires apiKey in options");
       }
-      break
+      break;
 
     default:
-      throw new Error(`Unknown payment provider type: ${config.type}`)
+      throw new Error(`Unknown payment provider type: ${config.type}`);
   }
 
-  return true
-}
+  return true;
+};
 
 // Builder pattern for easy configuration
 export class PaymentConfigBuilder {
-  private config: Partial<PaymentProviderConfig> = {}
+  private config: Partial<PaymentProviderConfig> = {};
 
   static create(): PaymentConfigBuilder {
-    return new PaymentConfigBuilder()
+    return new PaymentConfigBuilder();
   }
 
-  useStripe(publishableKey: string, secretKey: string, webhookSecret?: string): this {
+  useStripe(
+    publishableKey: string,
+    secretKey: string,
+    webhookSecret?: string,
+  ): this {
     this.config = {
-      type: 'stripe',
-      options: { publishableKey, secretKey, webhookSecret }
-    }
-    return this
+      type: "stripe",
+      options: { publishableKey, secretKey, webhookSecret },
+    };
+    return this;
   }
 
   usePaddle(vendorId: string, apiKey: string, publicKey?: string): this {
     this.config = {
-      type: 'paddle',
-      options: { vendorId, apiKey, publicKey }
-    }
-    return this
+      type: "paddle",
+      options: { vendorId, apiKey, publicKey },
+    };
+    return this;
   }
 
   useLemonSqueezy(apiKey: string, storeId?: string): this {
     this.config = {
-      type: 'lemonsqueezy',
-      options: { apiKey, storeId }
-    }
-    return this
+      type: "lemonsqueezy",
+      options: { apiKey, storeId },
+    };
+    return this;
   }
 
   withCustomOptions(options: Record<string, any>): this {
-    this.config.options = { ...this.config.options, ...options }
-    return this
+    this.config.options = { ...this.config.options, ...options };
+    return this;
   }
 
   build(): PaymentProviderConfig {
     if (!this.config.type || !this.config.options) {
-      throw new Error('Payment configuration is incomplete')
+      throw new Error("Payment configuration is incomplete");
     }
 
-    const config = this.config as PaymentProviderConfig
-    validatePaymentConfig(config)
-    return config
+    const config = this.config as PaymentProviderConfig;
+    validatePaymentConfig(config);
+    return config;
   }
 }
 
 // Preset configurations for common scenarios
 export const createPaymentConfig = {
   stripe: (publishableKey: string, secretKey: string, webhookSecret?: string) =>
-    PaymentConfigBuilder.create().useStripe(publishableKey, secretKey, webhookSecret).build(),
+    PaymentConfigBuilder.create()
+      .useStripe(publishableKey, secretKey, webhookSecret)
+      .build(),
 
   paddle: (vendorId: string, apiKey: string, publicKey?: string) =>
-    PaymentConfigBuilder.create().usePaddle(vendorId, apiKey, publicKey).build(),
+    PaymentConfigBuilder.create()
+      .usePaddle(vendorId, apiKey, publicKey)
+      .build(),
 
   lemonsqueezy: (apiKey: string, storeId?: string) =>
-    PaymentConfigBuilder.create().useLemonSqueezy(apiKey, storeId).build()
-}
+    PaymentConfigBuilder.create().useLemonSqueezy(apiKey, storeId).build(),
+};

@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 // Basic validation schemas - add more as needed
 export const emailSchema = z.string().email();

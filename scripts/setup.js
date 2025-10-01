@@ -1,22 +1,22 @@
 #!/usr/bin/env node
 
-const fs = require('fs');
-const path = require('path');
-const { execSync } = require('child_process');
+const fs = require("fs");
+const path = require("path");
+const { execSync } = require("child_process");
 
-console.log('🚀 Setting up Next.js SOLID Boilerplate...\n');
+console.log("🚀 Setting up Next.js SOLID Boilerplate...\n");
 
 // Colors for console output
 const colors = {
-  green: '\x1b[32m',
-  blue: '\x1b[34m',
-  yellow: '\x1b[33m',
-  red: '\x1b[31m',
-  reset: '\x1b[0m',
-  bold: '\x1b[1m'
+  green: "\x1b[32m",
+  blue: "\x1b[34m",
+  yellow: "\x1b[33m",
+  red: "\x1b[31m",
+  reset: "\x1b[0m",
+  bold: "\x1b[1m",
 };
 
-function log(message, color = 'reset') {
+function log(message, color = "reset") {
   console.log(`${colors[color]}${message}${colors.reset}`);
 }
 
@@ -35,7 +35,7 @@ function error(message) {
 function executeCommand(command, description) {
   try {
     step(description);
-    execSync(command, { stdio: 'inherit' });
+    execSync(command, { stdio: "inherit" });
     success(`${description} completed`);
     return true;
   } catch (err) {
@@ -54,18 +54,18 @@ function createFileIfNotExists(filePath, content) {
     fs.writeFileSync(filePath, content);
     success(`Created ${filePath}`);
   } else {
-    log(`${filePath} already exists, skipping...`, 'yellow');
+    log(`${filePath} already exists, skipping...`, "yellow");
   }
 }
 
 // Check Node.js version
 function checkNodeVersion() {
-  step('Checking Node.js version');
+  step("Checking Node.js version");
   const nodeVersion = process.version;
-  const majorVersion = parseInt(nodeVersion.slice(1).split('.')[0]);
-  
+  const majorVersion = parseInt(nodeVersion.slice(1).split(".")[0]);
+
   if (majorVersion < 18) {
-    error('Node.js version 18 or higher is required');
+    error("Node.js version 18 or higher is required");
     process.exit(1);
   }
   success(`Node.js ${nodeVersion} is compatible`);
@@ -73,45 +73,45 @@ function checkNodeVersion() {
 
 // Create directory structure
 function createDirectoryStructure() {
-  step('Creating SOLID directory structure');
-  
+  step("Creating SOLID directory structure");
+
   const directories = [
-    'src/app',
-    'src/components/ui',
-    'src/components/forms',
-    'src/components/layout',
-    'src/components/features',
-    'src/components/providers',
-    'src/lib/services',
-    'src/lib/hooks',
-    'src/lib/utils',
-    'src/lib/validations',
-    'src/types',
-    'src/config',
-    'tools/mcp-setup',
-    'tools/generators',
-    'tools/validators',
-    'docs',
-    'tests/__mocks__',
-    'tests/components',
-    'tests/lib',
-    'public/images',
-    'public/icons'
+    "src/app",
+    "src/components/ui",
+    "src/components/forms",
+    "src/components/layout",
+    "src/components/features",
+    "src/components/providers",
+    "src/lib/services",
+    "src/lib/hooks",
+    "src/lib/utils",
+    "src/lib/validations",
+    "src/types",
+    "src/config",
+    "tools/mcp-setup",
+    "tools/generators",
+    "tools/validators",
+    "docs",
+    "tests/__mocks__",
+    "tests/components",
+    "tests/lib",
+    "public/images",
+    "public/icons",
   ];
 
-  directories.forEach(dir => {
+  directories.forEach((dir) => {
     const dirPath = path.join(process.cwd(), dir);
     if (!fs.existsSync(dirPath)) {
       fs.mkdirSync(dirPath, { recursive: true });
     }
   });
-  
-  success('Directory structure created');
+
+  success("Directory structure created");
 }
 
 // Create essential configuration files
 function createConfigFiles() {
-  step('Creating configuration files');
+  step("Creating configuration files");
 
   // Next.js config
   const nextConfig = `/** @type {import('next').NextConfig} */
@@ -319,24 +319,24 @@ NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY="your_stripe_publishable_key"
 `;
 
   // Create files
-  createFileIfNotExists('next.config.mjs', nextConfig);
-  createFileIfNotExists('tailwind.config.ts', tailwindConfig);
-  createFileIfNotExists('tsconfig.json', tsConfig);
-  createFileIfNotExists('postcss.config.js', postcssConfig);
-  createFileIfNotExists('components.json', componentsConfig);
-  createFileIfNotExists('.env.example', envExample);
+  createFileIfNotExists("next.config.mjs", nextConfig);
+  createFileIfNotExists("tailwind.config.ts", tailwindConfig);
+  createFileIfNotExists("tsconfig.json", tsConfig);
+  createFileIfNotExists("postcss.config.js", postcssConfig);
+  createFileIfNotExists("components.json", componentsConfig);
+  createFileIfNotExists(".env.example", envExample);
 }
 
 // Main setup function
 async function main() {
   try {
-    log('🎯 Next.js SOLID Boilerplate Setup', 'bold');
-    log('===================================\n', 'blue');
+    log("🎯 Next.js SOLID Boilerplate Setup", "bold");
+    log("===================================\n", "blue");
 
     checkNodeVersion();
-    
+
     // Install dependencies
-    if (!executeCommand('npm install', 'Installing dependencies')) {
+    if (!executeCommand("npm install", "Installing dependencies")) {
       process.exit(1);
     }
 
@@ -344,20 +344,22 @@ async function main() {
     createConfigFiles();
 
     // Initialize shadcn/ui
-    executeCommand('npx shadcn-ui@latest init --yes', 'Initializing shadcn/ui');
-    
-    // Install essential shadcn/ui components  
-    executeCommand('npx shadcn-ui@latest add button card', 'Installing essential UI components');
+    executeCommand("npx shadcn-ui@latest init --yes", "Initializing shadcn/ui");
 
-    success('\n🎉 Setup completed successfully!');
-    log('\nNext steps:', 'bold');
-    log('1. Copy .env.example to .env.local and fill in your values', 'blue');
-    log('2. Run "npm run dev" to start development server', 'blue');
-    log('3. Run "npm run setup:mcp" to setup MCP servers', 'blue');
-    log('\n📚 Check the docs/ folder for more information', 'yellow');
+    // Install essential shadcn/ui components
+    executeCommand(
+      "npx shadcn-ui@latest add button card",
+      "Installing essential UI components",
+    );
 
+    success("\n🎉 Setup completed successfully!");
+    log("\nNext steps:", "bold");
+    log("1. Copy .env.example to .env.local and fill in your values", "blue");
+    log('2. Run "npm run dev" to start development server', "blue");
+    log('3. Run "npm run setup:mcp" to setup MCP servers', "blue");
+    log("\n📚 Check the docs/ folder for more information", "yellow");
   } catch (error) {
-    error('Setup failed');
+    error("Setup failed");
     console.error(error);
     process.exit(1);
   }

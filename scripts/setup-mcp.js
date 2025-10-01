@@ -1,21 +1,21 @@
 #!/usr/bin/env node
 
-const fs = require('fs');
-const path = require('path');
-const { execSync } = require('child_process');
+const fs = require("fs");
+const path = require("path");
+const { execSync } = require("child_process");
 
 // Colors for console output
 const colors = {
-  green: '\x1b[32m',
-  blue: '\x1b[34m', 
-  yellow: '\x1b[33m',
-  red: '\x1b[31m',
-  reset: '\x1b[0m',
-  bold: '\x1b[1m',
-  magenta: '\x1b[35m'
+  green: "\x1b[32m",
+  blue: "\x1b[34m",
+  yellow: "\x1b[33m",
+  red: "\x1b[31m",
+  reset: "\x1b[0m",
+  bold: "\x1b[1m",
+  magenta: "\x1b[35m",
 };
 
-function log(message, color = 'reset') {
+function log(message, color = "reset") {
   console.log(`${colors[color]}${message}${colors.reset}`);
 }
 
@@ -45,124 +45,135 @@ function createLocalMCPConfig() {
     mcpServers: {
       // 1. shadcn/ui MCP - Component management
       "shadcn-ui": {
-        "command": "node",
-        "args": ["./node_modules/@heilgar/shadcn-ui-mcp-server/index.js"],
-        "env": {}
+        command: "node",
+        args: ["./node_modules/@heilgar/shadcn-ui-mcp-server/index.js"],
+        env: {},
       },
-      
+
       // 2. Playwright MCP - Browser automation
-      "playwright": {
-        "command": "node", 
-        "args": ["./node_modules/@playwright/mcp/index.js"],
-        "env": {}
+      playwright: {
+        command: "node",
+        args: ["./node_modules/@playwright/mcp/index.js"],
+        env: {},
       },
-      
+
       // 3. Figma MCP - Design integration (requires Figma Desktop)
       "figma-dev-mode": {
-        "type": "sse",
-        "url": "http://127.0.0.1:3845/mcp",
-        "description": "Figma Dev Mode integration - requires Figma Desktop app with 'Enable local MCP Server' enabled in Preferences"
+        type: "sse",
+        url: "http://127.0.0.1:3845/mcp",
+        description:
+          "Figma Dev Mode integration - requires Figma Desktop app with 'Enable local MCP Server' enabled in Preferences",
       },
-      
+
       // 4. Apify MCP - Web scraping and automation
-      "apify": {
-        "command": "node",
-        "args": ["./node_modules/@apify/actors-mcp-server/index.js"],
-        "env": {
-          "APIFY_TOKEN": "${APIFY_TOKEN}"
-        }
+      apify: {
+        command: "node",
+        args: ["./node_modules/@apify/actors-mcp-server/index.js"],
+        env: {
+          APIFY_TOKEN: "${APIFY_TOKEN}",
+        },
       },
-      
-      
+
       // 6. Browser MCP - Additional browser control (alternative to Playwright)
       "browser-automation": {
-        "command": "node",
-        "args": ["./node_modules/@executeautomation/playwright-mcp-server/index.js"],
-        "env": {}
+        command: "node",
+        args: [
+          "./node_modules/@executeautomation/playwright-mcp-server/index.js",
+        ],
+        env: {},
       },
-      
-      // 7. Gemini MCP - Google Gemini AI integration  
-      "gemini": {
-        "command": "npx",
-        "args": ["-y", "github:aliargun/mcp-server-gemini"],
-        "env": {
-          "GEMINI_API_KEY": "${GEMINI_API_KEY}"
-        }
+
+      // 7. Gemini MCP - Google Gemini AI integration
+      gemini: {
+        command: "npx",
+        args: ["-y", "github:aliargun/mcp-server-gemini"],
+        env: {
+          GEMINI_API_KEY: "${GEMINI_API_KEY}",
+        },
       },
-      
+
       // 8. Context7 MCP - Up-to-date documentation
-      "context7": {
-        "command": "node",
-        "args": ["./node_modules/@upstash/context7-mcp/index.js"],
-        "env": {
-          "CONTEXT7_API_KEY": "${CONTEXT7_API_KEY}"
-        }
+      context7: {
+        command: "node",
+        args: ["./node_modules/@upstash/context7-mcp/index.js"],
+        env: {
+          CONTEXT7_API_KEY: "${CONTEXT7_API_KEY}",
+        },
       },
-      
+
       // 9. Stripe MCP - Payment processing and API integration
-      "stripe": {
-        "command": "node",
-        "args": ["./node_modules/@stripe/mcp/index.js", "--tools=all"],
-        "env": {
-          "STRIPE_SECRET_KEY": "${STRIPE_SECRET_KEY}"
-        }
+      stripe: {
+        command: "node",
+        args: ["./node_modules/@stripe/mcp/index.js", "--tools=all"],
+        env: {
+          STRIPE_SECRET_KEY: "${STRIPE_SECRET_KEY}",
+        },
       },
-      
+
       // 10. Supabase MCP - Local Supabase operations
       "supabase-local": {
-        "command": "node",
-        "args": [
+        command: "node",
+        args: [
           "./node_modules/@supabase/mcp-server-supabase/index.js",
           "--read-only",
-          "--local"
+          "--local",
         ],
-        "env": {
-          "SUPABASE_URL": "http://127.0.0.1:54321",
-          "SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0"
-        }
+        env: {
+          SUPABASE_URL: "http://127.0.0.1:54321",
+          SUPABASE_ANON_KEY:
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0",
+        },
       },
-      
+
       // 11. Serena MCP - Coding agent toolkit (special case - still uses uvx)
-      "serena": {
-        "command": "uvx",
-        "args": ["--from", "git+https://github.com/oraios/serena", "serena", "start-mcp-server"],
-        "env": {}
+      serena: {
+        command: "uvx",
+        args: [
+          "--from",
+          "git+https://github.com/oraios/serena",
+          "serena",
+          "start-mcp-server",
+        ],
+        env: {},
       },
-      
+
       // Essential system MCPs
-      "filesystem": {
-        "command": "node",
-        "args": ["./node_modules/@modelcontextprotocol/server-filesystem/index.js", process.cwd()],
-        "env": {}
-      }
-    }
+      filesystem: {
+        command: "node",
+        args: [
+          "./node_modules/@modelcontextprotocol/server-filesystem/index.js",
+          process.cwd(),
+        ],
+        env: {},
+      },
+    },
   };
 
   return config;
 }
 
 function installLocalMCPs() {
-  step('Installing MCP packages locally in project');
-  
+  step("Installing MCP packages locally in project");
+
   const mcpPackages = [
-    '@heilgar/shadcn-ui-mcp-server',
-    '@playwright/mcp',
-    '@apify/actors-mcp-server',
-    '@executeautomation/playwright-mcp-server',
-    '@upstash/context7-mcp',
-    '@stripe/mcp',
-    '@supabase/mcp-server-supabase',
-    '@modelcontextprotocol/server-filesystem'
+    "@heilgar/shadcn-ui-mcp-server",
+    "@playwright/mcp",
+    "@apify/actors-mcp-server",
+    "@executeautomation/playwright-mcp-server",
+    "@upstash/context7-mcp",
+    "@stripe/mcp",
+    "@supabase/mcp-server-supabase",
+    "@modelcontextprotocol/server-filesystem",
   ];
 
   try {
-    info('Installing MCP packages via npm...');
-    
+    info("Installing MCP packages via npm...");
+
     // Install all MCP packages locally
-    const installCommand = `npm install ${mcpPackages.join(' ')}`;
-    execSync(installCommand, { stdio: 'inherit' });
-    
-    success('All MCP packages installed locally');
+    const installCommand = `npm install ${mcpPackages.join(" ")}`;
+    execSync(installCommand, { stdio: "inherit" });
+
+    success("All MCP packages installed locally");
     return true;
   } catch (err) {
     error(`Failed to install MCP packages: ${err.message}`);
@@ -171,9 +182,12 @@ function installLocalMCPs() {
 }
 
 function installCompleteMCPSetup() {
-  step('Setting up LOCAL MCP configuration for Claude Code');
-  log('This will install MCP servers locally and configure project .mcp.json', 'blue');
-  
+  step("Setting up LOCAL MCP configuration for Claude Code");
+  log(
+    "This will install MCP servers locally and configure project .mcp.json",
+    "blue",
+  );
+
   // 1. Install MCP packages locally
   const packagesInstalled = installLocalMCPs();
   if (!packagesInstalled) {
@@ -181,12 +195,12 @@ function installCompleteMCPSetup() {
   }
 
   // 2. Create project-specific .mcp.json with ALL configured MCPs
-  const projectConfigPath = path.join(process.cwd(), '.mcp.json');
-  
+  const projectConfigPath = path.join(process.cwd(), ".mcp.json");
+
   try {
     const localConfig = createLocalMCPConfig();
     fs.writeFileSync(projectConfigPath, JSON.stringify(localConfig, null, 2));
-    success('Project MCP config created with ALL servers: .mcp.json');
+    success("Project MCP config created with ALL servers: .mcp.json");
   } catch (err) {
     error(`Failed to create project MCP config: ${err.message}`);
     return false;
@@ -196,8 +210,8 @@ function installCompleteMCPSetup() {
 }
 
 function createEnvironmentTemplate() {
-  const envTemplatePath = path.join(process.cwd(), '.env.mcp.example');
-  
+  const envTemplatePath = path.join(process.cwd(), ".env.mcp.example");
+
   const envTemplate = `# MCP Server Environment Variables
 # Copy this to .env.local and fill in your actual API tokens
 # Get tokens from the respective service provider websites
@@ -263,20 +277,21 @@ STRIPE_PUBLISHABLE_KEY=pk_test_your_stripe_test_publishable_key_here
 
   try {
     fs.writeFileSync(envTemplatePath, envTemplate);
-    success('Environment template created: .env.mcp.example');
-    
+    success("Environment template created: .env.mcp.example");
+
     // Also create .gitignore entry if it doesn't exist
-    const gitignorePath = path.join(process.cwd(), '.gitignore');
-    let gitignoreContent = '';
-    
+    const gitignorePath = path.join(process.cwd(), ".gitignore");
+    let gitignoreContent = "";
+
     if (fs.existsSync(gitignorePath)) {
-      gitignoreContent = fs.readFileSync(gitignorePath, 'utf8');
+      gitignoreContent = fs.readFileSync(gitignorePath, "utf8");
     }
-    
-    if (!gitignoreContent.includes('.env.local')) {
-      gitignoreContent += '\n# MCP Environment Variables\n.env.local\n.env.mcp\n';
+
+    if (!gitignoreContent.includes(".env.local")) {
+      gitignoreContent +=
+        "\n# MCP Environment Variables\n.env.local\n.env.mcp\n";
       fs.writeFileSync(gitignorePath, gitignoreContent);
-      success('Updated .gitignore to exclude MCP environment files');
+      success("Updated .gitignore to exclude MCP environment files");
     }
   } catch (err) {
     warning(`Could not create environment template: ${err.message}`);
@@ -284,52 +299,55 @@ STRIPE_PUBLISHABLE_KEY=pk_test_your_stripe_test_publishable_key_here
 }
 
 async function main() {
-  log('🔌 LOCAL MCP Servers Setup for Claude Code', 'bold');
-  log('==========================================\n', 'blue');
-  
-  log('Installing all 11 MCP servers LOCALLY in this project...', 'blue');
-  log('MCPs will be installed in node_modules and configured for local use.\n', 'yellow');
+  log("🔌 LOCAL MCP Servers Setup for Claude Code", "bold");
+  log("==========================================\n", "blue");
 
-  info('MCP Servers to be installed locally:');
-  log('  Core Development: shadcn/ui, Playwright, Figma', 'green');
-  log('  Repository: GitHub, Git', 'green');
-  log('  Web & Data: Apify, Browser Automation', 'green');
-  log('  AI & Docs: Gemini, Context7, Serena', 'green');
-  log('  Services: Stripe, Supabase', 'green');
-  log('  System: Filesystem, Local Git\n', 'green');
-  
+  log("Installing all 11 MCP servers LOCALLY in this project...", "blue");
+  log(
+    "MCPs will be installed in node_modules and configured for local use.\n",
+    "yellow",
+  );
+
+  info("MCP Servers to be installed locally:");
+  log("  Core Development: shadcn/ui, Playwright, Figma", "green");
+  log("  Repository: GitHub, Git", "green");
+  log("  Web & Data: Apify, Browser Automation", "green");
+  log("  AI & Docs: Gemini, Context7, Serena", "green");
+  log("  Services: Stripe, Supabase", "green");
+  log("  System: Filesystem, Local Git\n", "green");
+
   // Install MCP servers locally
   const mcpSuccess = installCompleteMCPSetup();
-  
+
   if (mcpSuccess) {
     createEnvironmentTemplate();
-    
-    log('\n🎉 LOCAL MCP setup completed successfully!', 'bold');
-    log('=========================================\n', 'green');
-    
-    log('📋 ALL MCP Servers installed LOCALLY:', 'bold');
-    log('  ✅ All 11+ MCP packages in node_modules/', 'green');
-    log('  ✅ .mcp.json configured for local paths', 'green');
-    log('  ✅ .env.mcp.example template created', 'green');
-    
-    log('\n📝 Next Steps:', 'bold');
-    log('1. 🔑 Configure your API tokens:', 'blue');
-    log('   cp .env.mcp.example .env.local', 'yellow');
-    log('   # Edit .env.local with your real API keys', 'yellow');
-    log('2. 🔄 Restart Claude Code completely', 'blue');
-    log('3. ✅ Verify servers in Claude Code:', 'blue');
-    log('   # Use the /mcp command', 'yellow');
-    
-    log('\n💡 Key Benefits:', 'bold');
-    log('- MCPs are installed locally in THIS project', 'magenta');
-    log('- Template is self-contained and portable', 'magenta');
-    log('- No global Claude Code configuration needed', 'magenta');
-    log('- Each project has its own MCP versions', 'magenta');
-    
-    log('\n🚀 Your project now has 11+ MCP tools installed locally!', 'bold');
+
+    log("\n🎉 LOCAL MCP setup completed successfully!", "bold");
+    log("=========================================\n", "green");
+
+    log("📋 ALL MCP Servers installed LOCALLY:", "bold");
+    log("  ✅ All 11+ MCP packages in node_modules/", "green");
+    log("  ✅ .mcp.json configured for local paths", "green");
+    log("  ✅ .env.mcp.example template created", "green");
+
+    log("\n📝 Next Steps:", "bold");
+    log("1. 🔑 Configure your API tokens:", "blue");
+    log("   cp .env.mcp.example .env.local", "yellow");
+    log("   # Edit .env.local with your real API keys", "yellow");
+    log("2. 🔄 Restart Claude Code completely", "blue");
+    log("3. ✅ Verify servers in Claude Code:", "blue");
+    log("   # Use the /mcp command", "yellow");
+
+    log("\n💡 Key Benefits:", "bold");
+    log("- MCPs are installed locally in THIS project", "magenta");
+    log("- Template is self-contained and portable", "magenta");
+    log("- No global Claude Code configuration needed", "magenta");
+    log("- Each project has its own MCP versions", "magenta");
+
+    log("\n🚀 Your project now has 11+ MCP tools installed locally!", "bold");
   } else {
-    log('\n💥 MCP setup failed!', 'red');
-    log('Check the errors above and try again.', 'red');
+    log("\n💥 MCP setup failed!", "red");
+    log("Check the errors above and try again.", "red");
     process.exit(1);
   }
 }

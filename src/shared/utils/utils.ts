@@ -1,5 +1,5 @@
-import { type ClassValue, clsx } from 'clsx';
-import { twMerge } from 'tailwind-merge';
+import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 /**
  * Utility function to merge and dedupe Tailwind CSS classes
@@ -16,10 +16,10 @@ export function cn(...inputs: ClassValue[]) {
  * @returns Formatted date string
  */
 export function formatDate(date: Date): string {
-  return new Intl.DateTimeFormat('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
+  return new Intl.DateTimeFormat("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
   }).format(date);
 }
 
@@ -41,20 +41,23 @@ export function generateId(length = 8): string {
   if (isServer()) {
     // Server-side: Use Node.js crypto (dynamic import for ESM compatibility)
     try {
-      const crypto = eval('require')('crypto');
-      return crypto.randomBytes(Math.ceil(length / 2))
-        .toString('hex')
+      const crypto = eval("require")("crypto");
+      return crypto
+        .randomBytes(Math.ceil(length / 2))
+        .toString("hex")
         .slice(0, length);
     } catch {
       // Fallback if crypto not available
-      return Math.random().toString(36).substring(2, length + 2);
+      return Math.random()
+        .toString(36)
+        .substring(2, length + 2);
     }
   } else {
     // Client-side: Use Web Crypto API
     const array = new Uint8Array(Math.ceil(length / 2));
     crypto.getRandomValues(array);
-    return Array.from(array, byte => byte.toString(16).padStart(2, '0'))
-      .join('')
+    return Array.from(array, (byte) => byte.toString(16).padStart(2, "0"))
+      .join("")
       .slice(0, length);
   }
 }
@@ -67,7 +70,7 @@ export function generateId(length = 8): string {
  */
 export function debounce<T extends (...args: any[]) => any>(
   func: T,
-  wait: number
+  wait: number,
 ): (...args: Parameters<T>) => void {
   let timeout: NodeJS.Timeout;
   return (...args: Parameters<T>) => {
@@ -81,7 +84,7 @@ export function debounce<T extends (...args: any[]) => any>(
  * @returns True if client side
  */
 export function isClient(): boolean {
-  return typeof window !== 'undefined';
+  return typeof window !== "undefined";
 }
 
 /**
@@ -89,7 +92,7 @@ export function isClient(): boolean {
  * @returns True if server side
  */
 export function isServer(): boolean {
-  return typeof window === 'undefined';
+  return typeof window === "undefined";
 }
 
 /**
@@ -98,7 +101,7 @@ export function isServer(): boolean {
  * @returns Promise that resolves after the given time
  */
 export function sleep(ms: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 /**
@@ -108,13 +111,13 @@ export function sleep(ms: number): Promise<void> {
  * @returns Formatted bytes string
  */
 export function formatBytes(bytes: number, decimals = 2): string {
-  if (bytes === 0) return '0 Bytes';
+  if (bytes === 0) return "0 Bytes";
 
   const k = 1024;
   const dm = decimals < 0 ? 0 : decimals;
-  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+  const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
 
   const i = Math.floor(Math.log(bytes) / Math.log(k));
 
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
 }

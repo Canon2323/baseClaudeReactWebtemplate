@@ -1,34 +1,41 @@
 # 🚀 Boilerplate Web Project - Arquitetura SOLID
+
 ## Starter Template para Desenvolvimento Web Moderno
 
 Este projeto é um **boilerplate/starter template** para desenvolvimento web com **Next.js**, **shadcn/ui** e **TypeScript**, seguindo os princípios **SOLID** para uma arquitetura robusta e de fácil manutenção.
 
 ### 🔌 MCPs como Facilitadores Externos
+
 Os **servidores MCP** (Playwright, Figma, Supabase, etc.) são **facilitadores externos** que rodam como processos isolados. Eles **não fazem parte da arquitetura interna** do projeto, mas sim **potencializam o desenvolvimento** através de scripts de instalação e configuração.
 
 ## 🏗 Arquitetura SOLID do Boilerplate
 
 ### **S** - Single Responsibility Principle
+
 - Cada componente/hook tem uma responsabilidade específica
 - Services separados por domínio (auth, api, storage, etc.)
 - Scripts de setup com responsabilidades bem definidas
 
 ### **O** - Open/Closed Principle
+
 - Sistema extensível para novos providers/services
 - Plugin architecture para funcionalidades opcionais
 - Configurações modulares e extensíveis
 
 ### **L** - Liskov Substitution Principle
+
 - Providers intercambiáveis (Auth0 ↔ Clerk, Supabase ↔ Firebase)
 - Implementations específicas seguem contratos bem definidos
 - Strategy Pattern para diferentes integrações
 
 ### **I** - Interface Segregation Principle
+
 - Interfaces específicas por domínio (IAuthProvider, IStorageProvider)
 - Hooks especializados sem dependências desnecessárias
 - APIs granulares e focadas
 
 ### **D** - Dependency Inversion Principle
+
 - Dependência de abstrações, não implementações
 - Injeção de dependência via Context/Providers
 - Factory Pattern para criação de services
@@ -36,6 +43,7 @@ Os **servidores MCP** (Playwright, Figma, Supabase, etc.) são **facilitadores e
 ## 📋 Estrutura do Projeto
 
 ### Fase 1: Arquitetura Base SOLID
+
 - [ ] **1.1** - Setup do Next.js com Arquitetura SOLID
   - Inicializar Next.js 14+ com TypeScript
   - Configurar Tailwind CSS + shadcn/ui
@@ -97,6 +105,7 @@ Os **servidores MCP** (Playwright, Figma, Supabase, etc.) são **facilitadores e
   ```
 
 #### 1.5 Arquivos Base Detalhados
+
 - [ ] **1.5.1** - Arquivos de Configuração Root
   - `middleware.ts` - Route protection, redirects, auth
   - `next.config.js` - Next.js configuration + optimizations
@@ -156,6 +165,7 @@ Os **servidores MCP** (Playwright, Figma, Supabase, etc.) são **facilitadores e
 ### Fase 2: Implementação Core da Aplicação
 
 #### 2.1 Providers & Context (DIP)
+
 - [x] **2.1.1** - AuthProvider abstrato ✅
   - Interface IAuthProvider
   - Implementações: Supabase Auth (extensível)
@@ -185,12 +195,13 @@ Os **servidores MCP** (Playwright, Figma, Supabase, etc.) são **facilitadores e
   - Webhook handling automático
 
 #### 2.2 Services Layer (SRP)
+
 - [ ] **2.2.1** - AuthService
   - Login, logout, register, validate
   - Isolated from implementation details
   - Error handling e validation
 
-- [ ] **2.2.2** - ApiService  
+- [ ] **2.2.2** - ApiService
   - HTTP client abstraction
   - Request/Response interceptors
   - Error handling centralizado
@@ -201,6 +212,7 @@ Os **servidores MCP** (Playwright, Figma, Supabase, etc.) são **facilitadores e
   - Encrypted storage options
 
 #### 2.3 Components Architecture (SRP + OCP)
+
 - [ ] **2.3.1** - Base UI Components (shadcn/ui)
   - Button, Input, Card, Dialog variants
   - Compound components pattern
@@ -219,6 +231,7 @@ Os **servidores MCP** (Playwright, Figma, Supabase, etc.) são **facilitadores e
 ### Fase 3: Ferramentas de Desenvolvimento (MCPs)
 
 #### 3.1 Scripts de Setup MCP (SRP)
+
 - [ ] **3.1.1** - Script base de detecção de ambiente
   - Detectar OS (Windows/macOS/Linux)
   - Verificar dependências (Node.js, npm, etc.)
@@ -235,6 +248,7 @@ Os **servidores MCP** (Playwright, Figma, Supabase, etc.) são **facilitadores e
   - Instalação de browsers
 
 #### 3.2 Configuradores por IDE (Strategy Pattern)
+
 - [ ] **3.2.1** - Claude Desktop configurator
   - Gerar `claude_desktop_config.json`
   - Detectar path correto por OS
@@ -251,6 +265,7 @@ Os **servidores MCP** (Playwright, Figma, Supabase, etc.) são **facilitadores e
   - Workspace settings
 
 #### 3.3 MCPs Avançados
+
 - [ ] **3.3.1** - Supabase MCP Setup
   - Personal Access Token setup
   - Read-only mode configuration
@@ -269,6 +284,7 @@ Os **servidores MCP** (Playwright, Figma, Supabase, etc.) são **facilitadores e
 ### Fase 4: Generators & Templates (OCP)
 
 #### 4.1 Code Generators
+
 - [ ] **4.1.1** - Component Generator
   - Gerar component + stories + tests
   - Seguir patterns estabelecidos
@@ -285,6 +301,7 @@ Os **servidores MCP** (Playwright, Figma, Supabase, etc.) são **facilitadores e
   - Provider integration
 
 #### 4.2 Project Templates
+
 - [ ] **4.2.1** - Dashboard Template
   - Layout com sidebar
   - Charts integration
@@ -303,6 +320,7 @@ Os **servidores MCP** (Playwright, Figma, Supabase, etc.) são **facilitadores e
 ### Fase 5: Testing & Quality (Todas as fases SOLID)
 
 #### 5.1 Testing Architecture
+
 - [ ] **5.1.1** - Unit Tests Setup
   - Jest + Testing Library
   - Component testing patterns
@@ -319,6 +337,7 @@ Os **servidores MCP** (Playwright, Figma, Supabase, etc.) são **facilitadores e
   - Performance testing
 
 #### 5.2 Quality Assurance
+
 - [ ] **5.2.1** - Linting & Formatting
   - ESLint rules para SOLID
   - Prettier configuration
@@ -337,6 +356,7 @@ Os **servidores MCP** (Playwright, Figma, Supabase, etc.) são **facilitadores e
 ### Fase 6: Documentation & Distribution
 
 #### 6.1 Documentation
+
 - [ ] **6.1.1** - Architecture Documentation
   - SOLID principles aplicados
   - Design patterns utilizados
@@ -353,6 +373,7 @@ Os **servidores MCP** (Playwright, Figma, Supabase, etc.) são **facilitadores e
   - Best practices
 
 #### 6.2 Distribution
+
 - [ ] **6.2.1** - GitHub Template Setup
   - Template repository
   - Issue templates
@@ -371,18 +392,21 @@ Os **servidores MCP** (Playwright, Figma, Supabase, etc.) são **facilitadores e
 ## 🛠 Stack Tecnológico
 
 ### Core Framework
+
 - **Next.js 14+** - App Router, Server Actions
 - **TypeScript** - Type safety
 - **Tailwind CSS** - Styling system
 - **shadcn/ui** - Component library
 
 ### Architecture Patterns
+
 - **SOLID Principles** - Clean architecture
 - **Strategy Pattern** - Provider switching
 - **Factory Pattern** - Service creation
 - **Observer Pattern** - State management
 
 ### Development Tools (MCPs)
+
 - **shadcn MCP** - Component management
 - **Playwright MCP** - Browser automation
 - **Supabase MCP** - Database operations
@@ -403,6 +427,7 @@ Os **servidores MCP** (Playwright, Figma, Supabase, etc.) são **facilitadores e
 ## 🎉 **TEMPLATE PRONTO PARA USO!**
 
 ### ✅ **Concluído:**
+
 - **Fase 1 Completa**: Arquivos base, configurações, SOLID structure
 - **Fase 2.1 Completa**: Providers & Context (Auth, Database, Theme, RBAC, Payments)
 - **Fase 3 Completa**: 11 MCP servers + VibeKit security configurados
@@ -415,6 +440,7 @@ Os **servidores MCP** (Playwright, Figma, Supabase, etc.) são **facilitadores e
 ## 🎯 Objetivos do Boilerplate
 
 ### Para Desenvolvedores
+
 1. **Setup Instantâneo** - Clone → Install → Develop
 2. **Arquitetura Sólida** - Princípios SOLID aplicados
 3. **Extensibilidade** - Fácil adicionar novos providers/features
@@ -422,6 +448,7 @@ Os **servidores MCP** (Playwright, Figma, Supabase, etc.) são **facilitadores e
 5. **Best Practices** - Patterns estabelecidos
 
 ### Para Teams
+
 1. **Consistência** - Todos os projetos seguem mesmo padrão
 2. **Produtividade** - MCPs aceleram desenvolvimento
 3. **Qualidade** - Testes e linting integrados
@@ -488,7 +515,7 @@ project/
 # 1. Clone/Download o template
 git clone <template-repo>
 
-# 2. Install dependencies  
+# 2. Install dependencies
 npm install
 
 # 3. Configure MCP servers + VibeKit security

@@ -2,29 +2,29 @@
 // Repository: https://github.com/nextjs/saas-starter
 // Enhanced with SOLID principles and React patterns
 
-'use client'
+"use client";
 
-import { type ReactNode } from 'react'
-import { useRBAC } from '@/shared/hooks/use-rbac'
+import { type ReactNode } from "react";
+import { useRBAC } from "@/shared/hooks/use-rbac";
 
 interface RBACGuardProps {
-  children: ReactNode
+  children: ReactNode;
   // Permission-based access
-  permissions?: string[]
-  requireAllPermissions?: boolean
+  permissions?: string[];
+  requireAllPermissions?: boolean;
   // Role-based access
-  roles?: string[]
-  requireAllRoles?: boolean
+  roles?: string[];
+  requireAllRoles?: boolean;
   // Resource-based access
-  resource?: string
-  action?: string
+  resource?: string;
+  action?: string;
   // Organization context
-  organizationId?: string
+  organizationId?: string;
   // Fallback components
-  fallback?: ReactNode
-  loadingFallback?: ReactNode
+  fallback?: ReactNode;
+  loadingFallback?: ReactNode;
   // Alternative: render prop pattern
-  render?: (hasAccess: boolean, loading: boolean) => ReactNode
+  render?: (hasAccess: boolean, loading: boolean) => ReactNode;
 }
 
 /**
@@ -72,21 +72,17 @@ export function RBACGuard({
   organizationId,
   fallback = null,
   loadingFallback = null,
-  render
+  render,
 }: RBACGuardProps) {
-  const {
-    hasPermission,
-    hasRole,
-    canAccess,
-    loading
-  } = useRBAC(organizationId)
+  const { hasPermission, hasRole, canAccess, loading } =
+    useRBAC(organizationId);
 
   // Show loading fallback while fetching RBAC data
   if (loading) {
     if (render) {
-      return <>{render(false, true)}</>
+      return <>{render(false, true)}</>;
     }
-    return <>{loadingFallback}</>
+    return <>{loadingFallback}</>;
   }
 
   // Check access based on provided criteria
@@ -99,16 +95,16 @@ export function RBACGuard({
     action,
     hasPermission,
     hasRole,
-    canAccess
-  })
+    canAccess,
+  });
 
   // Use render prop if provided
   if (render) {
-    return <>{render(hasAccess, false)}</>
+    return <>{render(hasAccess, false)}</>;
   }
 
   // Show children if access granted, fallback otherwise
-  return hasAccess ? <>{children}</> : <>{fallback}</>
+  return hasAccess ? <>{children}</> : <>{fallback}</>;
 }
 
 // Helper function to check access (Single Responsibility)
@@ -121,52 +117,52 @@ function checkAccess({
   action,
   hasPermission,
   hasRole,
-  canAccess
+  canAccess,
 }: {
-  permissions: string[]
-  requireAllPermissions: boolean
-  roles: string[]
-  requireAllRoles: boolean
-  resource?: string
-  action?: string
-  hasPermission: (permission: string) => boolean
-  hasRole: (role: string) => boolean
-  canAccess: (resource: string, action: string) => boolean
+  permissions: string[];
+  requireAllPermissions: boolean;
+  roles: string[];
+  requireAllRoles: boolean;
+  resource?: string;
+  action?: string;
+  hasPermission: (permission: string) => boolean;
+  hasRole: (role: string) => boolean;
+  canAccess: (resource: string, action: string) => boolean;
 }): boolean {
   // Resource-action check (highest priority)
   if (resource && action) {
-    return canAccess(resource, action)
+    return canAccess(resource, action);
   }
 
   // Permission checks
   if (permissions.length > 0) {
     if (requireAllPermissions) {
-      return permissions.every(permission => hasPermission(permission))
+      return permissions.every((permission) => hasPermission(permission));
     } else {
-      return permissions.some(permission => hasPermission(permission))
+      return permissions.some((permission) => hasPermission(permission));
     }
   }
 
   // Role checks
   if (roles.length > 0) {
     if (requireAllRoles) {
-      return roles.every(role => hasRole(role))
+      return roles.every((role) => hasRole(role));
     } else {
-      return roles.some(role => hasRole(role))
+      return roles.some((role) => hasRole(role));
     }
   }
 
   // No restrictions specified - allow access
-  return true
+  return true;
 }
 
 // Specialized guard components (Single Responsibility)
 
 interface AdminGuardProps {
-  children: ReactNode
-  organizationId?: string
-  fallback?: ReactNode
-  loadingFallback?: ReactNode
+  children: ReactNode;
+  organizationId?: string;
+  fallback?: ReactNode;
+  loadingFallback?: ReactNode;
 }
 
 /**
@@ -176,25 +172,25 @@ export function AdminGuard({
   children,
   organizationId,
   fallback,
-  loadingFallback
+  loadingFallback,
 }: AdminGuardProps) {
   return (
     <RBACGuard
-      roles={['admin', 'super_admin', 'owner']}
+      roles={["admin", "super_admin", "owner"]}
       organizationId={organizationId}
       fallback={fallback}
       loadingFallback={loadingFallback}
     >
       {children}
     </RBACGuard>
-  )
+  );
 }
 
 interface OwnerGuardProps {
-  children: ReactNode
-  organizationId?: string
-  fallback?: ReactNode
-  loadingFallback?: ReactNode
+  children: ReactNode;
+  organizationId?: string;
+  fallback?: ReactNode;
+  loadingFallback?: ReactNode;
 }
 
 /**
@@ -204,24 +200,24 @@ export function OwnerGuard({
   children,
   organizationId,
   fallback,
-  loadingFallback
+  loadingFallback,
 }: OwnerGuardProps) {
   return (
     <RBACGuard
-      roles={['owner', 'super_admin']}
+      roles={["owner", "super_admin"]}
       organizationId={organizationId}
       fallback={fallback}
       loadingFallback={loadingFallback}
     >
       {children}
     </RBACGuard>
-  )
+  );
 }
 
 interface SuperAdminGuardProps {
-  children: ReactNode
-  fallback?: ReactNode
-  loadingFallback?: ReactNode
+  children: ReactNode;
+  fallback?: ReactNode;
+  loadingFallback?: ReactNode;
 }
 
 /**
@@ -230,40 +226,40 @@ interface SuperAdminGuardProps {
 export function SuperAdminGuard({
   children,
   fallback,
-  loadingFallback
+  loadingFallback,
 }: SuperAdminGuardProps) {
   return (
     <RBACGuard
-      roles={['super_admin']}
+      roles={["super_admin"]}
       fallback={fallback}
       loadingFallback={loadingFallback}
     >
       {children}
     </RBACGuard>
-  )
+  );
 }
 
 // HOC pattern for page-level protection
 export function withRBACGuard<P extends object>(
   Component: React.ComponentType<P>,
-  guardProps: Omit<RBACGuardProps, 'children'>
+  guardProps: Omit<RBACGuardProps, "children">,
 ) {
   return function ProtectedComponent(props: P) {
     return (
       <RBACGuard {...guardProps}>
         <Component {...props} />
       </RBACGuard>
-    )
-  }
+    );
+  };
 }
 
 // Utility components for common UI patterns
 
 interface PermissionGateProps {
-  permission: string
-  organizationId?: string
-  children: ReactNode
-  fallback?: ReactNode
+  permission: string;
+  organizationId?: string;
+  children: ReactNode;
+  fallback?: ReactNode;
 }
 
 /**
@@ -273,7 +269,7 @@ export function PermissionGate({
   permission,
   organizationId,
   children,
-  fallback
+  fallback,
 }: PermissionGateProps) {
   return (
     <RBACGuard
@@ -283,15 +279,15 @@ export function PermissionGate({
     >
       {children}
     </RBACGuard>
-  )
+  );
 }
 
 interface ResourceGateProps {
-  resource: string
-  action: string
-  organizationId?: string
-  children: ReactNode
-  fallback?: ReactNode
+  resource: string;
+  action: string;
+  organizationId?: string;
+  children: ReactNode;
+  fallback?: ReactNode;
 }
 
 /**
@@ -302,7 +298,7 @@ export function ResourceGate({
   action,
   organizationId,
   children,
-  fallback
+  fallback,
 }: ResourceGateProps) {
   return (
     <RBACGuard
@@ -313,5 +309,5 @@ export function ResourceGate({
     >
       {children}
     </RBACGuard>
-  )
+  );
 }

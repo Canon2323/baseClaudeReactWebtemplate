@@ -1,50 +1,50 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from "next/server";
 
-import { 
-  isProtectedRoute, 
-  isAuthRoute, 
+import {
+  isProtectedRoute,
+  isAuthRoute,
   isAdminRoute,
-  redirects 
-} from '@/config/routes';
+  redirects,
+} from "@/config/routes";
 
 /**
  * Middleware for handling routing, authentication, and redirects
  * This runs before every request and is essential for:
  * - Route protection
- * - Authentication checks  
+ * - Authentication checks
  * - Redirects and rewrites
  * - Request/response modifications
- * 
+ *
  * TEMPLATE NOTE: Uncomment and modify the authentication logic based on your auth provider
  */
 export function middleware(request: NextRequest) {
   // Get pathname from the request URL
   const { pathname } = request.nextUrl;
-  
+
   // Skip middleware for static files and API routes that don't need auth
   if (
-    pathname.startsWith('/_next') ||
-    pathname.startsWith('/api/public') ||
-    pathname.includes('.')
+    pathname.startsWith("/_next") ||
+    pathname.startsWith("/api/public") ||
+    pathname.includes(".")
   ) {
     return NextResponse.next();
   }
 
   // Security headers for all requests
   const response = NextResponse.next();
-  
+
   // Add security headers
-  response.headers.set('X-Frame-Options', 'DENY');
-  response.headers.set('X-Content-Type-Options', 'nosniff');
-  response.headers.set('Referrer-Policy', 'origin-when-cross-origin');
+  response.headers.set("X-Frame-Options", "DENY");
+  response.headers.set("X-Content-Type-Options", "nosniff");
+  response.headers.set("Referrer-Policy", "origin-when-cross-origin");
   response.headers.set(
-    'Permissions-Policy',
-    'camera=(), microphone=(), geolocation=()'
+    "Permissions-Policy",
+    "camera=(), microphone=(), geolocation=()",
   );
 
   // EXAMPLE: Route protection using centralized configuration
   // Uncomment and modify based on your authentication strategy
-  
+
   /*
   // Check if route requires authentication
   if (isProtectedRoute(pathname)) {
@@ -138,6 +138,6 @@ export const config = {
      * - favicon.ico (favicon file)
      * - public folder files
      */
-    '/((?!api|_next/static|_next/image|favicon.ico|.*\\..*).*)',
+    "/((?!api|_next/static|_next/image|favicon.ico|.*\\..*).*)",
   ],
 };

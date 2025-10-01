@@ -28,6 +28,7 @@ Modern Next.js template with SOLID architecture, TypeScript, Tailwind CSS and Ve
 ## ⚡ Quick Start
 
 ### 🚀 Usando pnpm (Recomendado - Mais Seguro)
+
 ```bash
 # Clone and setup
 git clone <this-repo> my-app
@@ -45,6 +46,7 @@ pnpm dev
 ```
 
 ### 🔄 Outras opções
+
 ```bash
 # Yarn
 yarn install && yarn setup:hooks && yarn dev
@@ -74,6 +76,7 @@ npm install && npm run setup:hooks && npm run dev
 - **D**ependency Inversion - Depend on abstractions, not concretes
 
 ### 🔌 11 MCP Servers (Claude Code Integration)
+
 1. **shadcn/ui MCP** - Install/manage UI components
 2. **Playwright MCP** - Browser automation & testing
 3. **Figma MCP** - Design-to-code integration
@@ -89,24 +92,29 @@ npm install && npm run setup:hooks && npm run dev
 **Note**: Git/GitHub operations use standard **CLI tools** (GitHub CLI + Git) for better performance.
 
 ### 🪝 Code Quality Hooks
+
 Automatic code quality checks on Git operations:
+
 - **Pre-commit**: Auto-format, lint, and type-check before commits
 - **Pre-push**: Final validation before pushing to remote
 - **Commit-msg**: Validates commit message format (optional)
 
 ### 🛡️ Security & Access Control
+
 - **RBAC System** - Role-based access control with Supabase RLS
 - **Multi-tenant** - Organization-based permissions
 - **JWT Claims** - Automatic role/permission injection
 - **VibeKit** - AI agent sandbox isolation
 
 ### 💳 SaaS Features (Next.js SaaS Starter Integration)
+
 - **Payment Processing** - Stripe, Paddle, LemonSqueezy support
 - **Subscription Management** - Complete billing workflows
 - **Customer Portal** - Self-service billing management
 - **Webhook Handling** - Automated payment event processing
 
 ### 📋 Spec-Driven Development
+
 - **GitHub Spec Kit** - Specification-first development methodology
 - **Structured AI interactions** with Claude Code
 - **Living documentation** that evolves with code
@@ -162,12 +170,14 @@ docs/             # 📚 Documentation
 ### 🎯 Features vs Shared - When to use each?
 
 **Features/** - Domain-specific business code:
+
 - ✅ Components that only exist in one context (e.g., `UserProfileCard`)
 - ✅ Specific business logic (e.g., `calculateOrderTotal`)
 - ✅ Domain local state (e.g., `useProductFilters`)
 - ✅ Domain types (e.g., `interface Product`)
 
 **Shared/** - Reusable code across multiple domains:
+
 - ✅ Generic components (e.g., `Button`, `Modal`, `Toast`)
 - ✅ Utility hooks (e.g., `useDebounce`, `useLocalStorage`)
 - ✅ Global application state (e.g., `authStore`, `themeStore`)
@@ -183,22 +193,25 @@ docs/             # 📚 Documentation
 **What they are:** TypeScript interfaces and types that define data structures.
 
 **When to use:**
+
 - Define API data formats
 - Create contracts between layers
 - Ensure type safety
 - Document data structures
 
 **Example:**
+
 ```typescript
 // features/users/types/user.types.ts
 export interface User {
-  id: string
-  email: string
-  name: string
+  id: string;
+  email: string;
+  name: string;
 }
 ```
 
 **Where to place:**
+
 - `features/[domain]/types/` - Domain-specific types
 - `shared/types/` - Globally shared types
 
@@ -207,29 +220,33 @@ export interface User {
 **What they are:** Functions that encapsulate state logic and React side effects.
 
 **When to use:**
+
 - Share logic between components
 - Manage component local state
 - Execute side effects (API calls, subscriptions)
 - Abstract complex UI logic
 
 **Example:**
+
 ```typescript
 // features/users/hooks/useUser.ts
 export function useUser(userId: string) {
-  const [user, setUser] = useState<User>()
-  const [loading, setLoading] = useState(true)
+  const [user, setUser] = useState<User>();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    userService.getById(userId)
+    userService
+      .getById(userId)
       .then(setUser)
-      .finally(() => setLoading(false))
-  }, [userId])
+      .finally(() => setLoading(false));
+  }, [userId]);
 
-  return { user, loading }
+  return { user, loading };
 }
 ```
 
 **Where to place:**
+
 - `features/[domain]/hooks/` - Domain-specific hooks
 - `shared/hooks/` - Global utility hooks
 
@@ -238,12 +255,14 @@ export function useUser(userId: string) {
 **What they are:** Shared state containers between components using Zustand.
 
 **When to use:**
+
 - State that needs to be accessed by multiple components
 - Data that persists between page navigations
 - User data cache
 - Application state (theme, language, authentication)
 
 **Example:**
+
 ```typescript
 // shared/stores/auth.store.ts
 export const useAuthStore = create((set) => ({
@@ -251,30 +270,32 @@ export const useAuthStore = create((set) => ({
   isAuthenticated: false,
 
   login: (user) => set({ user, isAuthenticated: true }),
-  logout: () => set({ user: null, isAuthenticated: false })
-}))
+  logout: () => set({ user: null, isAuthenticated: false }),
+}));
 ```
 
 **Where to place:**
+
 - `shared/stores/` - Global state (auth, theme, UI)
 - `features/[domain]/stores/` - Domain-specific state
 
 ## 🎯 Quick Decision Guide
 
-| I need to... | Use | Example |
-|---------------|-----|---------|
-| Define data format | **Types** | `interface Product { id: string; name: string }` |
-| Fetch data in a component | **Hook** | `useProduct(id)` returns product and loading |
-| Share state between pages | **Store** | Shopping cart, logged user |
-| Validate data structure | **Types** + Zod | Validation schema with types |
-| Temporary form state | **Hook** | `useForm()` with react-hook-form |
-| API data cache | **Store** or React Query | Already loaded products list |
-| Reusable UI logic | **Hook** | `useModal()`, `useDebounce()` |
-| Global settings | **Store** | Theme, language, preferences |
+| I need to...              | Use                      | Example                                          |
+| ------------------------- | ------------------------ | ------------------------------------------------ |
+| Define data format        | **Types**                | `interface Product { id: string; name: string }` |
+| Fetch data in a component | **Hook**                 | `useProduct(id)` returns product and loading     |
+| Share state between pages | **Store**                | Shopping cart, logged user                       |
+| Validate data structure   | **Types** + Zod          | Validation schema with types                     |
+| Temporary form state      | **Hook**                 | `useForm()` with react-hook-form                 |
+| API data cache            | **Store** or React Query | Already loaded products list                     |
+| Reusable UI logic         | **Hook**                 | `useModal()`, `useDebounce()`                    |
+| Global settings           | **Store**                | Theme, language, preferences                     |
 
 ## 🛡️ Middleware
 
 The `src/middleware.ts` file manages:
+
 - Route protection and authentication
 - Request/response modifications
 - Redirects and rewrites
@@ -289,12 +310,14 @@ Location: `src/middleware.ts` (same level as `src/app/`)
 To change keys: edit `scripts/setup-all.js` lines 127-129.
 
 ### Access Local Supabase
+
 - **Database**: http://127.0.0.1:54321
 - **Dashboard**: http://127.0.0.1:54323
 
 ## 🧪 Testing
 
 ### Unit Tests (Jest)
+
 ```bash
 npm run test           # Run tests
 npm run test:watch     # Watch mode
@@ -302,6 +325,7 @@ npm run test:coverage  # Coverage report
 ```
 
 ### E2E Tests (Playwright)
+
 ```bash
 npm run test:e2e       # Run E2E tests
 npm run test:e2e:ui    # Visual interface
@@ -319,6 +343,7 @@ npm run generate:feature
 ```
 
 This will create complete structure:
+
 ```
 features/products/
 ├── components/
@@ -349,6 +374,7 @@ implement specs/plan.md
 ```
 
 **Benefits:**
+
 - 📋 **Structured development** with clear specifications
 - 🤖 **Enhanced AI interactions** with consistent context
 - 📚 **Living documentation** that evolves with code
@@ -382,6 +408,7 @@ if (hasPermission('billing.read')) {
 ```
 
 **Features:**
+
 - 🎯 **Granular permissions** - Resource-based access control
 - 🏢 **Multi-tenant** - Organization-scoped permissions
 - ⚡ **JWT integration** - Permissions in token for performance
@@ -393,17 +420,20 @@ See [RBAC Documentation](docs/RBAC.md) for complete guide.
 ## 📋 Best Practices Checklist
 
 ### Before Implementation
+
 - [ ] Check if similar code already exists
 - [ ] Confirm requirements with user
 - [ ] Plan following SOLID principles
 
 ### During Implementation
+
 - [ ] One responsibility per class/function
 - [ ] Use appropriate TypeScript types
 - [ ] Reuse existing code
 - [ ] Follow project patterns
 
 ### After Implementation
+
 - [ ] Run linter and type-check
 - [ ] Add/update tests
 - [ ] Request user approval
@@ -419,6 +449,7 @@ See [RBAC Documentation](docs/RBAC.md) for complete guide.
 ## 🙏 **Acknowledgments**
 
 This template integrates and adapts code from the excellent **Next.js SaaS Starter** by Vercel:
+
 - **Repository**: [nextjs/saas-starter](https://github.com/nextjs/saas-starter)
 - **Features integrated**: Stripe payments, RBAC system, activity logging
 - **Adapted with**: SOLID architecture, MCP integration, Spec-Driven Development
@@ -426,6 +457,7 @@ This template integrates and adapts code from the excellent **Next.js SaaS Start
 **Special thanks to the Vercel team** for creating such a solid foundation for SaaS applications! 🚀
 
 We've enhanced their approach with:
+
 - ✅ **SOLID principles** implementation
 - ✅ **11+ MCP servers** for enhanced development
 - ✅ **Spec-Driven Development** methodology
